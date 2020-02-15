@@ -1,12 +1,12 @@
 from db import db
-from sqlalchemy import ForeignKey
+from sqlalchemy import ForeignKey,Table
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
 Base = declarative_base()
 
 
 #Association Table refrences back to programs
-programs_languages = Table('Programs_Languages', Base.metadata,
+programs_languages = db.Table('Programs_Languages', Base.metadata,
 db.Column('program_id', db.Integer, ForeignKey('programs.id')),
 db.Column('language_id', db.Integer, ForeignKey('languages.id')))
 
@@ -22,7 +22,7 @@ class Language(db.Model):
 
 
 #Relationship 
-	programs = relationship("Program", secondary=programs_languagess, back_populates="languages")
+	programs = relationship("Program", secondary=programs_languages, back_populates="languages")
 
 
 #Individual Methods

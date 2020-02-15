@@ -1,5 +1,5 @@
 from db import db
-from sqlalchemy import ForeignKey
+from sqlalchemy import ForeignKey, Table
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
 Base = declarative_base()
@@ -8,21 +8,21 @@ Base = declarative_base()
 
 
 #Association table to programs.py
-programs_cities = Table('Programs_Cities', Base.metadata,
+programs_cities = db.Table('Programs_Cities', Base.metadata,
 	db.Column('program_id', db.Integer, ForeignKey('programs.id')),
 	db.Column('city_id', db.Integer, ForeignKey('city.id')))
 
 
-
+cities_countries = db.Table('Cities_Countries', Base.metadata,
+	db.Column('city_id', db.Integer, ForeignKey('city.id')),
+	db.Column('country_id', db.Integer, ForeignKey('country.id')))
 
 class City(db.Model):
 	
 #Individual Attributes
 	__tablename__="city"
-	
 	id = db.Column(db.Integer, primary_key=True)
 	city = db.Column(db.String(100))
-
 
 #Relationships
 	programs = relationship("Program", secondary=programs_cities, back_populates="program_city")
@@ -46,24 +46,6 @@ class City(db.Model):
 #Class Methods
 	#This is where search methods will go. There is a reference of how to 
 	# in the programs file
-
-
-
-
-
-
-
-#Association table 
-cities_countries = Table('Cities_Countries', Base.metadata,
-	db.Column('city_id', db.Integer, ForeignKey('city.id')),
-	db.Column('country_id', db.Integer, ForeignKey('country.id')))
-
-
-
-
-
-
-
 
 #This is the class to define the country table with ids
 class Country(db.Model):

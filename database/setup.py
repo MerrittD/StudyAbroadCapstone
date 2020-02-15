@@ -1,7 +1,12 @@
+from db import db
 from admin import Admin
-from term import Term
+from term import Term, programs_terms
 from programs import Program
-from locations import City, Country
-from languages import Languages,programs_languages
+from locations import City, Country, programs_cities, cities_countries
+from languages import Language, programs_languages
 from areas import Area, programs_areas
 db.create_all()
+
+admin = Admin(username= 'TestDummy',passoword='1234')
+db.session.add(admin)
+db.session.commit()

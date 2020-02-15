@@ -867,3 +867,11 @@ env/Scripts/pip3.exe
 env/Scripts/python.exe
 env/Scripts/pythonw.exe
 .vscode/settings.json
+__pycache__/db.cpython-37.pyc
+database/__pycache__/admin.cpython-37.pyc
+database/__pycache__/areas.cpython-37.pyc
+database/__pycache__/languages.cpython-37.pyc
+database/__pycache__/locations.cpython-37.pyc
+database/__pycache__/programs.cpython-37.pyc
+database/__pycache__/term.cpython-37.pyc
+__pycache__/db.cpython-37.pyc

@@ -1,5 +1,5 @@
 from db import db
-from sqlalchemy import ForeignKey
+from sqlalchemy import ForeignKey, Table
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
 Base = declarative_base()
@@ -7,7 +7,7 @@ Base = declarative_base()
 
 
 #Association Table refrences back to programs
-programs_terms = Table('Programs_Terms', Base.metadata,
+programs_terms = db.Table('Programs_Terms', Base.metadata,
 	db.Column('program_id', db.Integer, ForeignKey('programs.id')),
 	db.Column('term_id', db.Integer, ForeignKey('term.id')))
 

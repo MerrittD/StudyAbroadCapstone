@@ -1,5 +1,5 @@
 from db import db
-from sqlalchemy import ForeignKey
+from sqlalchemy import ForeignKey, Table
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
 Base = declarative_base()
@@ -7,9 +7,9 @@ Base = declarative_base()
 
 
 #Association Table refrences back to programs
-programs_areas = Table('Programs_Areas', Base.metadata,
-db.Column('program_id', db.Integer, ForeignKey('programs.id')),
-db.Column('area_id', db.Integer, ForeignKey('areas_of_study.id')))
+programs_areas = db.Table('Programs_Areas', Base.metadata,
+db.Column('program_id', db.Integer, db.ForeignKey('programs.id')),
+db.Column('area_id', db.Integer,db.ForeignKey('areas_of_study.id')))
 
 
 
@@ -23,7 +23,7 @@ class Area(db.Model):
 
 
 #Relationship 
-	programs = relationship("Program", secondary=programs_areas, back_populates="areas")
+	programs = db.relationship("Program", secondary=programs_areas, back_populates="areas")
 
 
 #Individual Methods

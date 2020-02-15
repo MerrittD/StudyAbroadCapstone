@@ -1,6 +1,10 @@
 from db import db
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import relationship
+from areas import programs_areas
+from languages import programs_languages
+from locations import programs_cities
+from term import programs_terms
 
 #  Websites Refrenced:
 # https://docs.sqlalchemy.org/en/13/orm/tutorial.html
@@ -29,10 +33,10 @@ class Program(db.Model):
 
 
 #Relationships
-	areas = relationship("Area", secondary = programs_areas, back_populates="programs")
-	languages = relationship("Language", secondary = programs_languages, back_populates="programs")
-	program_city = relationship("City", secondary = programs_cities, back_populates="programs")
-	program_term = relationship("Term", secondary = programs_terms, back_populates="programs")
+	areas = db.relationship("Area", secondary = programs_areas, back_populates="programs")
+	languages = db.relationship("Language", secondary = programs_languages, back_populates="programs")
+	program_city = db.relationship("City", secondary = programs_cities, back_populates="programs")
+	program_term = db.relationship("Term", secondary = programs_terms, back_populates="programs")
 	
 
 
@@ -42,13 +46,14 @@ class Program(db.Model):
 	def __repr__(self):
 		return "<Program(Program ID='%d', Name='%s')>" % (self.id, self.name)
 
-	def __init__(self, name, cost, com, res, intern, description):
+	def __init__(self, name, cost, com, res, intern, description,area,language,city,term):
 		self.name = name
 		self.cost = cost
 		self.comm_eng = com
 		self.research_opp = res
 		self.intership_opp = intern
 		self.description  = description
+
 
 	def save_to_db(self):
 		db.session.add(self)
