@@ -9,13 +9,13 @@ Base = declarative_base()
 
 #Association table to programs.py
 programs_cities = db.Table('Programs_Cities', Base.metadata,
-	db.Column('program_id', db.Integer, ForeignKey('programs.id')),
-	db.Column('city_id', db.Integer, ForeignKey('city.id')))
+	db.Column('program_id', db.Integer, db.ForeignKey('programs.id')),
+	db.Column('city_id', db.Integer, db.ForeignKey('city.id')))
 
 
 cities_countries = db.Table('Cities_Countries', Base.metadata,
-	db.Column('city_id', db.Integer, ForeignKey('city.id')),
-	db.Column('country_id', db.Integer, ForeignKey('country.id')))
+	db.Column('city_id', db.Integer, db.ForeignKey('city.id')),
+	db.Column('country_id', db.Integer, db.ForeignKey('country.id')))
 
 class City(db.Model):
 	
@@ -25,8 +25,8 @@ class City(db.Model):
 	city = db.Column(db.String(100))
 
 #Relationships
-	programs = relationship("Program", secondary=programs_cities, back_populates="program_city")
-	country = relationship("Country", secondary=cities_countries, back_populates="cities")
+	programs = db.relationship("Program", secondary=programs_cities, back_populates="program_city")
+	country = db.relationship("Country", secondary=cities_countries, back_populates="cities")
 
 
 #Individual Methods
@@ -58,7 +58,7 @@ class Country(db.Model):
 
 
 #Relationship
-	cities = relationship("City", secondary=cities_countries, back_populates="country")
+	cities = db.relationship("City", secondary=cities_countries, back_populates="country")
 
 
 #Individual Methods

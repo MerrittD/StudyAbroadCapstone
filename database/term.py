@@ -2,14 +2,15 @@ from db import db
 from sqlalchemy import ForeignKey, Table
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
+
 Base = declarative_base()
 
 
 
 #Association Table refrences back to programs
 programs_terms = db.Table('Programs_Terms', Base.metadata,
-	db.Column('program_id', db.Integer, ForeignKey('programs.id')),
-	db.Column('term_id', db.Integer, ForeignKey('term.id')))
+	db.Column('program_id', db.Integer, db.ForeignKey('programs.id')),
+	db.Column('term_id', db.Integer, db.ForeignKey('term.id')))
 
 
 
@@ -24,7 +25,7 @@ class Term(db.Model):
 
 
 #Relationship
-	programs = relationship("Program", secondary=programs_terms, back_populates="program_term")
+	programs = db.relationship("Program", secondary=programs_terms, back_populates="programs_terms")
 
 
 #Individual Methods

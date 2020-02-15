@@ -7,8 +7,8 @@ Base = declarative_base()
 
 #Association Table refrences back to programs
 programs_languages = db.Table('Programs_Languages', Base.metadata,
-db.Column('program_id', db.Integer, ForeignKey('programs.id')),
-db.Column('language_id', db.Integer, ForeignKey('languages.id')))
+db.Column('program_id', db.Integer, db.ForeignKey('programs.id')),
+db.Column('language_id', db.Integer, db.ForeignKey('languages.id')))
 
 
 class Language(db.Model):
