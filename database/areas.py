@@ -6,24 +6,28 @@ Base = declarative_base()
 
 
 
-#Association Table refrences back to programs
-programs_areas = db.Table('Programs_Areas', Base.metadata,
-db.Column('program_id', db.Integer, db.ForeignKey('programs.id')),
-db.Column('area_id', db.Integer,db.ForeignKey('areas_of_study.id')))
+class Programs_Areas(db.Model):
+    __tablename__ = 'programs_areas'
+	
+    program_id = db.Column(db.Integer, db.ForeignKey('programs.id'))
+    right_id = Column(db.Integer,db.ForeignKey('areas_of_study.id'))
+    
+	programs = db.relationship("Program",  back_populates="programs")
+	areas = db.relationship("Area",  back_populates="areas")
 
 
 
 class Area(db.Model):
 
 #Individual Attributes
-	__tablename__ = "areas_of_study"
+	__tablename__ = "areas"
 
 	id = db.Column(db.Integer, primary_key=True)
 	name = db.Column(db.String(100), unique=True, nullable=False)
 
 
 #Relationship 
-	programs = db.relationship("Program", secondary=programs_areas, back_populates="areas")
+	#need to add relationship between areas and association class
 
 
 #Individual Methods
