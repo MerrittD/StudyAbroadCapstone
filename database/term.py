@@ -18,7 +18,7 @@ programs_terms = db.Table('Programs_Terms', Base.metadata,
 class Term(db.Model):
 	
 #Individual Attributes
-	__tablename__ = "term"
+	__tablename__ = "terms"
 
 	id = db.Column(db.Integer, primary_key=True)
 	name = db.Column(db.String(10))

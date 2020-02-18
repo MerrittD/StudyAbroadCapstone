@@ -22,8 +22,8 @@ class Program(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
 	name = db.Column(db.String(100))
 	cost = db.Column(db.String(15))
-	comm_eng = db.Column(db.Boolean)#yes or no
-	research_opp =  db.Column(db.Boolean)#yes or no
+	comm_eng = db.Column(db.Boolean) #yes or no
+	research_opp =  db.Column(db.Boolean) #yes or no
 	intership_opp = db.Column(db.Boolean)	#yes or no
 
 
@@ -33,10 +33,10 @@ class Program(db.Model):
 
 
 #Relationships
-	areas = db.relationship("Area", secondary = programs_areas, back_populates="programs")
-	languages = db.relationship("Language", secondary = programs_languages, back_populates="programs")
-	program_city = db.relationship("City", secondary = programs_cities, back_populates="programs")
-	program_term = db.relationship("Term", secondary = programs_terms, back_populates="programs")
+	areas = db.relationship("Programs_Areas", back_populates="programs")
+	languages = db.relationship("Programs_Languages", back_populates="programs")
+	cities = db.relationship("Programs_Cities", back_populates="programs")
+	terms = db.relationship("Programs_Terms", back_populates="programs")
 	
 
 
