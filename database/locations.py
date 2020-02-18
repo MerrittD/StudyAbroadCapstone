@@ -27,24 +27,23 @@ class Programs_Cities(db.Model):
 	city_id = Column(db.Integer, db.ForeignKey('cities.id'))
 
 	#Relationships
-	programs = db.relationship("Program",  back_populates="programs")
-	cities = db.relationship("City",  back_populates="cities")
+	program = db.relationship("Program",  back_populates="cities")
+	city = db.relationship("City",  back_populates="programs")
 
 
 
 class City(db.Model):
-	
-#Individual Attributes
+	#Individual Attributes
 	__tablename__="cities"
 	id = db.Column(db.Integer, primary_key=True)
 	city = db.Column(db.String(100))
 
-#Relationships
-	programs = db.relationship("Program", back_populates="program_city")
-	countries = db.relationship("Country", back_populates="cities")
+	#Relationships
+	programs = db.relationship("Programs_Cities", back_populates="city")
+	countries = db.relationship("Cities_Countries", back_populates="city")
 
 
-#Individual Methods
+	#Individual Methods
 	#optional method to set the porper string representation of the object
 	def __repr__(self):
 		return "<City(City ID='%d', Name='%s')>" % (self.id, self.name)
@@ -67,27 +66,26 @@ class Cities_Countries(db.Model):
 	country_id = db.Column(db.Integer, db.ForeignKey('countries.id'))
 
 	#Relationships
-	cities = db.relationship("City",  back_populates="countries")
-	countries = db.relationship("Country",  back_populates="cities")
-
+	city = db.relationship("City",  back_populates="countries")
+	country = db.relationship("Country",  back_populates="cities")
 
 
 
 #This is the class to define the country table with ids
 class Country(db.Model):
 
-#Individual Attributes
+	#Individual Attributes
 	__tablename__ = "countries"
 
 	id = db.Column(db.Integer, primary_key=True)
 	country = db.Column(db.String(100))
 
 
-#Relationship
-	cities = db.relationship("City", secondary=cities_countries, back_populates="country")
+	#Relationship
+	cities = db.relationship("Cities_Countries", back_populates="country")
 
 
-#Individual Methods
+	#Individual Methods
 	#optional method to set the porper string representation of the object
 	def __repr__(self):
 		return "<Country(Country ID='%d', Name='%s')>" % (self.id, self.name)
@@ -99,8 +97,3 @@ class Country(db.Model):
 	def save_to_db(self):
 		db.session.add(self)
 		db.session.commit()
-
-
-#Class Methods
-	#This is where search methods will go. There is a reference of how to 
-	# in the programs file

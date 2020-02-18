@@ -1,10 +1,10 @@
 from db import db
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import relationship
-from areas import programs_areas
-from languages import programs_languages
-from locations import programs_cities
-from term import programs_terms
+from areas import Programs_Areas
+from languages import Programs_Languages
+from locations import Programs_Cities
+from term import Programs_Terms
 
 #  Websites Refrenced:
 # https://docs.sqlalchemy.org/en/13/orm/tutorial.html
@@ -15,8 +15,7 @@ from term import programs_terms
 
 
 class Program(db.Model):
-
-#Individual Attributes
+	#Individual Attributes
 	__tablename__ = "programs"
 
 	id = db.Column(db.Integer, primary_key=True)
@@ -32,16 +31,15 @@ class Program(db.Model):
 	description  = db.Column(db.String(5000))
 
 
-#Relationships
-	areas = db.relationship("Programs_Areas", back_populates="programs")
-	languages = db.relationship("Programs_Languages", back_populates="programs")
-	cities = db.relationship("Programs_Cities", back_populates="programs")
-	terms = db.relationship("Programs_Terms", back_populates="programs")
+	#Relationships
+	areas = db.relationship("Programs_Areas", back_populates="program")
+	languages = db.relationship("Programs_Languages", back_populates="program")
+	cities = db.relationship("Programs_Cities", back_populates="program")
+	terms = db.relationship("Programs_Terms", back_populates="program")
 	
 
 
-#Individual Methods
-
+	#Individual Methods
 	#optional method to set the porper string representation of the object
 	def __repr__(self):
 		return "<Program(Program ID='%d', Name='%s')>" % (self.id, self.name)

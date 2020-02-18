@@ -14,9 +14,8 @@ class Programs_Areas(db.Model):
 	area_id = Column(db.Integer, db.ForeignKey('areas.id'))
 	
 	#Relationships
-	program = db.relationship("Program",  back_populates="programs")
-	area = db.relationship("Area",  back_populates="areas")
-
+	program = db.relationship("Program",  back_populates="areas")
+	area = db.relationship("Area",  back_populates="programs")
 
 
 
@@ -28,7 +27,7 @@ class Area(db.Model):
 	name = db.Column(db.String(100), unique=True, nullable=False)
 
 #Relationship 
-	programs = relationship("Programs_Areas", back_populates="program")
+	programs = relationship("Programs_Areas", back_populates="area")
 
 #Individual Methods
 	#optional method to set the porper string representation of the object
