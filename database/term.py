@@ -1,9 +1,9 @@
 from db import db
-from sqlalchemy import ForeignKey, Table
-from sqlalchemy.orm import relationship
-from sqlalchemy.ext.declarative import declarative_base
+#from sqlalchemy import ForeignKey, Table
+#from sqlalchemy.orm import relationship
+#from sqlalchemy.ext.declarative import declarative_base
 
-Base = declarative_base()
+#Base = declarative_base()
 
 # Association Table refrences back to programs
 # programs_terms = db.Table('Programs_Terms', Base.metadata,
@@ -15,12 +15,12 @@ class Programs_Terms(db.Model):
 	#Individual Attributes
 	__tablename__ = 'programs_terms'
 	
-	program_id = db.Column(db.Integer, db.ForeignKey('programs.id'))
-	term_id = Column(db.Integer, db.ForeignKey('terms.id'))
+	program_id = db.Column(db.Integer, db.ForeignKey('programs.id'), nullable=False)
+	term_id = db.Column(db.Integer, db.ForeignKey('terms.id'))
 	
 	#Relationships
-	program = db.relationship("Program",  back_populates="terms")
-	term = db.relationship("Term",  back_populates="programs") 
+	program = db.relationship("Program",lazy = 'select',backref=db.backref('terms',lazy='joined'))
+	term = db.relationship("Term",  lazy = 'select', backref = db.backref('programs',lazy='joined')) 
 	
 
 

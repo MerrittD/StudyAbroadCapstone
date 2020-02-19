@@ -1,8 +1,8 @@
 from db import db
-from sqlalchemy import ForeignKey,Table
-from sqlalchemy.orm import relationship
-from sqlalchemy.ext.declarative import declarative_base
-Base = declarative_base()
+#from sqlalchemy import ForeignKey,Table
+#from sqlalchemy.orm import relationship
+#from sqlalchemy.ext.declarative import declarative_base
+#Base = declarative_base()
 
 
 ##Association Table refrences back to programs

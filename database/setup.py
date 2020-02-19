@@ -7,6 +7,3 @@ from languages import Language, programs_languages
 from areas import Area, programs_areas
 db.create_all()
 
-admin = Admin(username= 'TestDummy',password='1234')
-db.session.add(admin)
-db.session.commit()
