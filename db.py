@@ -3,7 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import text
 
 app= Flask(__name__)
-url = 'sqlite:///TestDatabase1.sqlite'
+url = 'sqlite:///testDatabase.db'
 app.config['SQLALCHEMY_DATABASE_URI']=url
 db = SQLAlchemy(app)	#creats an object for SQL to be used
 
