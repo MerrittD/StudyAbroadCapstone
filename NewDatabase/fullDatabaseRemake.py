@@ -1,4 +1,4 @@
-from databaseTesting import db
+from dataaseTesting import db
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 
@@ -30,26 +30,25 @@ class Admin(db.Model):
     @classmethod
     def find_by_id(cls, _id):
         return cls.query.filter_by(id=_id).first()
-# Association Table refrences back to programs
-# programs_terms = db.Table('Programs_Terms', Base.metadata,
-#	db.Column('program_id', db.Integer, db.ForeignKey('programs.id')),
-#	db.Column('term_id', db.Integer, db.ForeignKey('term.id')))
 
 
-class Programs_Terms(db.Model):
+#Association Table refrences back to programs
+programs_terms = db.Table('Programs_Terms',
+db.Column('program_id', db.Integer, db.ForeignKey('programs.id'),primary_key=True),
+db.Column('term_id', db.Integer, db.ForeignKey('term.id')),primary_key=True)
+
+
+#class Programs_Terms(db.Model):
 	#Individual Attributes
-	__tablename__ = 'programs_terms'
+#	__tablename__ = 'programs_terms'
 	
-	program_id = db.Column(db.Integer, db.ForeignKey('programs.id'), nullable=False)
-	term_id = db.Column(db.Integer, db.ForeignKey('terms.id'))
+#	program_id = db.Column(db.Integer, db.ForeignKey('programs.id'), nullable=False)
+#	term_id = db.Column(db.Integer, db.ForeignKey('terms.id'))
 	
 	#Relationships
-	program = db.relationship("Program",lazy = 'select',backref=db.backref('terms',lazy='joined'))
-	term = db.relationship("Term",  lazy = 'select', backref = db.backref('programs',lazy='joined')) 
+#	program = db.relationship("Program",lazy = 'select',backref=db.backref('terms',lazy='joined'))
+#	term = db.relationship("Term",  lazy = 'select', backref = db.backref('programs',lazy='joined')) 
 	
-
-
-
 class Term(db.Model):	
 	#Individual Attributes
 	__tablename__ = "terms"
@@ -59,7 +58,7 @@ class Term(db.Model):
 
 
 	#Relationship
-	programs = db.relationship("Programs_Terms", back_populates="term")
+	#programs = db.relationship("Programs_Terms", back_populates="term")
 
 
 	#Individual Methods
@@ -232,9 +231,13 @@ class Program(db.Model):
 
 	#Relationships
 	areas = db.relationship("Programs_Areas", back_populates="program")
+
 	languages = db.relationship("Programs_Languages", back_populates="program")
+
 	cities = db.relationship("Programs_Cities", back_populates="program")
-	terms = db.relationship("Programs_Terms", back_populates="program")
+
+	programs_terms = db.relationship('Term', secondary=programs_terms, lazy='subquery', 
+								  backref=db.backref('program',lazy=True))
 	
 
 
