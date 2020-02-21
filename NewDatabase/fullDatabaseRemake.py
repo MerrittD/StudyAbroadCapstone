@@ -30,12 +30,35 @@ class Admin(db.Model):
     @classmethod
     def find_by_id(cls, _id):
         return cls.query.filter_by(id=_id).first()
-
-
 #Association Table refrences back to programs
-programs_terms = db.Table('Programs_Terms',
-db.Column('program_id', db.Integer, db.ForeignKey('programs.id'),primary_key=True),
-db.Column('term_id', db.Integer, db.ForeignKey('term.id')),primary_key=True)
+
+programs_areas = db.Table('Programs_Areas',
+db.Column('program_id', db.Integer, db.ForeignKey('Program.id'),primary_key=True),
+db.Column('area_id', db.Integer, db.ForeignKey('Area.id')),primary_key=True)
+
+class Area(db.Model):	
+	#Individual Attributes
+	__tablename__ = "areas"
+
+	id = db.Column(db.Integer, primary_key=True)
+	name = db.Column(db.String(100))
+
+
+	#Relationship
+	#programs = db.relationship("Programs_Terms", back_populates="term")
+
+
+	#Individual Methods
+	#optional method to set the porper string representation of the object
+	def __repr__(self):
+		return "<Area(id='%d', name='%s')>" % (self.id, self.name)
+
+	def __init__(self, name):
+		self.name = name
+
+	def save_to_db(self):
+		db.session.add(self)
+		db.session.commit()
 
 
 #class Programs_Terms(db.Model):
@@ -49,6 +72,10 @@ db.Column('term_id', db.Integer, db.ForeignKey('term.id')),primary_key=True)
 #	program = db.relationship("Program",lazy = 'select',backref=db.backref('terms',lazy='joined'))
 #	term = db.relationship("Term",  lazy = 'select', backref = db.backref('programs',lazy='joined')) 
 	
+programs_terms = db.Table('Programs_Terms',
+db.Column('program_id', db.Integer, db.ForeignKey('programs.id'),primary_key=True),
+db.Column('term_id', db.Integer, db.ForeignKey('term.id')),primary_key=True)
+
 class Term(db.Model):	
 	#Individual Attributes
 	__tablename__ = "terms"
@@ -67,7 +94,7 @@ class Term(db.Model):
 		return "<Term(id='%d', name='%s')>" % (self.id, self.name)
 
 	def __init__(self, name):
-		self.term_name = name
+		self.name = name
 
 	def save_to_db(self):
 		db.session.add(self)
@@ -232,14 +259,16 @@ class Program(db.Model):
 
 
 	#Relationships
-	areas = db.relationship("Programs_Areas", back_populates="program")
+	programs_areas = db.relationship('Areas', secondary=programs_terms, lazy='subquery', 
+								  backref=db.backref('area',lazy=True))
 
-	languages = db.relationship("Programs_Languages", back_populates="program")
+	programs_languages = db.relationship('Languages', secondary=programs_terms, lazy='subquery', 
+								  backref=db.backref('language',lazy=True))
 
 	cities = db.relationship("Programs_Cities", back_populates="program")
 
 	programs_terms = db.relationship('Term', secondary=programs_terms, lazy='subquery', 
-								  backref=db.backref('Term',lazy=True))
+								  backref=db.backref('term',lazy=True))
 	
 
 
