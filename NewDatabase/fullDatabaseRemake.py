@@ -1,4 +1,4 @@
-from dataaseTesting import db
+from databaseTesting import db
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 
