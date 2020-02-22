@@ -30,220 +30,43 @@ class Admin(db.Model):
     @classmethod
     def find_by_id(cls, _id):
         return cls.query.filter_by(id=_id).first()
+
+
+
+
+
+
 #Association Table refrences back to programs
-
 programs_areas = db.Table('Programs_Areas',
-db.Column('program_id', db.Integer, db.ForeignKey('Program.id'),primary_key=True),
-db.Column('area_id', db.Integer, db.ForeignKey('Area.id')),primary_key=True)
-
-class Area(db.Model):	
-	#Individual Attributes
-	__tablename__ = "areas"
-
-	id = db.Column(db.Integer, primary_key=True)
-	name = db.Column(db.String(100))
+db.Column('Program_id', db.Integer, db.ForeignKey('program.id'),primary_key=True),
+db.Column('Area_id', db.Integer, db.ForeignKey('areas.id'),primary_key=True))
 
 
-	#Relationship
-	#programs = db.relationship("Programs_Terms", back_populates="term")
-
-
-	#Individual Methods
-	#optional method to set the porper string representation of the object
-	def __repr__(self):
-		return "<Area(id='%d', name='%s')>" % (self.id, self.name)
-
-	def __init__(self, name):
-		self.name = name
-
-	def save_to_db(self):
-		db.session.add(self)
-		db.session.commit()
-
-
-#class Programs_Terms(db.Model):
-	#Individual Attributes
-#	__tablename__ = 'programs_terms'
-	
-#	program_id = db.Column(db.Integer, db.ForeignKey('programs.id'), nullable=False)
-#	term_id = db.Column(db.Integer, db.ForeignKey('terms.id'))
-	
-	#Relationships
-#	program = db.relationship("Program",lazy = 'select',backref=db.backref('terms',lazy='joined'))
-#	term = db.relationship("Term",  lazy = 'select', backref = db.backref('programs',lazy='joined')) 
-	
 programs_terms = db.Table('Programs_Terms',
-db.Column('program_id', db.Integer, db.ForeignKey('programs.id'),primary_key=True),
-db.Column('term_id', db.Integer, db.ForeignKey('term.id')),primary_key=True)
-
-class Term(db.Model):	
-	#Individual Attributes
-	__tablename__ = "terms"
-
-	id = db.Column(db.Integer, primary_key=True)
-	name = db.Column(db.String(10))
+db.Column('program_id', db.Integer, db.ForeignKey('program.id'),primary_key=True),
+db.Column('term_id', db.Integer, db.ForeignKey('terms.id'),primary_key=True))
 
 
-	#Relationship
-	#programs = db.relationship("Programs_Terms", back_populates="term")
 
-
-	#Individual Methods
-	#optional method to set the porper string representation of the object
-	def __repr__(self):
-		return "<Term(id='%d', name='%s')>" % (self.id, self.name)
-
-	def __init__(self, name):
-		self.name = name
-
-	def save_to_db(self):
-		db.session.add(self)
-		db.session.commit()
-#Old way to construct the association tables 
-	#Association table to programs.py
-
-pograms_cities = db.Table('Programs_Cities',
-db.Column('program_id', db.Integer, db.ForeignKey('programs.id'),primary_key=True),
-db.Column('city_id', db.Integer, db.ForeignKey('city.id')),primary_key=True)
+programs_cities = db.Table('Programs_Cities',
+db.Column('program_id', db.Integer, db.ForeignKey('program.id'),primary_key=True),
+db.Column('city_id', db.Integer, db.ForeignKey('city.id'),primary_key=True))
 
 
 cities_countries = db.Table('Cities_Countries',
 db.Column('city_id', db.Integer, db.ForeignKey('city.id'),primary_key=True),
 db.Column('country_id', db.Integer, db.ForeignKey('country.id'),primary_key=True))
 
-
-
-#class Programs_Cities(db.Model):
-	#Individual Attributes
-	#__tablename__ = 'programs_cities'
-	
-	#program_id = db.Column(db.Integer, db.ForeignKey('programs.id'))
-	#city_id = Column(db.Integer, db.ForeignKey('cities.id'))
-
-	#Relationships
-	#program = db.relationship("Program",  back_populates="cities")
-	#city = db.relationship("City",  back_populates="programs")
-
-
-
-class City(db.Model):
-	#Individual Attributes
-	__tablename__="cities"
-	id = db.Column(db.Integer, primary_key=True)
-	city = db.Column(db.String(100))
-
-	#Relationships
-	programs = db.relationship("Programs_Cities", back_populates="city")
-	countries = db.relationship("Cities_Countries", back_populates="city")
-
-
-	#Individual Methods
-	#optional method to set the porper string representation of the object
-	def __repr__(self):
-		return "<City(City ID='%d', Name='%s')>" % (self.id, self.name)
-
-	def __init__(self, id, name):
-		self.id = id
-		self.city = name
-
-	def save_to_db(self):
-		db.session.add(self)
-		db.session.commit()
-
-
-#class Cities_Countries(db.Model):
-	#Individual Attributes
-#	__tablename__ = 'cities_countries'
-	
-#	city_id = Column(db.Integer, db.ForeignKey('cities.id'))
-#	country_id = db.Column(db.Integer, db.ForeignKey('countries.id'))
-
-	#Relationships
-#	city = db.relationship("City",  back_populates="countries")
-
-#	country = db.relationship("Country",  back_populates="cities")
-
-
-
-#This is the class to define the country table with ids
-class Country(db.Model):
-
-	#Individual Attributes
-	__tablename__ = "countries"
-
-	id = db.Column(db.Integer, primary_key=True)
-	country = db.Column(db.String(100))
-
-
-	#Relationship
-	cities = db.relationship("Cities_Countries", back_populates="country")
-
-
-	#Individual Methods
-	#optional method to set the porper string representation of the object
-	def __repr__(self):
-		return "<Country(Country ID='%d', Name='%s')>" % (self.id, self.name)
-
-	def __init__(self, id, name):
-		self.id = id
-		self.country = name
-
-	def save_to_db(self):
-		db.session.add(self)
-		db.session.commit()
-##Association Table refrences back to programs
-
 programs_languages = db.Table('Programs_Languages',
-db.Column('program_id', db.Integer, db.ForeignKey('programs.id'),primary_key=True),
-db.Column('language_id', db.Integer, db.ForeignKey('languages.id'),primary_key=True))
+db.Column('program_id', db.Integer, db.ForeignKey('program.id'),primary_key=True),
+db.Column('language_id', db.Integer, db.ForeignKey('language.id'),primary_key=True))
 
 
-#class Programs_Languages(db.Model):
-	#Individual Attributes
-#	__tablename__ = 'programs_languages'
-	
-#	program_id = db.Column(db.Integer, db.ForeignKey('programs.id'))
-#	language_id = Column(db.Integer, db.ForeignKey('languages.id'))
-	
-	#Relationships
-#	program = db.relationship("Program",  back_populates="languages")
-#	language = db.relationship("Language",  back_populates="programs")
-
-
-
-class Language(db.Model):
-	#Individual Attributes
-	__tablename__ = "languages"
-
-	id = db.Column(db.Integer, primary_key=True)
-	name = db.Column(db.String(50))
-
-	#Relationship 
-	programs = relationship("Programs_Languages",  back_populates="language")
-
-
-	#Individual Methods
-	#optional method to set the porper string representation of the object
-	def __repr__(self):
-		return "<Language(id='%d', name='%s')>" % (self.id, self.name)
-
-	def __init__(self, name):
-		self.area_name = name
-
-	def save_to_db(self):
-		db.session.add(self)
-		db.session.commit()
-#  Websites Refrenced:
-# https://docs.sqlalchemy.org/en/13/orm/tutorial.html
-# https://github.com/Daniel-Wh/radiosonde/blob/master/models/station_model.py
-# https://docs.sqlalchemy.org/en/13/orm/basic_relationships.html#many-to-many
-# Use this for how to refrence a query: 
-#  https://stackoverflow.com/questions/41270319/how-do-i-query-an-association-table-in-sqlalchemy
 
 
 class Program(db.Model):
 	#Individual Attributes
-	__tablename__ = "programs"
+	__tablename__ = "program"
 
 	id = db.Column(db.Integer, primary_key=True)
 	name = db.Column(db.String(100))
@@ -265,7 +88,8 @@ class Program(db.Model):
 	programs_languages = db.relationship('Languages', secondary=programs_terms, lazy='subquery', 
 								  backref=db.backref('language',lazy=True))
 
-	cities = db.relationship("Programs_Cities", back_populates="program")
+	cities = db.relationship("Cities", secondary=programs_cities, lazy='subquery', 
+								  backref=db.backref('city',lazy=True))
 
 	programs_terms = db.relationship('Term', secondary=programs_terms, lazy='subquery', 
 								  backref=db.backref('term',lazy=True))
@@ -284,8 +108,135 @@ class Program(db.Model):
 		self.research_opp = res
 		self.intership_opp = intern
 		self.description  = description
-
+		
 
 	def save_to_db(self):
 		db.session.add(self)
 		db.session.commit()
+
+
+
+
+
+class Area(db.Model):	
+	#Individual Attributes
+	__tablename__ = "areas"
+
+	id = db.Column(db.Integer, primary_key=True)
+	name = db.Column(db.String(100))
+	def __repr__(self):
+		return "<Area(id='%d', name='%s')>" % (self.id, self.name)
+
+	def __init__(self, name):
+		self.name = name
+
+	def save_to_db(self):
+		db.session.add(self)
+		db.session.commit()
+
+
+
+
+class Term(db.Model):	
+	#Individual Attributes
+	__tablename__ = "terms"
+
+	id = db.Column(db.Integer, primary_key=True)
+	name = db.Column(db.String(10))
+	#Individual Methods
+	#optional method to set the porper string representation of the object
+	def __repr__(self):
+		return "<Term(id='%d', name='%s')>" % (self.id, self.name)
+
+	def __init__(self, name):
+		self.name = name
+
+	def save_to_db(self):
+		db.session.add(self)
+		db.session.commit()
+
+
+
+
+
+
+
+class City(db.Model):
+	#Individual Attributes
+	__tablename__="city"
+	id = db.Column(db.Integer, primary_key=True)
+	city = db.Column(db.String(100))
+
+	#Relationships
+	countries = db.relationship('Countries', secondary=cities_countries, lazy='subquery', 
+								  backref=db.backref('country',lazy=True))
+
+
+	#Individual Methods
+	#optional method to set the porper string representation of the object
+	def __repr__(self):
+		return "<City(City ID='%d', Name='%s')>" % (self.id, self.name)
+
+	def __init__(self, id, name):
+		self.id = id
+		self.city = name
+
+	def save_to_db(self):
+		db.session.add(self)
+		db.session.commit()
+
+
+
+
+#This is the class to define the country table with ids
+class Country(db.Model):
+
+	#Individual Attributes
+	__tablename__ = "country"
+
+	id = db.Column(db.Integer, primary_key=True)
+	country = db.Column(db.String(100))
+
+	#Individual Methods
+	#optional method to set the porper string representation of the object
+	def __repr__(self):
+		return "<Country(Country ID='%d', Name='%s')>" % (self.id, self.name)
+
+	def __init__(self, id, name):
+		self.id = id
+		self.country = name
+
+	def save_to_db(self):
+		db.session.add(self)
+		db.session.commit()
+##Association Table refrences back to programs
+
+
+
+class Language(db.Model):
+	#Individual Attributes
+	__tablename__ = "language"
+
+	id = db.Column(db.Integer, primary_key=True)
+	name = db.Column(db.String(50))
+
+
+	#Individual Methods
+	#optional method to set the porper string representation of the object
+	def __repr__(self):
+		return "<Language(id='%d', name='%s')>" % (self.id, self.name)
+
+	def __init__(self, name):
+		self.area_name = name
+
+	def save_to_db(self):
+		db.session.add(self)
+		db.session.commit()
+#  Websites Refrenced:
+# https://docs.sqlalchemy.org/en/13/orm/tutorial.html
+# https://github.com/Daniel-Wh/radiosonde/blob/master/models/station_model.py
+# https://docs.sqlalchemy.org/en/13/orm/basic_relationships.html#many-to-many
+# Use this for how to refrence a query: 
+#  https://stackoverflow.com/questions/41270319/how-do-i-query-an-association-table-in-sqlalchemy
+
+
