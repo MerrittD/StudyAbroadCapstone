@@ -77,19 +77,20 @@ class Program(db.Model):
 	comm_eng = db.Column(db.Boolean)		#yes or no
 	research_opp =  db.Column(db.Boolean)	#yes or no
 	intership_opp = db.Column(db.Boolean)	#yes or no
-
+	area_of_study = db.Column(db.Integer, db.ForeignKey('Area.id'),nullable=False)
+	language_requirement = db.Column(db.Integer, db.ForeignKey('Language.id'),nullable=False)
 	# This is to contain any specific data that does not fall into any of the above catorgies  
 	description  = db.Column(db.String(5000))
 
 
 	#Relationships
-	programs_areas = db.relationship('Areas', secondary=programs_terms, lazy='subquery', 
+	programs_areas = db.relationship('Area', secondary=programs_terms, lazy='subquery', 
 								  backref=db.backref('area',lazy=True))
 
-	programs_languages = db.relationship('Languages', secondary=programs_terms, lazy='subquery', 
+	programs_languages = db.relationship('Language', secondary=programs_terms, lazy='subquery', 
 								  backref=db.backref('language',lazy=True))
 
-	cities = db.relationship("Cities", secondary=programs_cities, lazy='subquery', 
+	cities = db.relationship("City", secondary=programs_cities, lazy='subquery', 
 								  backref=db.backref('city',lazy=True))
 
 	programs_terms = db.relationship('Term', secondary=programs_terms, lazy='subquery', 

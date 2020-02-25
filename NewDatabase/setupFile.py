@@ -21,3 +21,6 @@ db.create_all()
 #if we use a text document to populate, we can take the strings in and use .split()
 #inorder to break the strings into the needed parts
 #however, this isnt secure and there has to be a better way 
+newProgram = Program("TestingProgram","30",True,True,True, "This is for testing","CS","Spanish","Madrid","Spain","Spring")
+db.session.add(newProgram)
+db.session.commit()
