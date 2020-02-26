@@ -6,7 +6,7 @@ from databaseTesting import db
 #This file is to be run upon initial setup of the database, and should pull from a 
 #backup file inorder to populate new database 
 
-#db.create_all()
+db.create_all()
 
 
 
@@ -26,7 +26,7 @@ Newprogram = Program("Spain shit", "500",True,True,True,"This is for testing, we
 Newprogram.area=[Area("CS")]
 Newprogram.language=[Language("Spanish")]
 newCity = City("Madrid")
-newCity.countries=[Country(10,"Spain")]
+newCity.countries=[Country("Spain")]
 Newprogram.city=[newCity]
 Newprogram.term=[Term("Spring")]
 db.session.add(Newprogram)

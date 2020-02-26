@@ -135,7 +135,7 @@ class City(db.Model):
 		return "<City(City ID='%d', Name='%s')>" % (self.id, self.name)
 
 	def __init__(self, name):
-		self.id = id
+		
 		self.city = name
 
 	def save_to_db(self):
@@ -158,8 +158,8 @@ class Country(db.Model):
 	def __repr__(self):
 		return "<Country(Country ID='%d', Name='%s')>" % (self.id, self.name)
 
-	def __init__(self, id, name):
-		self.id = id
+	def __init__(self, name):
+		
 		self.country = name
 
 	def save_to_db(self):
