@@ -134,7 +134,7 @@ class City(db.Model):
 	def __repr__(self):
 		return "<City(City ID='%d', Name='%s')>" % (self.id, self.name)
 
-	def __init__(self, id, name):
+	def __init__(self, name):
 		self.id = id
 		self.city = name
 
@@ -235,7 +235,7 @@ class Program(db.Model):
 	def __repr__(self):
 		return "<Program(Program ID='%d', Name='%s')>" % (self.id, self.name)
 
-	def __init__(self, name, cost, com, res, intern, description, area, language, city, country, term):
+	def __init__(self, name, cost, com, res, intern, description):
 		#This initilizes the program specific fields
 		print("GOT HERE")
 		self.name = name
