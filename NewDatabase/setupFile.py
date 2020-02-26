@@ -15,12 +15,12 @@ db.create_all()
     # create the program
     #newprogram = Program('all things needed')
     #db.session.add(newprogram)
-#once we are done adding programs,     
+#once we are done adding programs,      
 #db.session.commit()
 #admins can be loaded in with a different loop before the commit
 #if we use a text document to populate, we can take the strings in and use .split()
-#inorder to break the strings into the needed parts
-#however, this isnt secure and there has to be a better way 
-newProgram = Program("TestingProgram","30",True,True,True, "This is for testing","CS","Spanish","Madrid","Spain","Spring")
-db.session.add(newProgram)
+ #however, this isnt secure and there has to be a better way 
+newAdmin= Admin("test","1234")
+#newProgram = Program("TestingProgram","30",True,True,True, "This is for testing","CS","Spanish","Madrid","Spain","Spring")
+db.session.add(newAdmin)
 db.session.commit()

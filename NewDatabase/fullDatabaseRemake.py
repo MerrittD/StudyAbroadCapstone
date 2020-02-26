@@ -40,83 +40,34 @@ class Admin(db.Model):
 #Association Tables refrences back to programs: 
 # These tables hold all relationship rows between the 2 respected classes
 programs_areas = db.Table('Programs_Areas',
-	db.Column('Program_id', db.Integer, db.ForeignKey('program.id'),primary_key=True),
-	db.Column('Area_id', db.Integer, db.ForeignKey('areas.id'),primary_key=True))
+	db.Column('program_id', db.Integer, db.ForeignKey('program.id')),
+	db.Column('area_id', db.Integer, db.ForeignKey('areas.id')))
 
 programs_terms = db.Table('Programs_Terms',
-	db.Column('program_id', db.Integer, db.ForeignKey('program.id'),primary_key=True),
-	db.Column('term_id', db.Integer, db.ForeignKey('terms.id'),primary_key=True))
+	db.Column('program_id', db.Integer, db.ForeignKey('program.id')),
+	db.Column('term_id', db.Integer, db.ForeignKey('terms.id')))
 
 programs_languages = db.Table('Programs_Languages',
-	db.Column('program_id', db.Integer, db.ForeignKey('program.id'),primary_key=True),
-	db.Column('language_id', db.Integer, db.ForeignKey('language.id'),primary_key=True))
+	db.Column('program_id', db.Integer, db.ForeignKey('program.id')),
+	db.Column('language_id', db.Integer, db.ForeignKey('language.id')))
 
 programs_cities = db.Table('Programs_Cities',
-	db.Column('program_id', db.Integer, db.ForeignKey('program.id'),primary_key=True),
-	db.Column('city_id', db.Integer, db.ForeignKey('city.id'),primary_key=True))
+	db.Column('program_id', db.Integer, db.ForeignKey('program.id')),
+	db.Column('city_id', db.Integer, db.ForeignKey('city.id')))
 
 
 #This assocaition table holds the extra association between cities and countries 
 #	This is necessary to hold 3rd Degree of Normalization
 cities_countries = db.Table('Cities_Countries',
-	db.Column('city_id', db.Integer, db.ForeignKey('city.id'),primary_key=True),
-	db.Column('country_id', db.Integer, db.ForeignKey('country.id'),primary_key=True))
+	db.Column('city_id', db.Integer, db.ForeignKey('city.id')),
+	db.Column('country_id', db.Integer, db.ForeignKey('country.id')))
 
 
 
 #This class defines the table for all programs stored. The table holds specific attributes listed under 
 #	Individual Attributes. The relationships define connections to the 4 of the 5 association tables listed above.
 #	The relationships to the "children" classes are only defined here, but backrefrence upon update. 
-class Program(db.Model):
-	#Individual Attributes
-	__tablename__ = "program"
 
-	id = db.Column(db.Integer, primary_key=True)
-	name = db.Column(db.String(100))
-	cost = db.Column(db.String(15))
-	comm_eng = db.Column(db.Boolean)		#yes or no
-	research_opp =  db.Column(db.Boolean)	#yes or no
-	intership_opp = db.Column(db.Boolean)	#yes or no
-	area_of_study = db.Column(db.Integer, db.ForeignKey('Area.id'),nullable=False)
-	language_requirement = db.Column(db.Integer, db.ForeignKey('Language.id'),nullable=False)
-	# This is to contain any specific data that does not fall into any of the above catorgies  
-	description  = db.Column(db.String(5000))
-
-
-	#Relationships
-	programs_areas = db.relationship('Area', secondary=programs_terms, lazy='subquery', 
-								  backref=db.backref('area',lazy=True))
-
-	programs_languages = db.relationship('Language', secondary=programs_terms, lazy='subquery', 
-								  backref=db.backref('language',lazy=True))
-
-	cities = db.relationship("City", secondary=programs_cities, lazy='subquery', 
-								  backref=db.backref('city',lazy=True))
-
-	programs_terms = db.relationship('Term', secondary=programs_terms, lazy='subquery', 
-								  backref=db.backref('term',lazy=True))
-	
-
-	#Individual Methods
-	#optional method to set the porper string representation of the object
-	def __repr__(self):
-		return "<Program(Program ID='%d', Name='%s')>" % (self.id, self.name)
-
-	def __init__(self, name, cost, com, res, intern, description, area, language, city, country, term):
-		#This initilizes the program specific fields
-		self.name = name
-		self.cost = cost
-		self.comm_eng = com
-		self.research_opp = res
-		self.intership_opp = intern
-		self.description  = description
-
-		#This is to create all relationships needed when creating a program
-		#https://stackoverflow.com/questions/32938475/flask-sqlalchemy-check-if-row-exists-in-table
-
-	def save_to_db(self):
-		db.session.add(self)
-		db.session.commit()
 
 
 
@@ -175,7 +126,7 @@ class City(db.Model):
 	city = db.Column(db.String(100))
 
 	#Relationships
-	countries = db.relationship('Countries', secondary=cities_countries, lazy='subquery', 
+	countries = db.relationship('Country', secondary=cities_countries, lazy='subquery', 
 								  backref=db.backref('country',lazy=True))
 
 	#Individual Methods
@@ -236,6 +187,67 @@ class Language(db.Model):
 	def save_to_db(self):
 		db.session.add(self)
 		db.session.commit()
+
+
+
+
+class Program(db.Model):
+	#Individual Attributes
+	__tablename__ = "program"
+
+	id = db.Column(db.Integer, primary_key=True)
+	name = db.Column(db.String(100))
+	cost = db.Column(db.String(15))
+	comm_eng = db.Column(db.Boolean)		#yes or no
+	research_opp =  db.Column(db.Boolean)	#yes or no
+	intership_opp = db.Column(db.Boolean)	#yes or no
+	#area_of_study = db.Column(db.Integer, db.ForeignKey('Area.id'),nullable=False)
+	#language_requirement = db.Column(db.Integer, db.ForeignKey('Language.id'),nullable=False)
+	# This is to contain any specific data that does not fall into any of the above catorgies  
+	description  = db.Column(db.String(5000))
+
+
+	#Relationships
+	program_area= db.relationship('Area',
+								secondary=programs_areas, 
+								primaryjoin=programs_areas.c.program_id==id,
+								secondaryjoin=programs_areas.c.area_id==Area.id,
+								lazy=True, 
+								backref=db.backref('areas',lazy=True)
+								)
+
+	program_language = db.relationship('Language', secondary=programs_languages, lazy='subquery', 
+								  backref=db.backref('languages',lazy=True))
+
+	program_city = db.relationship('City', secondary=programs_cities, lazy='subquery', 
+								  backref=db.backref('cities',lazy=True))
+
+	program_term = db.relationship('Term', secondary=programs_terms, lazy='subquery', 
+								  backref=db.backref('terms',lazy=True))
+	
+
+	#Individual Methods
+	#optional method to set the porper string representation of the object
+	def __repr__(self):
+		return "<Program(Program ID='%d', Name='%s')>" % (self.id, self.name)
+
+	def __init__(self, name, cost, com, res, intern, description, area, language, city, country, term):
+		#This initilizes the program specific fields
+		print("GOT HERE")
+		self.name = name
+		self.cost = cost
+		self.comm_eng = com
+		self.research_opp = res
+		self.intership_opp = intern
+		self.description  = description
+		#programs_areas.append()
+		#This is to create all relationships needed when creating a program
+		#https://stackoverflow.com/questions/32938475/flask-sqlalchemy-check-if-row-exists-in-table
+
+	def save_to_db(self):
+		db.session.add(self)
+		db.session.commit()
+
 
 
 
