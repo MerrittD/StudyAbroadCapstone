@@ -12,8 +12,13 @@
   <link href="https://fonts.googleapis.com/css?family=Nanum+Gothic:400,700|Playfair+Display" rel="stylesheet">
 
   <!-- Bootstrap & custom CSS -->
+<<<<<<< HEAD
   <link rel="stylesheet" type="text/css" href="../static/css/style.css">
   <link rel="stylesheet" type="text/css" href="../static/css/bootstrap.min.css">
+=======
+  <link rel="stylesheet" type="text/css" href="static/css/style.css"> <!--why is this link broken? - Ryan-->
+  <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+>>>>>>> 79ceacaec528f8b4c1b571519b9580b3e142aea5
 
   <link rel="shortcut icon" href="{% static '/favicon.ico' %}">
   <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
@@ -55,6 +60,7 @@
       <a class="btn btn-outline-secondary" href="{% url 'results' %}">BROWSE</a>
       <a class="p-2 text-dark" href="#" id="howToButton">HOW TO</a> <!-- used sweetalert2 to create pop up -->
       <a class="p-2 text-dark" href=https://www.southwestern.edu/community-engaged-learning/ target="_blank">CONTACT
+      <a class="p-2 text-dark" href=https://www.southwestern.edu/study-abroad/ target="_blank">CONTACT
         US</a>
       <a class="p-2 text-dark" href="{% url 'login' %}">ADMIN LOGIN</a>
     </nav>
