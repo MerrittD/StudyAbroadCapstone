@@ -79,7 +79,7 @@ class Area(db.Model):
 	__tablename__='Area'
 
 	id = db.Column(db.Integer, primary_key=True)
-	name = db.Column(db.String(100))
+	name = db.Column(db.String(100),unique=True,nullable=False)
 
 	#Individual Methods
 	def __repr__(self):
@@ -101,7 +101,7 @@ class Term(db.Model):
 	__tablename__='Term'
 
 	id = db.Column(db.Integer, primary_key=True)
-	name = db.Column(db.String(10))
+	name = db.Column(db.String(10),unique=True,nullable=False)
 
 	#Individual Methods
 	def __repr__(self):
@@ -123,7 +123,7 @@ class City(db.Model):
 	__tablename__='City'
 
 	id = db.Column(db.Integer, primary_key=True)
-	city = db.Column(db.String(100))
+	city = db.Column(db.String(100),unique=True,nullable=False)
 
 	#Relationships
 	countries = db.relationship('Country', 
@@ -152,7 +152,7 @@ class Country(db.Model):
 	
 
 	id = db.Column(db.Integer, primary_key=True)
-	country = db.Column(db.String(100))
+	country = db.Column(db.String(100),unique=True,nullable=False)
 
 	#Individual Methods
 	def __repr__(self):
@@ -175,7 +175,7 @@ class Language(db.Model):
 	__tablename__='Language'
 
 	id = db.Column(db.Integer, primary_key=True)
-	name = db.Column(db.String(50))
+	name = db.Column(db.String(50),unique=True,nullable=False)
 
 
 	#Individual Methods
@@ -197,11 +197,11 @@ class Program(db.Model):
 	__tablename__='Program'
 
 	id = db.Column(db.Integer, primary_key=True)
-	name = db.Column(db.String(100))
+	name = db.Column(db.String(100),unique=True,nullable=False)
 	cost = db.Column(db.String(15))
-	comm_eng = db.Column(db.Boolean)		#yes or no
-	research_opp =  db.Column(db.Boolean)	#yes or no
-	intership_opp = db.Column(db.Boolean)	#yes or no
+	comm_eng = db.Column(db.Boolean,nullable=False)		#yes or no
+	research_opp =  db.Column(db.Boolean,nullable=False)	#yes or no
+	intership_opp = db.Column(db.Boolean,nullable=False)	#yes or no
 	#area_of_study = db.Column(db.Integer, db.ForeignKey('Area.id'),nullable=False)
 	#language_requirement = db.Column(db.Integer, db.ForeignKey('Language.id'),nullable=False)
 	# This is to contain any specific data that does not fall into any of the above catorgies  
