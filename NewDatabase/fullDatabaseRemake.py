@@ -7,7 +7,7 @@ from flask_sqlalchemy import SQLAlchemy
 #This class handles all admin logins including username and passwords so that admins may edit the 
 #	information on the site. A normal user will only be able to view the information. 
 class Admin(db.Model):
-    __tablename__ = "users"  # table name is users
+
 
     id = db.Column(db.INTEGER, primary_key=True)  # column in table for id for user, auto incremented
     username = db.Column(db.String(40),unique=True,nullable=False)  # column in table for the user's username that is entered at login, no repeats
@@ -39,28 +39,28 @@ class Admin(db.Model):
 
 #Association Tables refrences back to programs: 
 # These tables hold all relationship rows between the 2 respected classes
-programs_areas = db.Table('Programs_Areas',
-	db.Column('program_id', db.Integer, db.ForeignKey('program.id')),
-	db.Column('area_id', db.Integer, db.ForeignKey('areas.id')))
+areas = db.Table('Programs_Areas',
+	db.Column('program_id', db.Integer, db.ForeignKey('Program.id')),
+	db.Column('area_id', db.Integer, db.ForeignKey('Area.id')))
 
-programs_terms = db.Table('Programs_Terms',
-	db.Column('program_id', db.Integer, db.ForeignKey('program.id')),
-	db.Column('term_id', db.Integer, db.ForeignKey('terms.id')))
+terms = db.Table('Programs_Terms',
+	db.Column('program_id', db.Integer, db.ForeignKey('Program.id')),
+	db.Column('term_id', db.Integer, db.ForeignKey('Term.id')))
 
-programs_languages = db.Table('Programs_Languages',
-	db.Column('program_id', db.Integer, db.ForeignKey('program.id')),
-	db.Column('language_id', db.Integer, db.ForeignKey('language.id')))
+languages = db.Table('Programs_Languages',
+	db.Column('program_id', db.Integer, db.ForeignKey('Program.id')),
+	db.Column('language_id', db.Integer, db.ForeignKey('Language.id')))
 
-programs_cities = db.Table('Programs_Cities',
-	db.Column('program_id', db.Integer, db.ForeignKey('program.id')),
-	db.Column('city_id', db.Integer, db.ForeignKey('city.id')))
+cities = db.Table('Programs_Cities',
+	db.Column('program_id', db.Integer, db.ForeignKey('Program.id')),
+	db.Column('city_id', db.Integer, db.ForeignKey('City.id')))
 
 
 #This assocaition table holds the extra association between cities and countries 
 #	This is necessary to hold 3rd Degree of Normalization
-cities_countries = db.Table('Cities_Countries',
-	db.Column('city_id', db.Integer, db.ForeignKey('city.id')),
-	db.Column('country_id', db.Integer, db.ForeignKey('country.id')))
+countries = db.Table('Cities_Countries',
+	db.Column('city_id', db.Integer, db.ForeignKey('City.id')),
+	db.Column('country_id', db.Integer, db.ForeignKey('Country.id')))
 
 
 
@@ -76,7 +76,7 @@ cities_countries = db.Table('Cities_Countries',
 #	It has a relationship back to the program class
 class Area(db.Model):	
 	#Individual Attributes
-	__tablename__ = "areas"
+	__tablename__='Area'
 
 	id = db.Column(db.Integer, primary_key=True)
 	name = db.Column(db.String(100))
@@ -98,7 +98,7 @@ class Area(db.Model):
 # It has a relationship back to the program class
 class Term(db.Model):	
 	#Individual Attributes
-	__tablename__ = "terms"
+	__tablename__='Term'
 
 	id = db.Column(db.Integer, primary_key=True)
 	name = db.Column(db.String(10))
@@ -120,14 +120,15 @@ class Term(db.Model):
 # It has a relationship back to the program class
 class City(db.Model):
 	#Individual Attributes
-	__tablename__="city"
+	__tablename__='City'
 
 	id = db.Column(db.Integer, primary_key=True)
 	city = db.Column(db.String(100))
 
 	#Relationships
-	countries = db.relationship('Country', secondary=cities_countries, lazy='subquery', 
-								  backref=db.backref('country',lazy=True))
+	countries = db.relationship('Country', 
+								secondary=countries, 
+								backref=db.backref('Country',lazy='dynamic'))
 
 	#Individual Methods
 	def __repr__(self):
@@ -146,9 +147,9 @@ class City(db.Model):
 #This is the class to define the country table with ids. 
 #It has a relationship back to the city class
 class Country(db.Model):
-
+	__tablename__='Country'
 	#Individual Attributes
-	__tablename__ = "country"
+	
 
 	id = db.Column(db.Integer, primary_key=True)
 	country = db.Column(db.String(100))
@@ -171,7 +172,7 @@ class Country(db.Model):
 #	It has a relationship back to the program class
 class Language(db.Model):
 	#Individual Attributes
-	__tablename__ = "language"
+	__tablename__='Language'
 
 	id = db.Column(db.Integer, primary_key=True)
 	name = db.Column(db.String(50))
@@ -193,7 +194,7 @@ class Language(db.Model):
 
 class Program(db.Model):
 	#Individual Attributes
-	__tablename__ = "program"
+	__tablename__='Program'
 
 	id = db.Column(db.Integer, primary_key=True)
 	name = db.Column(db.String(100))
@@ -208,22 +209,25 @@ class Program(db.Model):
 
 
 	#Relationships
-	program_area= db.relationship('Area',
-								secondary=programs_areas, 
-								primaryjoin=programs_areas.c.program_id==id,
-								secondaryjoin=programs_areas.c.area_id==Area.id,
-								lazy=True, 
-								backref=db.backref('areas',lazy=True)
+	area= db.relationship('Area',
+							secondary=areas, 
+							backref=db.backref('areas',lazy=True)
+							)
+
+	languages = db.relationship('Language',
+								secondary=languages,
+								backref=db.backref('languages',lazy=True)
 								)
 
-	program_language = db.relationship('Language', secondary=programs_languages, lazy='subquery', 
-								  backref=db.backref('languages',lazy=True))
+	city = db.relationship('City',
+						secondary=cities, 
+						backref=db.backref('cities',lazy=True)
+						)
 
-	program_city = db.relationship('City', secondary=programs_cities, lazy='subquery', 
-								  backref=db.backref('cities',lazy=True))
-
-	program_term = db.relationship('Term', secondary=programs_terms, lazy='subquery', 
-								  backref=db.backref('terms',lazy=True))
+	term = db.relationship('Term',
+						secondary=terms,  
+						backref=db.backref('terms',lazy=True)
+						)
 	
 
 	#Individual Methods
