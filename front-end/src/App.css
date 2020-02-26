@@ -1,0 +1,117 @@
+#nav {
+    background-color: #FFCD00;
+  }
+
+  .jumbotron-heading {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+  }
+  
+  a, p, h5 {
+    font-family: 'Nanum Gothic', sans-serif;
+  }
+  
+  a {
+    text-decoration: none;
+    color: #000;
+  }
+  
+  a:hover {
+    text-decoration: none;
+    color: #000;
+  }
+  
+  .form-control {
+    width: 40%;
+    margin: 0 auto;
+  }
+
+  button {
+    position: relative;
+    height: 50px;
+    width: 175px;
+    margin: 10px 7px;
+    padding: 5px 5px;
+    font-weight: 700;
+    font-size: 15px;
+    letter-spacing: 2px;
+    color: #FFCD00;
+    border: 3px #FFCD00 solid;
+    text-transform: uppercase;
+    outline: 0;
+    overflow:hidden;
+    background: #fff;
+    z-index: 1;
+    cursor: pointer;
+    text-decoration: none;
+    transition:         0.25s ease;
+    -o-transition:      0.25s ease;
+    -ms-transition:     0.25s ease;
+    -moz-transition:    0.25s ease;
+    -webkit-transition: 0.25s ease;
+  }
+  
+  button a {
+    text-decoration: none;
+    color: #FFCD00;
+  }
+  
+  button:hover{
+    text-decoration: none;
+    color: #fff;
+  }
+  
+  .fill:hover a {
+    color: #fff;
+  }
+  
+  .fill:before {
+    content: "";
+    position: absolute;
+    background: #FFCD00;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    top: 100%;
+    z-index: -1;
+    -webkit-transition: top 0.25s ease;
+  }
+  
+  .fill:hover:before {
+    top: 0;
+  }
+  
+  #resultsList h3 {
+    position: relative;
+    left: 10px;
+  }
+  
+  #id_category {
+    margin: 10px 10px 10px 10px;
+  }
+  
+  #filterBarContent form button {
+    position: relative;
+    float: right;
+    margin-right: 25px;
+  }
+
+  .result-header {
+    margin: 50px;
+  }
+
+  table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+  }
+  
+  td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+  }
+  
+  tr:nth-child(even) {
+    background-color: #dddddd;
+  }
