@@ -8,7 +8,6 @@ from flask_sqlalchemy import SQLAlchemy
 #	information on the site. A normal user will only be able to view the information. 
 class Admin(db.Model):
 
-
     id = db.Column(db.INTEGER, primary_key=True)  # column in table for id for user, auto incremented
     username = db.Column(db.String(40),unique=True,nullable=False)  # column in table for the user's username that is entered at login, no repeats
     password = db.Column(db.String(40),unique=True,nullable=False)  # column in table for the user's password that is entered at login, no repeats
@@ -64,11 +63,6 @@ countries = db.Table('Cities_Countries',
 
 
 
-#This class defines the table for all programs stored. The table holds specific attributes listed under 
-#	Individual Attributes. The relationships define connections to the 4 of the 5 association tables listed above.
-#	The relationships to the "children" classes are only defined here, but backrefrence upon update. 
-
-
 
 
 #This class defines the area class. It is to hold all areas of study that can exist 
@@ -94,7 +88,7 @@ class Area(db.Model):
 
 	@classmethod
 	def get_area_id(cls,name):
-		id = db.sessnion.query(cls).filter(cls.name == name).first()
+		id = db.session.query(cls).filter(cls.name == name).first()
 		if id is None:
 			newArea = Area(name)
 			db.session.add(newArea)
@@ -103,6 +97,16 @@ class Area(db.Model):
 			return newArea.id
 		else:
 			return id
+
+	# finds a row by specific id given as a parameter
+	@classmethod
+	def find_by_id(cls, _id):
+		return cls.query.filter_by(id=_id).first()
+
+	# finds a row by specific username given as a parameter
+	@classmethod
+	def find_by_name(cls, _name):
+		return cls.query.filter_by(name=_name).first()
 
 
 
@@ -129,6 +133,28 @@ class Term(db.Model):
 	def save_to_db(self):
 		db.session.add(self)
 		db.session.commit()
+		
+	@classmethod
+	def get_term_id(cls,name):
+		id = db.session.query(cls).filter(cls.name == name).first()
+		if id is None:
+			newTerm = Term(name)
+			db.session.add(newTerm)
+			db.session.commit()
+			print(name + " Has been added ")
+			return newTerm.id
+		else:
+			return id
+
+	# finds a row by specific id given as a parameter
+	@classmethod
+	def find_by_id(cls, _id):
+		return cls.query.filter_by(id=_id).first()
+
+	# finds a row by specific username given as a parameter
+	@classmethod
+	def find_by_name(cls, _name):
+		return cls.query.filter_by(name=_name).first()
 
 
 
@@ -159,6 +185,29 @@ class City(db.Model):
 		db.session.add(self)
 		db.session.commit()
 
+	@classmethod
+	def get_city_id(cls,name):
+		id = db.session.query(cls).filter(cls.name == name).first()
+		if id is None:
+			newCity = City(name)
+			db.session.add(newCity)
+			db.session.commit()
+			print(name + " Has been added ")
+			return newCity.id
+		else:
+			return id
+
+
+	# finds a row by specific id given as a parameter
+	@classmethod
+	def find_by_id(cls, _id):
+		return cls.query.filter_by(id=_id).first()
+
+	# finds a row by specific username given as a parameter
+	@classmethod
+	def find_by_name(cls, _name):
+		return cls.query.filter_by(name=_name).first()
+
 
 
 #This is the class to define the country table with ids. 
@@ -183,6 +232,28 @@ class Country(db.Model):
 		db.session.add(self)
 		db.session.commit()
 
+	@classmethod
+	def get_country_id(cls,name):
+		id = db.session.query(cls).filter(cls.name == name).first()
+		if id is None:
+			newCountry = Country(name)
+			db.session.add(newCountry)
+			db.session.commit()
+			print(name + " Has been added ")
+			return newCountry.id
+		else:
+			return id
+
+	# finds a row by specific id given as a parameter
+	@classmethod
+	def find_by_id(cls, _id):
+		return cls.query.filter_by(id=_id).first()
+
+	# finds a row by specific username given as a parameter
+	@classmethod
+	def find_by_name(cls, _name):
+		return cls.query.filter_by(name=_name).first()
+
 
 
 # This class defines the Langue class which holds all foreign languages a proram can offer to teach
@@ -206,9 +277,34 @@ class Language(db.Model):
 		db.session.add(self)
 		db.session.commit()
 
+	@classmethod
+	def get_language_id(cls,name):
+		id = db.session.query(cls).filter(cls.name == name).first()
+		if id is None:
+			newLanguage = Language(name)
+			db.session.add(newLanguage)
+			db.session.commit()
+			print(name + " Has been added ")
+			return newLanguage.id
+		else:
+			return id
+
+	# finds a row by specific id given as a parameter
+	@classmethod
+	def find_by_id(cls, _id):
+		return cls.query.filter_by(id=_id).first()
+
+	# finds a row by specific username given as a parameter
+	@classmethod
+	def find_by_name(cls, _name):
+		return cls.query.filter_by(name=_name).first()
 
 
 
+
+#This class defines the table for all programs stored. The table holds specific attributes listed under 
+#	Individual Attributes. The relationships define connections to the 4 of the 5 association tables listed above.
+#	The relationships to the "children" classes are only defined here, but backrefrence upon update. 
 class Program(db.Model):
 	#Individual Attributes
 	__tablename__='Program'
@@ -226,7 +322,7 @@ class Program(db.Model):
 
 
 	#Relationships
-	area= db.relationship('Area',
+	area = db.relationship('Area',
 							secondary=areas, 
 							backref=db.backref('areas',lazy=True)
 							)
@@ -269,9 +365,66 @@ class Program(db.Model):
 		#https://stackoverflow.com/questions/32938475/flask-sqlalchemy-check-if-row-exists-in-table
 
 	def save_to_db(self):
-
 		db.session.add(self)
 		db.session.commit()
+
+
+	def add_language(self, newLanguage): 
+		self.languages.append(newLanguage)
+
+	def remove_language(self, oldLanguage): 
+		self.languages.remove(oldLanguage)
+
+
+	def add_area(self, newArea): 
+		self.areas.append(newArea)
+
+	def remove_area(self, oldArea): 
+		self.areas.remove(oldArea)
+
+
+	def add_term(self, newTerm): 
+		self.terms.append(newTerm)
+
+	def remove_term(self, oldTerm): 
+		self.terms.remove(oldTerm)
+
+
+	def add_city(self, newCity): 
+		self.cities.append(newCity)
+
+	def remove_city(self, oldCity): 
+		self.cities.remove(oldCity)
+
+
+
+	@classmethod
+	def sort_by_language(cls, desiredLanguage):
+		return cls.query.join(Programs_Languages).join(Language).filter(Programs_Languages.c.language_id == get_language_id(desiredLanguage)).all()
+
+	@classmethod
+	def sort_by_term(cls, desiredTerm):
+		return cls.query.join(Programs_Terms).join(Term).filter(Programs_Terms.c.term_id == get_term_id(desiredTerm)).all()
+
+	@classmethod
+	def sort_by_area(cls, desiredArea):
+		return cls.query.join(Programs_Areas).join(Area).filter(Programs_Areas.c.area_id == get_area_id(desiredArea)).all()
+
+
+
+	# finds a row by specific id given as a parameter
+	@classmethod
+	def find_by_id(cls, _id):
+		return cls.query.filter_by(id=_id).first()
+
+	# finds a row by specific username given as a parameter
+	@classmethod
+	def find_by_username(cls, _name):
+		return cls.query.filter_by(name=_name).first()
+
+
+		
+
 
 
 
