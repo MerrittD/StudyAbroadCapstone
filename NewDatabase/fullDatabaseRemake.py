@@ -261,8 +261,8 @@ class Program(db.Model):
 		self.research_opp = res
 		self.intership_opp = intern
 		self.description  = description
-		self.area.append(Area(areaGiven))
-		self.languages.append(Language(languageGiven))
+		#self.area.append(Area(areaGiven))
+		#self.languages.append(Language(languageGiven))
 		
 		#programs_areas.append()
 		#This is to create all relationships needed when creating a program
