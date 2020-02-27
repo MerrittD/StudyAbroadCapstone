@@ -91,6 +91,20 @@ class Area(db.Model):
 	def save_to_db(self):
 		db.session.add(self)
 		db.session.commit()
+	@classmethod
+	def get_area_id(cls,name):
+		id = db.sessnion.query(cls).filter(cls.name == name).first()
+		if id is None:
+			newArea = Area(name)
+			db.session.add(newArea)
+			print(name + " Has been added ")
+			return newArea.id
+		else:
+			return id
+
+
+
+
 
 
 
@@ -113,6 +127,7 @@ class Term(db.Model):
 	def save_to_db(self):
 		db.session.add(self)
 		db.session.commit()
+
 
 
 
@@ -235,7 +250,7 @@ class Program(db.Model):
 	def __repr__(self):
 		return "<Program(Program ID='%d', Name='%s')>" % (self.id, self.name)
 
-	def __init__(self, name, cost, com, res, intern, description):
+	def __init__(self, name, cost, com, res, intern, description,areaGiven,languageGiven,cityGiven,countryGiven,termGiven):
 		#This initilizes the program specific fields
 		print("GOT HERE")
 		self.name = name
@@ -244,11 +259,15 @@ class Program(db.Model):
 		self.research_opp = res
 		self.intership_opp = intern
 		self.description  = description
+		self.area.append(Area(areaGiven))
+		self.languages.append(Language(languageGiven))
+		
 		#programs_areas.append()
 		#This is to create all relationships needed when creating a program
 		#https://stackoverflow.com/questions/32938475/flask-sqlalchemy-check-if-row-exists-in-table
 
 	def save_to_db(self):
+
 		db.session.add(self)
 		db.session.commit()
 
