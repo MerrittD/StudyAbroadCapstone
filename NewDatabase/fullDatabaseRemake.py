@@ -91,12 +91,14 @@ class Area(db.Model):
 	def save_to_db(self):
 		db.session.add(self)
 		db.session.commit()
+
 	@classmethod
 	def get_area_id(cls,name):
 		id = db.sessnion.query(cls).filter(cls.name == name).first()
 		if id is None:
 			newArea = Area(name)
 			db.session.add(newArea)
+			db.session.commit()
 			print(name + " Has been added ")
 			return newArea.id
 		else:
