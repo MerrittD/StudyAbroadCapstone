@@ -57,9 +57,9 @@ cities = db.Table('Programs_Cities',
 
 #This assocaition table holds the extra association between cities and countries 
 #	This is necessary to hold 3rd Degree of Normalization
-countries = db.Table('Cities_Countries',
-	db.Column('city_id', db.Integer, db.ForeignKey('City.id')),
-	db.Column('country_id', db.Integer, db.ForeignKey('Country.id')))
+#countries = db.Table('Cities_Countries',
+#	db.Column('city_id', db.Integer, db.ForeignKey('City.id')),
+#	db.Column('country_id', db.Integer, db.ForeignKey('Country.id')))
 
 
 
@@ -166,8 +166,8 @@ class City(db.Model):
 	__tablename__='City'
 
 	id = db.Column(db.Integer, primary_key=True)
-	city = db.Column(db.String(100),unique=True,nullable=False)
-
+	city = db.Column(db.String(100),nullable=False)
+	country= db.Column(db.String(100),nullable=False)
 	#Relationships
 	countries = db.relationship('Country', 
 								secondary=countries, 
@@ -177,82 +177,35 @@ class City(db.Model):
 	def __repr__(self):
 		return "<City(City ID='%d', Name='%s')>" % (self.id, self.name)
 
-	def __init__(self, name):
+	def __init__(self, nameCity,nameCountry):
 		
-		self.city = name
-
+		self.city = nameCity
+		self.country= nameCountry
 	def save_to_db(self):
 		db.session.add(self)
 		db.session.commit()
 
 	@classmethod
-	def get_city_id(cls,name):
-		id = db.session.query(cls).filter(cls.name == name).first()
-		if id is None:
-			newCity = City(name)
-			db.session.add(newCity)
-			db.session.commit()
-			print(name + " Has been added ")
-			return newCity.id
+	def get_Location_id(cls,nameCity,nameCountry):
+		id = db.session.query(cls).filter(cls.city == nameCity).filter(cls.country == nameCountry).first()
+		if id is None: 
+			return -1
 		else:
 			return id
-
-
 	# finds a row by specific id given as a parameter
 	@classmethod
 	def find_by_id(cls, _id):
+
 		return cls.query.filter_by(id=_id).first()
 
-	# finds a row by specific username given as a parameter
-	@classmethod
-	def find_by_name(cls, _name):
-		return cls.query.filter_by(name=_name).first()
+
+
 
 
 
 #This is the class to define the country table with ids. 
 #It has a relationship back to the city class
-class Country(db.Model):
-	__tablename__='Country'
-	#Individual Attributes
-	
 
-	id = db.Column(db.Integer, primary_key=True)
-	country = db.Column(db.String(100),unique=True,nullable=False)
-
-	#Individual Methods
-	def __repr__(self):
-		return "<Country(Country ID='%d', Name='%s')>" % (self.id, self.name)
-
-	def __init__(self, name):
-		
-		self.country = name
-
-	def save_to_db(self):
-		db.session.add(self)
-		db.session.commit()
-
-	@classmethod
-	def get_country_id(cls,name):
-		id = db.session.query(cls).filter(cls.name == name).first()
-		if id is None:
-			newCountry = Country(name)
-			db.session.add(newCountry)
-			db.session.commit()
-			print(name + " Has been added ")
-			return newCountry.id
-		else:
-			return id
-
-	# finds a row by specific id given as a parameter
-	@classmethod
-	def find_by_id(cls, _id):
-		return cls.query.filter_by(id=_id).first()
-
-	# finds a row by specific username given as a parameter
-	@classmethod
-	def find_by_name(cls, _name):
-		return cls.query.filter_by(name=_name).first()
 
 
 
@@ -357,8 +310,7 @@ class Program(db.Model):
 		self.research_opp = res
 		self.intership_opp = intern
 		self.description  = description
-		#self.area.append(Area(areaGiven))
-		#self.languages.append(Language(languageGiven))
+		
 		
 		#programs_areas.append()
 		#This is to create all relationships needed when creating a program
