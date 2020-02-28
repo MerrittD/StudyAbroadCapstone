@@ -89,19 +89,11 @@ class Area(db.Model):
 	@classmethod
 	def get_area_id(cls,name):
 		id = db.session.query(cls).filter(cls.name == name).first()
-		if id is None:
-			newArea = Area(name)
-			db.session.add(newArea)
-			db.session.commit()
-			print(name + " Has been added ")
-			return newArea.id
+		if id is None: 
+			return -1
 		else:
 			return id
 
-	# finds a row by specific id given as a parameter
-	@classmethod
-	def find_by_id(cls, _id):
-		return cls.query.filter_by(id=_id).first()
 
 	# finds a row by specific username given as a parameter
 	@classmethod
@@ -137,19 +129,11 @@ class Term(db.Model):
 	@classmethod
 	def get_term_id(cls,name):
 		id = db.session.query(cls).filter(cls.name == name).first()
-		if id is None:
-			newTerm = Term(name)
-			db.session.add(newTerm)
-			db.session.commit()
-			print(name + " Has been added ")
-			return newTerm.id
+		if id is None: 
+			return -1
 		else:
 			return id
 
-	# finds a row by specific id given as a parameter
-	@classmethod
-	def find_by_id(cls, _id):
-		return cls.query.filter_by(id=_id).first()
 
 	# finds a row by specific username given as a parameter
 	@classmethod
@@ -168,10 +152,7 @@ class City(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
 	city = db.Column(db.String(100),nullable=False)
 	country= db.Column(db.String(100),nullable=False)
-	#Relationships
-	countries = db.relationship('Country', 
-								secondary=countries, 
-								backref=db.backref('Country',lazy='dynamic'))
+	
 
 	#Individual Methods
 	def __repr__(self):
@@ -192,19 +173,11 @@ class City(db.Model):
 			return -1
 		else:
 			return id
+
 	# finds a row by specific id given as a parameter
 	@classmethod
 	def find_by_id(cls, _id):
-
 		return cls.query.filter_by(id=_id).first()
-
-
-
-
-
-
-#This is the class to define the country table with ids. 
-#It has a relationship back to the city class
 
 
 
@@ -233,19 +206,11 @@ class Language(db.Model):
 	@classmethod
 	def get_language_id(cls,name):
 		id = db.session.query(cls).filter(cls.name == name).first()
-		if id is None:
-			newLanguage = Language(name)
-			db.session.add(newLanguage)
-			db.session.commit()
-			print(name + " Has been added ")
-			return newLanguage.id
+		if id is None: 
+			return -1
 		else:
 			return id
 
-	# finds a row by specific id given as a parameter
-	@classmethod
-	def find_by_id(cls, _id):
-		return cls.query.filter_by(id=_id).first()
 
 	# finds a row by specific username given as a parameter
 	@classmethod
@@ -268,11 +233,8 @@ class Program(db.Model):
 	comm_eng = db.Column(db.Boolean,nullable=False)		#yes or no
 	research_opp =  db.Column(db.Boolean,nullable=False)	#yes or no
 	intership_opp = db.Column(db.Boolean,nullable=False)	#yes or no
-	#area_of_study = db.Column(db.Integer, db.ForeignKey('Area.id'),nullable=False)
-	#language_requirement = db.Column(db.Integer, db.ForeignKey('Language.id'),nullable=False)
-	# This is to contain any specific data that does not fall into any of the above catorgies  
 	description  = db.Column(db.String(5000))
-
+	url = db.Column(db.String(5000))
 
 	#Relationships
 	area = db.relationship('Area',
@@ -301,9 +263,8 @@ class Program(db.Model):
 	def __repr__(self):
 		return "<Program(Program ID='%d', Name='%s')>" % (self.id, self.name)
 
-	def __init__(self, name, cost, com, res, intern, description,areaGiven,languageGiven,cityGiven,countryGiven,termGiven):
+	def __init__(self, name, cost, com, res, intern, description,):
 		#This initilizes the program specific fields
-		print("GOT HERE")
 		self.name = name
 		self.cost = cost
 		self.comm_eng = com
@@ -315,6 +276,7 @@ class Program(db.Model):
 		#programs_areas.append()
 		#This is to create all relationships needed when creating a program
 		#https://stackoverflow.com/questions/32938475/flask-sqlalchemy-check-if-row-exists-in-table
+
 
 	def save_to_db(self):
 		db.session.add(self)
@@ -362,6 +324,9 @@ class Program(db.Model):
 	def sort_by_area(cls, desiredArea):
 		return cls.query.join(Programs_Areas).join(Area).filter(Programs_Areas.c.area_id == get_area_id(desiredArea)).all()
 
+	@classmethod
+	def sort_by_location(cls, desiredCountry):
+		return clas.query.join(Programs_Cities).join(Country).
 
 
 	# finds a row by specific id given as a parameter
