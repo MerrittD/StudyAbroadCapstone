@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
-import ExampleComponent from '../components/ExampleComponent'
+import NavBar from '../components/NavBar'
 import SearchBar from '../components/SearchBar'
 
 function Homepage() {
     return (
         <div>
-            <ExampleComponent />
+            <NavBar />
             <SearchBar />
         </div>
     )

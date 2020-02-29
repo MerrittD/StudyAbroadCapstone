@@ -1,14 +1,14 @@
 import React, { Component } from 'react'
-import ExampleComponent from '../components/ExampleComponent'
+import NavBar from '../components/NavBar'
 import SearchBar from '../components/SearchBar'
 import ResultHeader from '../components/ResultHeader'
 import Result from '../components/Result'
 
 
-export default function ResultList() {
+export default function ResultPage() {
     return (
         <div>
-            <ExampleComponent />
+            <NavBar />
             <SearchBar />
             <ResultHeader />
             <Result />

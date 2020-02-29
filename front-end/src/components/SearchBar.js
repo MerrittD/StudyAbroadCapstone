@@ -36,7 +36,7 @@ class SearchBar extends Component {
                         <a href="#">Link 3</a>
                     </div>
                 </div>
-                <a href="/ResultList"> Search</a>
+                <a href="/ResultPage"> Search</a>
             </div>
         )
     }
