@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import NavBar from '../components/NavBar'
 import SearchBar from '../components/SearchBar'
 
-function Homepage() {
+function Browse() {
     return (
         <div>
             <NavBar />
@@ -11,4 +11,4 @@ function Homepage() {
     )
 }
 
-export default Homepage;
+export default Browse;

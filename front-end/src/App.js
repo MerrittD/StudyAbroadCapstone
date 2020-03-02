@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { BrowserRouter, Switch, Route } from 'react-router-dom'
 import './App.css';
 import './css/bootstrap.min.css';
-import Homepage from './pages/Homepage';
+import Browse from './pages/Browse';
 import HowToPage from './pages/HowToPage';
 import ContactUsPage from './pages/ContactUsPage';
 import AdminLoginPage from './pages/AdminLoginPage';
@@ -17,7 +17,7 @@ class App extends Component {
 
         <BrowserRouter basename='/'>
           <Switch>
-            <Route exact path="/" component={Homepage} />
+            <Route exact path="/" component={Browse} />
             <Route path="/ResultPage" component={ResultPage} />
             <Route path="/HowToPage" component={HowToPage} />
             <Route path="/ContactUsPage" component={ContactUsPage} />
@@ -25,9 +25,6 @@ class App extends Component {
             <Route path="/AdminDashboardPage" component={AdminDashboardPage} />
           </Switch>
         </BrowserRouter>
-
-
-
       </div>
     );
   }
