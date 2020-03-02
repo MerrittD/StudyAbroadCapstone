@@ -15,12 +15,14 @@ class Browse extends Component {
     /* Function that lets us fetch from the database
         Data passed into an array of object called programs*/
     componentDidMount() {
-        var initialPrograms = [];
-        fetch('url')
+        let initialPrograms = [];
+        fetch('https://my-json-server.typicode.com/MasonTDaniel/capstonedatajson/db')
             .then(response => {
                 return response.json();
             }).then(data => {
-                initalPrograms = data.results.map((program) => {
+                console.log(data)
+                initialPrograms = data.results.map((program) => {
+                    return program
                 });
                 console.log(initialPrograms);
                 this.setState({
