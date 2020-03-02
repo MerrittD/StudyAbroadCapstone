@@ -3,6 +3,10 @@ import NavBar from '../components/NavBar'
 import SearchBar from '../components/SearchBar'
 
 class Browse {
+
+
+
+
     render() {
         return (
             <div>
