@@ -145,9 +145,9 @@ class Term(db.Model):
 
 #This class defines the city table which holds all cities a program can be offered in
 # It has a relationship back to the program class
-class City(db.Model):
+class Location(db.Model):
 	#Individual Attributes
-	__tablename__='City'
+	__tablename__='Location'
 
 	id = db.Column(db.Integer, primary_key=True)
 	city = db.Column(db.String(100),nullable=False)
@@ -247,7 +247,7 @@ class Program(db.Model):
 								backref=db.backref('languages',lazy=True)
 								)
 
-	city = db.relationship('City',
+	Location = db.relationship('Location',
 						secondary=cities, 
 						backref=db.backref('cities',lazy=True)
 						)
@@ -304,11 +304,11 @@ class Program(db.Model):
 		self.terms.remove(oldTerm)
 
 
-	def add_city(self, newCity): 
-		self.cities.append(newCity)
+	def add_tocation(self, newCity,newCountry):
+		self.Location.append(newCity,oldCountry)
 
-	def remove_city(self, oldCity): 
-		self.cities.remove(oldCity)
+	def remove_Location(self, oldCity,oldCountry): 
+		self.Location.remove(oldCity,oldCountry)
 
 
 
