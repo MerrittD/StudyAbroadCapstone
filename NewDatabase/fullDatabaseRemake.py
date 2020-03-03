@@ -50,9 +50,9 @@ languages = db.Table('Programs_Languages',
 	db.Column('program_id', db.Integer, db.ForeignKey('Program.id')),
 	db.Column('language_id', db.Integer, db.ForeignKey('Language.id')))
 
-cities = db.Table('Programs_Cities',
+locations = db.Table('Programs_Cities',
 	db.Column('program_id', db.Integer, db.ForeignKey('Program.id')),
-	db.Column('city_id', db.Integer, db.ForeignKey('City.id')))
+	db.Column('Location_id', db.Integer, db.ForeignKey('Location.id')))
 
 
 #This assocaition table holds the extra association between cities and countries 
@@ -247,9 +247,9 @@ class Program(db.Model):
 								backref=db.backref('languages',lazy=True)
 								)
 
-	Location = db.relationship('Location',
-						secondary=cities, 
-						backref=db.backref('cities',lazy=True)
+	loc = db.relationship('Location',
+						secondary=locations, 
+						backref=db.backref('locations',lazy=True)
 						)
 
 	term = db.relationship('Term',
@@ -263,7 +263,7 @@ class Program(db.Model):
 	def __repr__(self):
 		return "<Program(Program ID='%d', Name='%s')>" % (self.id, self.name)
 
-	def __init__(self, name, cost, com, res, intern, description,):
+	def __init__(self, name, cost, com, res, intern, description,newLanguage,newArea,newTerm,newCity,newCountry):
 		#This initilizes the program specific fields
 		self.name = name
 		self.cost = cost
@@ -271,6 +271,11 @@ class Program(db.Model):
 		self.research_opp = res
 		self.intership_opp = intern
 		self.description  = description
+		self.add_area(newArea)
+		self.add_language(newLanguage)
+		self.add_location(newCity,newCountry)
+		self.add_term(newTerm)
+		
 		
 		
 		#programs_areas.append()
@@ -291,10 +296,10 @@ class Program(db.Model):
 
 
 	def add_area(self, newArea): 
-		self.areas.append(newArea)
+		self.area.append(newArea)
 
 	def remove_area(self, oldArea): 
-		self.areas.remove(oldArea)
+		self.area.remove(oldArea)
 
 
 	def add_term(self, newTerm): 
@@ -304,11 +309,11 @@ class Program(db.Model):
 		self.terms.remove(oldTerm)
 
 
-	def add_tocation(self, newCity,newCountry):
-		self.Location.append(newCity,oldCountry)
+	def add_location(self, newCity,newCountry):
+		self.locations.append(newCity,oldCountry)
 
 	def remove_Location(self, oldCity,oldCountry): 
-		self.Location.remove(oldCity,oldCountry)
+		self.locations.remove(oldCity,oldCountry)
 
 
 
@@ -324,9 +329,9 @@ class Program(db.Model):
 	def sort_by_area(cls, desiredArea):
 		return cls.query.join(Programs_Areas).join(Area).filter(Programs_Areas.c.area_id == get_area_id(desiredArea)).all()
 
-	@classmethod
-	def sort_by_location(cls, desiredCountry):
-		return clas.query.join(Programs_Cities).join(Country).
+#	@classmethod
+#	def sort_by_location(cls, desiredCountry):
+#		return clas.query.join(Programs_Cities).join(Country).
 
 
 	# finds a row by specific id given as a parameter
