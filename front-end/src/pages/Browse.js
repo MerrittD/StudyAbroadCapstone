@@ -26,18 +26,16 @@ class Browse extends Component {
             /* Examine the data and then map it to our initialPrograms array */
             .then(data => {
                 console.log(data)
-                initialPrograms = data.programs.map((program) => {
+                initialPrograms = data.allPrograms.map((program) => {
                     return program
                 });
                 console.log(initialPrograms);
                 /* Set our new state with the programs array filled with the programs from the array found in the data */
                 this.setState({
-                    programs: initialPrograms,
+                    programs: [{ term: 'Any', country: 'Any', areaOfStudy: 'Any', language: 'Any' }].concat(initialPrograms)
                 });
             });
     }
-
-
 
 
     render() {
