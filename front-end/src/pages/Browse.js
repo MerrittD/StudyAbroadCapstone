@@ -23,7 +23,7 @@ class Browse extends Component {
             })
             .then(data => {
                 console.log(data)
-                initialPrograms = data.results.map((program) => {
+                initialPrograms = data.programs.map((program) => {
                     return program
                 });
                 console.log(initialPrograms);
