@@ -2,6 +2,10 @@ from databaseTesting import db
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 
+# Written by Luke Yates and Daniel Merritt
+# Last Updated: 3/4/2020
+# This is the ORM (Object Relationship Model) for the Study Abroad Program Finder
+# 	Other Group Members: Ryan Wheeler, Mason Daniel, and Alyssa Case 
 
 
 #This class handles all admin logins including username and passwords so that admins may edit the 
@@ -35,7 +39,6 @@ class Admin(db.Model):
         return cls.query.filter_by(id=_id).first()
 
 
-
 #Association Tables refrences back to programs: 
 # These tables hold all relationship rows between the 2 respected classes
 areas = db.Table('Programs_Areas',
@@ -50,28 +53,18 @@ languages = db.Table('Programs_Languages',
 	db.Column('program_id', db.Integer, db.ForeignKey('Program.id')),
 	db.Column('language_id', db.Integer, db.ForeignKey('Language.id')))
 
-locations = db.Table('Programs_Cities',
+locations = db.Table('Programs_Locations',
 	db.Column('program_id', db.Integer, db.ForeignKey('Program.id')),
 	db.Column('Location_id', db.Integer, db.ForeignKey('Location.id')))
-
-
-#This assocaition table holds the extra association between cities and countries 
-#	This is necessary to hold 3rd Degree of Normalization
-#countries = db.Table('Cities_Countries',
-#	db.Column('city_id', db.Integer, db.ForeignKey('City.id')),
-#	db.Column('country_id', db.Integer, db.ForeignKey('Country.id')))
-
-
-
 
 
 #This class defines the area class. It is to hold all areas of study that can exist 
 #	throught a study abroad program
 #	It has a relationship back to the program class
 class Area(db.Model):	
-	#Individual Attributes
 	__tablename__='Area'
 
+	#Individual Attributes
 	id = db.Column(db.Integer, primary_key=True)
 	name = db.Column(db.String(100),unique=True,nullable=False)
 
@@ -94,24 +87,18 @@ class Area(db.Model):
 		else:
 			return id
 
-
 	# finds a row by specific username given as a parameter
 	@classmethod
 	def find_by_name(cls, _name):
 		return cls.query.filter_by(name=_name).first()
 
 
-
-
-
-
-
 #This class defines the term table which holds all terms offered by a program
 # It has a relationship back to the program class
 class Term(db.Model):	
-	#Individual Attributes
 	__tablename__='Term'
-
+	
+	#Individual Attributes
 	id = db.Column(db.Integer, primary_key=True)
 	name = db.Column(db.String(10),unique=True,nullable=False)
 
@@ -141,14 +128,12 @@ class Term(db.Model):
 		return cls.query.filter_by(name=_name).first()
 
 
-
-
 #This class defines the city table which holds all cities a program can be offered in
 # It has a relationship back to the program class
 class Location(db.Model):
-	#Individual Attributes
 	__tablename__='Location'
-
+	
+	#Individual Attributes
 	id = db.Column(db.Integer, primary_key=True)
 	city = db.Column(db.String(100),nullable=False)
 	country= db.Column(db.String(100),nullable=False)
@@ -167,7 +152,7 @@ class Location(db.Model):
 		db.session.commit()
 
 	@classmethod
-	def get_Location_id(cls,nameCity,nameCountry):
+	def get_Location_id(cls, nameCity, nameCountry):
 		id = db.session.query(cls).filter(cls.city == nameCity).filter(cls.country == nameCountry).first()
 		if id is None: 
 			return -1
@@ -180,17 +165,14 @@ class Location(db.Model):
 		return cls.query.filter_by(id=_id).first()
 
 
-
-
 # This class defines the Langue class which holds all foreign languages a proram can offer to teach
 #	It has a relationship back to the program class
 class Language(db.Model):
-	#Individual Attributes
 	__tablename__='Language'
 
+	#Individual Attributes
 	id = db.Column(db.Integer, primary_key=True)
 	name = db.Column(db.String(50),unique=True,nullable=False)
-
 
 	#Individual Methods
 	def __repr__(self):
@@ -211,22 +193,19 @@ class Language(db.Model):
 		else:
 			return id
 
-
 	# finds a row by specific username given as a parameter
 	@classmethod
 	def find_by_name(cls, _name):
 		return cls.query.filter_by(name=_name).first()
 
 
-
-
 #This class defines the table for all programs stored. The table holds specific attributes listed under 
 #	Individual Attributes. The relationships define connections to the 4 of the 5 association tables listed above.
 #	The relationships to the "children" classes are only defined here, but backrefrence upon update. 
 class Program(db.Model):
-	#Individual Attributes
 	__tablename__='Program'
 
+	#Individual Attributes
 	id = db.Column(db.Integer, primary_key=True)
 	name = db.Column(db.String(100),unique=True,nullable=False)
 	cost = db.Column(db.String(15))
@@ -263,7 +242,7 @@ class Program(db.Model):
 	def __repr__(self):
 		return "<Program(Program ID='%d', Name='%s')>" % (self.id, self.name)
 
-	def __init__(self, name, cost, com, res, intern, description,newLanguage,newArea,newTerm,newCity,newCountry):
+	def __init__(self, name, cost, com, res, intern, description):
 		#This initilizes the program specific fields
 		self.name = name
 		self.cost = cost
@@ -271,29 +250,19 @@ class Program(db.Model):
 		self.research_opp = res
 		self.intership_opp = intern
 		self.description  = description
-		self.add_area(newArea)
-		self.add_language(newLanguage)
-		self.add_location(newCity,newCountry)
-		self.add_term(newTerm)
-		
-		
-		
-		#programs_areas.append()
-		#This is to create all relationships needed when creating a program
-		#https://stackoverflow.com/questions/32938475/flask-sqlalchemy-check-if-row-exists-in-table
 
 
 	def save_to_db(self):
 		db.session.add(self)
 		db.session.commit()
 
-
+	#These methods will be by the API to add and remove any property that falls 
+	# under the many to many relationship. 
 	def add_language(self, newLanguage): 
 		self.languages.append(newLanguage)
 
 	def remove_language(self, oldLanguage): 
 		self.languages.remove(oldLanguage)
-
 
 	def add_area(self, newArea): 
 		self.area.append(newArea)
@@ -301,13 +270,11 @@ class Program(db.Model):
 	def remove_area(self, oldArea): 
 		self.area.remove(oldArea)
 
-
 	def add_term(self, newTerm): 
 		self.terms.append(newTerm)
 
 	def remove_term(self, oldTerm): 
 		self.terms.remove(oldTerm)
-
 
 	def add_location(self, newCity,newCountry):
 		self.locations.append(newCity,oldCountry)
@@ -316,6 +283,10 @@ class Program(db.Model):
 		self.locations.remove(oldCity,oldCountry)
 
 
+	#These methods will be used for sorting when the user initilizes 
+	@classmethod
+	def return_all_programs(cls):
+		return cls.query.order_by(cls.name).all()
 
 	@classmethod
 	def sort_by_language(cls, desiredLanguage):
@@ -329,10 +300,17 @@ class Program(db.Model):
 	def sort_by_area(cls, desiredArea):
 		return cls.query.join(Programs_Areas).join(Area).filter(Programs_Areas.c.area_id == get_area_id(desiredArea)).all()
 
-#	@classmethod
-#	def sort_by_location(cls, desiredCountry):
-#		return clas.query.join(Programs_Cities).join(Country).
+	@classmethod
+	def sort_by_location(cls, desiredCountry):
+		return cls.query.join(Programs_Locations).join(Location).filter(Programs_Locations.c.location_id == get_location_id(desiredCountry)).all()
 
+
+	def get_program_id(cls, name):
+		id = db.session.query(cls).filter(cls.name == name).first()
+		if id is None: 
+			return -1
+		else:
+			return id
 
 	# finds a row by specific id given as a parameter
 	@classmethod
@@ -341,15 +319,11 @@ class Program(db.Model):
 
 	# finds a row by specific username given as a parameter
 	@classmethod
-	def find_by_username(cls, _name):
+	def find_by_name(cls, _name):
 		return cls.query.filter_by(name=_name).first()
 
 
 		
-
-
-
-
 
 #  Websites Refrenced:
 # https://docs.sqlalchemy.org/en/13/orm/tutorial.html
@@ -357,5 +331,6 @@ class Program(db.Model):
 # https://docs.sqlalchemy.org/en/13/orm/basic_relationships.html#many-to-many
 # Use this for how to refrence a query: 
 #  https://stackoverflow.com/questions/41270319/how-do-i-query-an-association-table-in-sqlalchemy
+# https://stackoverflow.com/questions/32938475/flask-sqlalchemy-check-if-row-exists-in-table
 
 
