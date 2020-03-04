@@ -9,7 +9,7 @@ import AdminLoginPage from './pages/AdminLoginPage';
 import AdminDashboardPage from './pages/AdminDashboardPage';
 import ResultPage from './pages/ResultPage';
 
-
+/* Main component which holds the routing to each page */
 class App extends Component {
   render() {
     return (
