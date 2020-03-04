@@ -1,4 +1,4 @@
-from fullDatabaseRemake import Admin,areas,terms,cities,languages,Program,Area,Term, City,Country, Language 
+from fullDatabaseRemake import Admin,areas,terms,locations,languages,Program,Area,Term, Location, Language 
 from databaseTesting import db
 
 
@@ -22,12 +22,5 @@ db.create_all()
  #however, this isnt secure and there has to be a better way 
 #newAdmin= Admin("test","1234")
 #newProgram = Program("TestingProgram","30",True,True,True, "This is for testing","CS","Spanish","Madrid","Spain","Spring")
-Newprogram = Program("Spain shit", "500",True,True,True,"This is for testing, we wish a study abroad only cost 500")
-Newprogram.area=[Area("CS")]
-Newprogram.language=[Language("Spanish")]
-newCity = City("Madrid")
-newCity.countries=[Country("Spain")]
-Newprogram.city=[newCity]
-Newprogram.term=[Term("Spring")]
-db.session.add(Newprogram)
-db.session.commit()
+#Newprogram = Program("Spain shit", "500",True,True,True,"This is for testing, we wish a study abroad only cost 500","Spanish","Buisness","Spring","Madrid","Spain")
+#Newprogram.save_to_db()
