@@ -5,6 +5,7 @@ export default function HowToPage() {
     return (
         <div>
             <NavBar />
+            How to search
         </div>
     )
 }

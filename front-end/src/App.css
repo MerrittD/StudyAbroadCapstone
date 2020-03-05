@@ -28,15 +28,15 @@ a:hover {
 
 button {
   position: relative;
-  height: 50px;
-  width: 175px;
+  height: 35px;
+  width: 100px;
   margin: 10px 7px;
   padding: 5px 5px;
   font-weight: 700;
   font-size: 15px;
   letter-spacing: 2px;
   color: #FFCD00;
-  border: 3px #FFCD00 solid;
+  border: 2px #FFCD00 solid;
   text-transform: uppercase;
   outline: 0;
   overflow:hidden;
@@ -58,7 +58,8 @@ button a {
 
 button:hover{
   text-decoration: none;
-  color: #fff;
+  background: rgb(243, 243, 243);
+  color: #FFCD00;
 }
 
 /* Dropdown Button */
@@ -167,3 +168,26 @@ td, th {
 tr:nth-child(even) {
   background-color: #dddddd;
 }
+
+    
+
+.footer-columns {
+    background: #333333;
+    padding-top: 10rem;
+    padding-bottom: 3rem;
+    color: #999;
+        width: 70%;
+        margin: 1rem auto 0;
+        font-size: 0.9rem;
+        overflow: auto;
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        grid-gap: 2rem;
+    }
+    
+    ul li {
+        list-style: none;
+        line-height: 2.5;
+    }
+
+   
