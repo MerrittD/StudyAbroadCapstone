@@ -32,7 +32,7 @@ class Browse extends Component {
                 console.log(initialPrograms);
                 /* Set our new state with the programs array filled with the programs from the array found in the data */
                 this.setState({
-                    programs: [{ term: 'Any', country: 'Any', areaOfStudy: 'Any', language: 'Any' }].concat(initialPrograms)
+                    programs: initialPrograms
                 });
             });
     }

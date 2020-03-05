@@ -9,7 +9,6 @@ export default function ResultPage() {
     return (
         <div>
             <NavBar />
-            <SearchBar />
             <ResultHeader />
             <Result />
         </div>

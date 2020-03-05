@@ -7,35 +7,73 @@ class SearchBar extends Component {
         super();
     }
 
+    getUnique(arr) {
+
+        return arr.filter((e, i) => arr.indexOf(e) >= i)
+    }
+
+
     render() {
+        /* Pass down array prop holding all programs */
         let programs = this.props.state.programs;
+        /* Fill an array with all possible terms (by mapping through every program) */
         let allProgramTerms = programs.map((program) =>
-            <option key={program.name}>{program.term}</option>
+            program.term
         );
+        /* Remove all duplicate terms */
+        allProgramTerms = this.getUnique(allProgramTerms)
+        /* Make it into an array of options so that we can insert them into our dropdown (below) */
+        allProgramTerms = allProgramTerms.map((program, i) =>
+            <option key={i}>{program}</option>
+        );
+
+        /* Repeat for countries */
         let allProgramCountries = programs.map((program) =>
-            <option key={program.name}>{program.country}</option>
+            program.country
         );
+        allProgramCountries = this.getUnique(allProgramCountries)
+        allProgramCountries = allProgramCountries.map((program, i) =>
+            <option key={i}>{program}</option>
+        );
+
+        /* Repeat for areas of study */
         let allProgramAreasOfStudy = programs.map((program) =>
-            <option key={program.name}>{program.areaOfStudy}</option>
+            program.areaOfStudy
         );
+        allProgramAreasOfStudy = this.getUnique(allProgramAreasOfStudy)
+        allProgramAreasOfStudy = allProgramAreasOfStudy.map((program, i) =>
+            <option key={i}>{program}</option>
+        );
+
+        /* Repeat for languages */
         let allProgramLanguages = programs.map((program) =>
-            <option key={program.name}>{program.language}</option>
+            program.language
         );
+        allProgramLanguages = this.getUnique(allProgramLanguages)
+        allProgramLanguages = allProgramLanguages.map((program, i) =>
+            <option key={i}>{program}</option>
+        );
+
         return (
             <div>
                 <select>
+                    <option default value="Any">Any</option>
                     {allProgramTerms}
                 </select>
                 <select>
+                    <option default value="Any">Any</option>
                     {allProgramCountries}
                 </select>
                 <select>
+                    <option default value="Any">Any</option>
                     {allProgramAreasOfStudy}
                 </select>
                 <select>
+                    <option default value="Any">Any</option>
                     {allProgramLanguages}
                 </select>
-                <a href="/ResultPage"> Search</a>
+                <a href="/ResultPage"> <button>Search
+                    </button></a>
             </div>
         )
     }
