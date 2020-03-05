@@ -22,6 +22,8 @@ class SearchBar extends Component {
         );
         /* Remove all duplicate terms */
         allProgramTerms = this.getUnique(allProgramTerms)
+        /* Sort the terms into alphabetical order */
+        allProgramTerms.sort()
         /* Make it into an array of options so that we can insert them into our dropdown (below) */
         allProgramTerms = allProgramTerms.map((program, i) =>
             <option key={i}>{program}</option>
@@ -32,6 +34,7 @@ class SearchBar extends Component {
             program.country
         );
         allProgramCountries = this.getUnique(allProgramCountries)
+        allProgramCountries.sort()
         allProgramCountries = allProgramCountries.map((program, i) =>
             <option key={i}>{program}</option>
         );
@@ -41,6 +44,7 @@ class SearchBar extends Component {
             program.areaOfStudy
         );
         allProgramAreasOfStudy = this.getUnique(allProgramAreasOfStudy)
+        allProgramAreasOfStudy.sort()
         allProgramAreasOfStudy = allProgramAreasOfStudy.map((program, i) =>
             <option key={i}>{program}</option>
         );
@@ -50,13 +54,14 @@ class SearchBar extends Component {
             program.language
         );
         allProgramLanguages = this.getUnique(allProgramLanguages)
+        allProgramLanguages.sort()
         allProgramLanguages = allProgramLanguages.map((program, i) =>
             <option key={i}>{program}</option>
         );
 
         return (
             <div>
-                <select>
+                <select style={{ relative: 'center' }}>
                     <option default value="Any">Any</option>
                     {allProgramTerms}
                 </select>
@@ -74,7 +79,7 @@ class SearchBar extends Component {
                 </select>
                 <a href="/ResultPage"> <button>Search
                     </button></a>
-            </div>
+            </div >
         )
     }
 }
