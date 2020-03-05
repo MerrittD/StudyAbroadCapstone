@@ -8,6 +8,7 @@ class AdminLoginPage extends Component {
             <div className="main-login-container">
                 <NavBar />
                 <LoginForm />
+                <a href="/AdminDashboardPage">Temporary link to admin dashboard</a>
             </div>
         )
     }
