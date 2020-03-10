@@ -55,8 +55,58 @@ languages = db.Table('Programs_Languages',
 
 locations = db.Table('Programs_Locations',
 	db.Column('program_id', db.Integer, db.ForeignKey('Program.id')),
-	db.Column('Location_id', db.Integer, db.ForeignKey('Location.id')))
+	db.Column('location_id', db.Integer, db.ForeignKey('Location.id')))
 
+providers = db.Table('Programs_Providers',
+	db.Column('provider_id', db.Integer, db.ForeignKey('Provider.id')),
+	db.Column('program_id', db.Integer, db.ForeignKey('Program.id')))
+
+
+
+#This class defines the term table which holds all terms offered by a program
+# It has a relationship back to the program class
+class Provider(db.Model):	
+	__tablename__='Provider'
+	
+	#Individual Attributes
+	id = db.Column(db.Integer, primary_key=True)
+	name = db.Column(db.String(100),unique=True,nullable=False)
+
+
+	program = db.relationship('Program',
+						secondary=providers,  
+						backref=db.backref('programs',lazy=True)
+						)
+
+	#Individual Methods
+	def __repr__(self):
+		return "<Provider(id='%d', name='%s')>" % (self.id, self.name)
+
+	def __init__(self, name):
+		self.name = name
+
+	def save_to_db(self):
+		db.session.add(self)
+		db.session.commit()
+
+	def add_program(self, newProvider): 
+		self.terms.append(newProvider)
+
+	def remove_program(self, oldProvider): 
+		self.terms.remove(oldProvider)
+		
+	@classmethod
+	def get_provider_id(cls,name):
+		id = db.session.query(cls).filter(cls.name == name).first()
+		if id is None: 
+			return -1
+		else:
+			return id
+
+	# finds a row by specific username given as a parameter
+	@classmethod
+	def find_by_name(cls, _name):
+		return cls.query.filter_by(name=_name).first()
 
 #This class defines the area class. It is to hold all areas of study that can exist 
 #	throught a study abroad program
@@ -121,7 +171,6 @@ class Term(db.Model):
 		else:
 			return id
 
-
 	# finds a row by specific username given as a parameter
 	@classmethod
 	def find_by_name(cls, _name):
@@ -135,7 +184,7 @@ class Location(db.Model):
 	
 	#Individual Attributes
 	id = db.Column(db.Integer, primary_key=True)
-	city = db.Column(db.String(100),nullable=False)
+	city = db.Column(db.String(100),nullable=True)
 	country= db.Column(db.String(100),nullable=False)
 	
 
@@ -208,10 +257,18 @@ class Program(db.Model):
 	#Individual Attributes
 	id = db.Column(db.Integer, primary_key=True)
 	name = db.Column(db.String(100),unique=True,nullable=False)
+
 	cost = db.Column(db.String(15))
+	cost_stipulations = db.Column(db.String(500), nullable=True)
+
 	comm_eng = db.Column(db.Boolean,nullable=False)		#yes or no
 	research_opp =  db.Column(db.Boolean,nullable=False)	#yes or no
 	intership_opp = db.Column(db.Boolean,nullable=False)	#yes or no
+
+	date_created  = db.Column(db.DateTime, default=db.func.current_timestamp())
+	date_modified = db.Column(db.DateTime, default=db.func.current_timestamp(),
+                                       onupdate=db.func.current_timestamp())
+
 	description  = db.Column(db.String(5000))
 	url = db.Column(db.String(5000))
 
@@ -332,5 +389,6 @@ class Program(db.Model):
 # Use this for how to refrence a query: 
 #  https://stackoverflow.com/questions/41270319/how-do-i-query-an-association-table-in-sqlalchemy
 # https://stackoverflow.com/questions/32938475/flask-sqlalchemy-check-if-row-exists-in-table
+# https://stackoverflow.com/questions/12154129/how-can-i-automatically-populate-sqlalchemy-database-fields-flask-sqlalchemy
 
 
