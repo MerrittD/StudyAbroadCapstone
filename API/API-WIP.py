@@ -6,33 +6,26 @@ from datetime import datetime
 from flask import render_template
 from FlaskWebProject1 import app
 
-@app.route('/')
-@app.route('/home')
+import flask
+from flask import request, jsonify
+
+app = flask.Flask(__name__)
+app.config["DEBUG"] = True
+
+#psuedo code from book for api
+#might need to do one for each page,
+#need to look more into this
+#so we'll need one for the admin dash, admin login
+#browse, and result
+@app.route('/', methods=['GET'])
 def home():
-    """Renders the home page."""
-    return render_template(
-        'index.html',
-        title='Home Page',
-        year=datetime.now().year,
-    )
+    return '''<h1>Distant Reading Archive</h1>
+<p>A prototype API for distant reading of science fiction novels.</p>'''
 
-@app.route('/contact')
-def contact():
-    """Renders the contact page."""
-    return render_template(
-        'contact.html',
-        title='Contact',
-        year=datetime.now().year,
-        message='Your contact page.'
-    )
 
-@app.route('/about')
-def about():
-    """Renders the about page."""
-    return render_template(
-        'about.html',
-        title='About',
-        year=datetime.now().year,
-        message='Your application description page.'
-    )
+# A route to return all of the available entries in our catalog.
+@app.route('/api/v1/resources/books/all', methods=['GET'])
+def api_all():
+    return jsonify(books)
 
+app.run()
