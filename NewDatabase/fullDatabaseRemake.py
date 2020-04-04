@@ -58,7 +58,7 @@ locations = db.Table('Programs_Locations',
 	db.Column('program_id', db.Integer, db.ForeignKey('Program.id')),
 	db.Column('location_id', db.Integer, db.ForeignKey('Location.id')))
 
-providers = db.Table('Programs_Providers',
+programs = db.Table('Programs_Providers',
 	db.Column('provider_id', db.Integer, db.ForeignKey('Provider.id')),
 	db.Column('program_id', db.Integer, db.ForeignKey('Program.id')))
 
@@ -75,7 +75,7 @@ class Provider(db.Model):
 
 
 	program = db.relationship('Program',
-						secondary=providers,  
+						secondary=programs,  
 						backref=db.backref('programs',lazy=True)
 						)
 
@@ -91,13 +91,13 @@ class Provider(db.Model):
 		db.session.commit()
 
 	def add_program(self, newProgram): 
-		self.terms.append(newProgram)
+		self.program.append(newProgram)
 
 	def remove_program(self, oldProgram): 
-		self.terms.remove(oldProgram)
+		self.program.remove(oldProgram)
 		
 	@classmethod
-	def get_provider_id(cls,name):
+	def get_provider_id(cls, name):
 		id = db.session.query(cls).filter(cls.name == name).first()
 		if id is None: 
 			return -1
@@ -284,12 +284,12 @@ class Program(db.Model):
 							backref=db.backref('areas',lazy=True)
 							)
 
-	languages = db.relationship('Language',
+	language = db.relationship('Language',
 								secondary=languages,
 								backref=db.backref('languages',lazy=True)
 								)
 
-	loc = db.relationship('Location',
+	location = db.relationship('Location',
 						secondary=locations, 
 						backref=db.backref('locations',lazy=True)
 						)
@@ -323,10 +323,10 @@ class Program(db.Model):
 	#These methods will be by the API to add and remove any property that falls 
 	# under the many to many relationship. 
 	def add_language(self, newLanguage): 
-		self.languages.append(newLanguage)
+		self.language.append(newLanguage)
 
 	def remove_language(self, oldLanguage): 
-		self.languages.remove(oldLanguage)
+		self.language.remove(oldLanguage)
 
 	def add_area(self, newArea): 
 		self.area.append(newArea)
@@ -335,16 +335,16 @@ class Program(db.Model):
 		self.area.remove(oldArea)
 
 	def add_term(self, newTerm): 
-		self.terms.append(newTerm)
+		self.term.append(newTerm)
 
 	def remove_term(self, oldTerm): 
-		self.terms.remove(oldTerm)
+		self.term.remove(oldTerm)
 
 	def add_location(self, newCity,newCountry):
-		self.locations.append(newCity,newCountry)
+		self.location.append(newCity,newCountry)
 
 	def remove_Location(self, oldCity,oldCountry): 
-		self.locations.remove(oldCity,oldCountry)
+		self.location.remove(oldCity,oldCountry)
 
 
 	#These methods will be used for sorting when the user initilizes 
