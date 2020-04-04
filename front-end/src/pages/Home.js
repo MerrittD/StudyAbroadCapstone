@@ -3,7 +3,7 @@ import NavBar from '../components/NavBar'
 import SearchBar from '../components/SearchBar'
 
 /* Take in data from database and pass down data to SearchBar via props to populate dropdowns */
-class Homepage extends Component {
+class Home extends Component {
 
     /* Sets the programs array to empty initially */
     constructor() {
@@ -48,4 +48,4 @@ class Homepage extends Component {
     }
 }
 
-export default Homepage;
+export default Home;

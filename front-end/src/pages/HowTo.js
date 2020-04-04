@@ -1,7 +1,7 @@
 import React from 'react'
 import NavBar from '../components/NavBar'
 
-export default function HowToPage() {
+export default function HowTo() {
     return (
         <div>
             <NavBar />

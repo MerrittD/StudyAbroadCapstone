@@ -2,11 +2,11 @@ import React, { Component } from 'react';
 import { BrowserRouter, Switch, Route } from 'react-router-dom'
 import './App.css';
 import './css/bootstrap.min.css';
-import Homepage from './pages/Homepage';
-import HowToPage from './pages/HowToPage';
-import ContactUsPage from './pages/ContactUsPage';
-import AdminLoginPage from './pages/AdminLoginPage';
-import AdminDashboardPage from './pages/AdminDashboardPage';
+import Home from './pages/Home';
+import HowTo from './pages/HowTo';
+import ContactUs from './pages/ContactUs';
+import AdminLogin from './pages/AdminLogin';
+import AdminDashboard from './pages/AdminDashboard';
 import ResultPage from './pages/ResultPage';
 
 /* Main component which holds the routing to each page */
@@ -17,12 +17,12 @@ class App extends Component {
 
         <BrowserRouter basename='/'>
           <Switch>
-            <Route exact path="/" component={Homepage} />
+            <Route exact path="/" component={Home} />
             <Route path="/ResultPage" component={ResultPage} />
-            <Route path="/HowToPage" component={HowToPage} />
-            <Route path="/ContactUsPage" component={ContactUsPage} />
-            <Route path="/AdminLoginPage" component={AdminLoginPage} />
-            <Route path="/AdminDashboardPage" component={AdminDashboardPage} />
+            <Route path="/how-to" component={HowTo} />
+            <Route path="/contact-us" component={ContactUs} />
+            <Route path="/admin-login" component={AdminLogin} />
+            <Route path="/admin-dashboard" component={AdminDashboard} />
           </Switch>
         </BrowserRouter>
       </div>
