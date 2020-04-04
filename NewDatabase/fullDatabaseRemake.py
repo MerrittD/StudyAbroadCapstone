@@ -10,6 +10,7 @@ from flask_sqlalchemy import SQLAlchemy
 
 #This class handles all admin logins including username and passwords so that admins may edit the 
 #	information on the site. A normal user will only be able to view the information. 
+# This class was written by Daniel Whitney (refrence to GitHub repo at bottom of document)  
 class Admin(db.Model):
 
     id = db.Column(db.INTEGER, primary_key=True)  # column in table for id for user, auto incremented
@@ -89,11 +90,11 @@ class Provider(db.Model):
 		db.session.add(self)
 		db.session.commit()
 
-	def add_program(self, newProvider): 
-		self.terms.append(newProvider)
+	def add_program(self, newProgram): 
+		self.terms.append(newProgram)
 
-	def remove_program(self, oldProvider): 
-		self.terms.remove(oldProvider)
+	def remove_program(self, oldProgram): 
+		self.terms.remove(oldProgram)
 		
 	@classmethod
 	def get_provider_id(cls,name):
@@ -193,9 +194,9 @@ class Location(db.Model):
 		return "<City(City ID='%d', Name='%s')>" % (self.id, self.name)
 
 	def __init__(self, nameCity,nameCountry):
-		
 		self.city = nameCity
 		self.country= nameCountry
+
 	def save_to_db(self):
 		db.session.add(self)
 		db.session.commit()
@@ -299,7 +300,7 @@ class Program(db.Model):
 	def __repr__(self):
 		return "<Program(Program ID='%d', Name='%s')>" % (self.id, self.name)
 
-	def __init__(self, name, cost, com, res, intern, description):
+	def __init__(self, name, cost, com, res, intern, description, url):
 		#This initilizes the program specific fields
 		self.name = name
 		self.cost = cost
@@ -307,6 +308,7 @@ class Program(db.Model):
 		self.research_opp = res
 		self.intership_opp = intern
 		self.description  = description
+		self.url  = url
 
 
 	def save_to_db(self):
@@ -361,7 +363,7 @@ class Program(db.Model):
 	def sort_by_location(cls, desiredCountry):
 		return cls.query.join(Programs_Locations).join(Location).filter(Programs_Locations.c.location_id == get_location_id(desiredCountry)).all()
 
-
+	@classmethod
 	def get_program_id(cls, name):
 		id = db.session.query(cls).filter(cls.name == name).first()
 		if id is None: 
