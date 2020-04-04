@@ -214,6 +214,11 @@ class Location(db.Model):
 	def find_by_id(cls, _id):
 		return cls.query.filter_by(id=_id).first()
 
+	# finds a row by specific username given as a parameter
+	@classmethod
+	def find_by_name(cls, _city):
+		return cls.query.filter_by(city=_city).filter_by(country=_country).first()
+
 
 # This class defines the Langue class which holds all foreign languages a proram can offer to teach
 #	It has a relationship back to the program class
@@ -336,7 +341,7 @@ class Program(db.Model):
 		self.terms.remove(oldTerm)
 
 	def add_location(self, newCity,newCountry):
-		self.locations.append(newCity,oldCountry)
+		self.locations.append(newCity,newCountry)
 
 	def remove_Location(self, oldCity,oldCountry): 
 		self.locations.remove(oldCity,oldCountry)

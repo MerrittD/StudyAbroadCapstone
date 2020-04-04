@@ -33,15 +33,15 @@ db.create_all()
 #  provider.add_program(programName)
 #  provider.remove_program(programName)
 
-#  program.add_language(languageName)
-#  program.add_area(areaName)
-#  program.add_term(termName)
-#  program.add_location(locationCity, locationCountry)
+#  program.add_language(language)
+#  program.add_area(area)
+#  program.add_term(term)
+#  program.add_location(location)
 
-#  program.remove_language(languageName)
-#  program.remove_area(areaName)
-#  program.remove_term(termName)
-#  program.remove_location(locationCity, locationCountry)
+#  program.remove_language(language)
+#  program.remove_area(area)
+#  program.remove_term(term)
+#  program.remove_location(location)
 
 
 # This script below is to test all methods for the database
@@ -50,7 +50,7 @@ db.create_all()
 #This is a generic script to populate an entire program
 # These are data sheets that can be filled in with different information
 def create_new_program(): 
-    # all variables for a new program to be added
+    #-----------------------------TEMPORARY VARIABLES----------------------------
     providerName = NULL
     programName = NULL
     cost = NULL 
@@ -63,10 +63,11 @@ def create_new_program():
     #all relationships will be lists to accomdiate multiple entries
     areas = []
     terms = []
-    areas = []
-    languages = [[]]    #This will be a list of list like [city name, country name] representing a location
+    languages = []
+    locations = [[]]    #This will be a list of list like [city name, country name] representing a location
 
 
+     #-----------------------------PROVIDER RELATIONSHIP----------------------------
      # Check if the provider already exist, if it doesn't then make a new provider
     if(get_provider_id(providerName) == -1):
         prov = Provider(providerName)
@@ -82,15 +83,62 @@ def create_new_program():
     #Add the program to the provider
     prov.add_program(programName)
 
+    #might need save to db methods for the provider and program before performing other operations
+
+
+    #-----------------------------PROGRAM RELATIONSHIPS----------------------------
+    # AREA, TERM, LANGUAGES, LOCATION
+
+    # AREA: 
+    # Cyle through all area names: check to see if the area already exist in the db, 
+    #    if it doesn't, add it to the program and create the relationship. 
+    for i in areas:
+        if(get_area_id(i) == -1):
+            tempArea = Area(i)
+        else: 
+            tempArea = find_by_name(i)
+        
+        prog.add_area(tempArea)
+        #might need save to db methods
+
+    # TERM: 
+    # Cyle through all term names: check to see if the term already exist in the db, 
+    #    if it doesn't, add it to the program and create the relationship. 
+    for i in terms:
+        if(get_term_id(i) == -1):
+            tempTerm = Term(i)
+        else: 
+            tempTerm = find_by_name(i)
+        
+        prog.add_term(tempTerm)
+        #might need save to db methods
+
+    # LANGUAGES: 
+    # Cyle through all term names: check to see if the term already exist in the db, 
+    #    if it doesn't, add it to the program and create the relationship. 
+    for i in languages:
+        if(get_language_id(i) == -1):
+            tempLanguage = Language(i)
+        else: 
+            tempLanguage = find_by_name(i)
+        
+        prog.add_language(tempLanguage)
+        #might need save to db methods
+
+    # LOCATION: 
+    # Cyle through all term names: check to see if the term already exist in the db, 
+    #    if it doesn't, add it to the program and create the relationship. 
+    for i in locations:
+        if(get_location_id(i[1], i[2]) == -1):
+            tempLocation = Location(i[1], i[2])
+        else: 
+            tempLocation = find_by_name(i[1], i[2])
+        
+        prog.add_location(tempLocation)
+        #might need save to db methods
 
 
 
-    
-
-    lang = Language(self, langName)
-    loc = Location(self, city, country)
-    term = Term(self, termName)
-    area = Area(self, areaName)
 
 
 
