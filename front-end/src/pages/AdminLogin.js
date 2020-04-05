@@ -6,7 +6,6 @@ class AdminLogin extends Component {
     render() {
         return (
             <div className="main-login-container">
-                <NavBar />
                 <LoginForm />
                 <a href="/admin-dashboard">Temporary link to admin dashboard</a>
             </div>

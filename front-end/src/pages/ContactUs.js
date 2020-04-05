@@ -4,7 +4,6 @@ import NavBar from '../components/NavBar'
 export default function ContactUs() {
     return (
         <div>
-            <NavBar />
             Contact Us
         </div>
     )

@@ -8,6 +8,7 @@ import ContactUs from './pages/ContactUs';
 import AdminLogin from './pages/AdminLogin';
 import AdminDashboard from './pages/AdminDashboard';
 import ResultPage from './pages/ResultPage';
+import NavBar from './components/NavBar'
 
 /* Main component which holds the routing to each page */
 class App extends Component {
@@ -16,13 +17,16 @@ class App extends Component {
       <div className="App">
 
         <BrowserRouter basename='/'>
+          <NavBar />
           <Switch>
-            <Route exact path="/" component={Home} />
-            <Route path="/ResultPage" component={ResultPage} />
-            <Route path="/how-to" component={HowTo} />
-            <Route path="/contact-us" component={ContactUs} />
-            <Route path="/admin-login" component={AdminLogin} />
-            <Route path="/admin-dashboard" component={AdminDashboard} />
+            <div className="container">
+              <Route exact path="/" component={Home} />
+              <Route path="/ResultPage" component={ResultPage} />
+              <Route path="/how-to" component={HowTo} />
+              <Route path="/contact-us" component={ContactUs} />
+              <Route path="/admin-login" component={AdminLogin} />
+              <Route path="/admin-dashboard" component={AdminDashboard} />
+            </div>
           </Switch>
         </BrowserRouter>
       </div>

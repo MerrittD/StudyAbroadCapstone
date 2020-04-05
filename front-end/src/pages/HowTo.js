@@ -4,7 +4,6 @@ import NavBar from '../components/NavBar'
 export default function HowTo() {
     return (
         <div>
-            <NavBar />
             How to search
         </div>
     )

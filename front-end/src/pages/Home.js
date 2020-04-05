@@ -41,7 +41,6 @@ class Home extends Component {
     render() {
         return (
             <div>
-                <NavBar />
                 <SearchBar state={this.state} />
             </div>
         )
