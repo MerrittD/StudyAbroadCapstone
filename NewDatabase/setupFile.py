@@ -1,12 +1,13 @@
 from fullDatabaseRemake import Admin,areas,terms,locations,languages,programs,Program,Area,Term,Location,Language,Provider 
 from databaseTesting import db
 
-
+db.create_all()
+db.session.commit()
 
 #This file is to be run upon initial setup of the database, and should pull from a 
 #backup file inorder to populate new database 
 
-#db.create_all()
+
 
 # Constructors: 
 #   - Provider(self, name):
@@ -50,106 +51,113 @@ from databaseTesting import db
 
 #This is a generic script to populate an entire program
 # These are data sheets that can be filled in with different information
-#def create_new_program(): 
-#-----------------------------TEMPORARY VARIABLES----------------------------
-providerName = "A1"
-programName = "SU Amsterdam"
-cost = "$6,215" 
-com = True 
-res = False
-intern = True
-description = "This is the amsterdam description"
-url = "https://www.southwestern.edu/study-abroad/study-abroad-programs/su-amsterdam/index.php"
-
-#all relationships will be lists to accomdiate multiple entries
-areas = ["Computer Science", "Communication"]
-terms = ["Summer 1"]
-languages = ["Dutch"]
-locations = [["Amsterdam", "Netherlands"]]    #This will be a list of list like [city name, country name] representing a location
-
-
+def create_new_program(providerName, programName, cost, com, res, intern, description, url, areas, terms, languages, locations): 
     #-----------------------------PROVIDER RELATIONSHIP----------------------------
     # Check if the provider already exist, if it doesn't then make a new provider
-if(Provider.get_provider_id(providerName) == -1):
-    prov = Provider(providerName)
+    if(Provider.get_provider_id(providerName) == -1):
+        prov = Provider(providerName)
+        prov.save_to_db()
+    else: 
+        prov = Provider.find_by_name(providerName)
+
+    # Check if the program already exist, if it doesn't then make a new program
+    if(Program.get_program_id(programName) == -1):
+        prog = Program(programName, cost, com, res, intern, description, url)
+        prog.save_to_db()
+    else: 
+        prog = Program.find_by_name(programName)
+
+    #Add the program to the provider
+    prov.add_program(prog)
     prov.save_to_db()
-else: 
-    prov = Provider.find_by_name(providerName)
-
-# Check if the program already exist, if it doesn't then make a new program
-if(Program.get_program_id(programName) == -1):
-    prog = Program(programName, cost, com, res, intern, description, url)
-    prog.save_to_db()
-else: 
-    prog = Program.find_by_name(programName)
-
-#Add the program to the provider
-prov.add_program(prog)
-prov.save_to_db()
 
 
-#-----------------------------PROGRAM RELATIONSHIPS----------------------------
-# AREA, TERM, LANGUAGES, LOCATION
+    #-----------------------------PROGRAM RELATIONSHIPS----------------------------
+    # AREA, TERM, LANGUAGES, LOCATION
 
-# AREA: 
-# Cyle through all area names: check to see if the area already exist in the db, 
-#    if it doesn't, add it to the program and create the relationship. 
-for i in areas:
-    if(Area.get_area_id(i) == -1):
-        tempArea = Area(i)
-        tempArea.save_to_db()
-    else: 
-        tempArea = Area.find_by_name(i)
+    # AREA: 
+    # Cyle through all area names: check to see if the area already exist in the db, 
+    #    if it doesn't, add it to the program and create the relationship. 
+    for i in areas:
+        if(Area.get_area_id(i) == -1):
+            tempArea = Area(i)
+            tempArea.save_to_db()
+        else: 
+            tempArea = Area.find_by_name(i)
         
-    prog.add_area(tempArea)
-    prog.save_to_db()
-    #might need save to db methods
+        prog.add_area(tempArea)
+        prog.save_to_db()
+        #might need save to db methods
 
-# TERM: 
-# Cyle through all term names: check to see if the term already exist in the db, 
-#    if it doesn't, add it to the program and create the relationship. 
-for i in terms:
-    if(Term.get_term_id(i) == -1):
-        tempTerm = Term(i)
-        tempTerm.save_to_db()
-    else: 
-        tempTerm = Term.find_by_name(i)
+    # TERM: 
+    # Cyle through all term names: check to see if the term already exist in the db, 
+    #    if it doesn't, add it to the program and create the relationship. 
+    for i in terms:
+        if(Term.get_term_id(i) == -1):
+            tempTerm = Term(i)
+            tempTerm.save_to_db()
+        else: 
+            tempTerm = Term.find_by_name(i)
         
-    prog.add_term(tempTerm)
-    prog.save_to_db()
-    #might need save to db methods
+        prog.add_term(tempTerm)
+        prog.save_to_db()
+        #might need save to db methods
 
-# LANGUAGES: 
-# Cyle through all term names: check to see if the term already exist in the db, 
-#    if it doesn't, add it to the program and create the relationship. 
-for i in languages:
-    if(Language.get_language_id(i) == -1):
-        tempLanguage = Language(i)
-        tempLanguage.save_to_db()
-    else: 
-        tempLanguage = Language.find_by_name(i)
+    # LANGUAGES: 
+    # Cyle through all term names: check to see if the term already exist in the db, 
+    #    if it doesn't, add it to the program and create the relationship. 
+    for i in languages:
+        if(Language.get_language_id(i) == -1):
+            tempLanguage = Language(i)
+            tempLanguage.save_to_db()
+        else: 
+            tempLanguage = Language.find_by_name(i)
         
-    prog.add_language(tempLanguage)
-    prog.save_to_db()
-    #might need save to db methods
+        prog.add_language(tempLanguage)
+        prog.save_to_db()
+        #might need save to db methods
 
-# LOCATION: 
-# Cyle through all term names: check to see if the term already exist in the db, 
-#    if it doesn't, add it to the program and create the relationship. 
-for i in locations:
-    if(Location.get_location_id(i[1], i[2]) == -1):
-        tempLocation = Location(i[1], i[2])
-        tempLocation.save_to_db()
-    else: 
-        tempLocation = Location.find_by_name(i[1], i[2])
+    # LOCATION: 
+    # Cyle through all term names: check to see if the term already exist in the db, 
+    #    if it doesn't, add it to the program and create the relationship. 
+    for i in locations:
+        if(Location.get_location_id(i[1], i[2]) == -1):
+            tempLocation = Location(i[1], i[2])
+            tempLocation.save_to_db()
+        else: 
+            tempLocation = Location.find_by_name(i[1], i[2])
         
-    prog.add_location(tempLocation)
-    prog.save_to_db()
-    #might need save to db methods
+        prog.add_location(tempLocation)
+        prog.save_to_db()
+        #might need save to db methods
 
 
+def main():
+    db.create_all()
+
+    print("Hello")
+
+   #-----------------------------TEMPORARY VARIABLES----------------------------
+    providerName = "A1"
+    programName = "SU Amsterdam"
+    cost = "$6,215" 
+    com = True 
+    res = False
+    intern = True
+    description = "This is the amsterdam description"
+    url = "https://www.southwestern.edu/study-abroad/study-abroad-programs/su-amsterdam/index.php"
+
+    #all relationships will be lists to accomdiate multiple entries
+    areas = ["Computer Science", "Communication"]
+    terms = ["Summer 1"]
+    languages = ["Dutch"]
+    locations = [["Amsterdam", "Netherlands"]]    #This will be a list of list like [city name, country name] representing a location
+
+    create_new_program(providerName, programName, cost, com, res, intern, description, url, areas, terms, languages, locations)
 
 
+if __name__ == '__main__':
+    #main()
 
 
 #Here will be a loop to add data to the database from files 
