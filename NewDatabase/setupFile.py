@@ -157,7 +157,7 @@ def main():
 
 
 if __name__ == '__main__':
-    #main()
+    main()
 
 
 #Here will be a loop to add data to the database from files 
