@@ -11,29 +11,34 @@ import ResultPage from './pages/ResultPage';
 import NavBar from './components/NavBar'
 import Login from './pages/Login';
 
+const OKTA_DOMAIN = 'dev-228327.okta.com';
+const CLIENT_ID = '0oa5ecwl6wmPJFY0l4x6';
+const CALLBACK_PATH = '/implicit/callback';
 
-function onAuthRequired({ history }) {
-  history.push('/login');
+const ISSUER = `https://${OKTA_DOMAIN}/oauth2/default`;
+const HOST = window.location.host;
+const REDIRECT_URI = `http://${HOST}${CALLBACK_PATH}`;
+const SCOPES = 'openid profile email';
+
+const config = {
+  issuer: ISSUER,
+  clientId: CLIENT_ID,
+  redirectUri: REDIRECT_URI,
+  scope: SCOPES.split(/\s+/),
 }
-
 
 /* Main component which holds the routing to each page */
 class App extends Component {
   render() {
     return (
       <Router>
-        <Security issuer='https://dev-228327.okta.com/oauth2/default'
-          clientId='0oa5ecwl6wmPJFY0l4x6'
-          redirectUri={window.location.origin + '/implicit/callback'}
-          onAuthRequired={onAuthRequired}
-          pkce={true} >
+        <Security {...config}>
           <NavBar />
           <div className="container">
             <Route exact path="/" component={Home} />
             <Route path="/ResultPage" component={ResultPage} />
             <Route path="/how-to" component={HowTo} />
             <Route path="/contact-us" component={ContactUs} />
-            <Route path='/login' render={() => <Login baseUrl='https://dev-228327.okta.com' />} />
             <Route path='/implicit/callback' component={ImplicitCallback} />
             <SecureRoute exact path="/admin-dashboard" component={AdminDashboard} />
           </div>
