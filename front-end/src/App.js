@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Router, Switch, Route, browserHistory } from 'react-router-dom'
+import { BrowserRouter as Router, Switch, Route, useHistory } from 'react-router-dom'
 import { Security, SecureRoute, ImplicitCallback } from '@okta/okta-react'
 import './App.css';
 import './css/bootstrap.min.css';
@@ -10,6 +10,7 @@ import AdminDashboard from './pages/AdminDashboard';
 import ResultPage from './pages/ResultPage';
 import NavBar from './components/NavBar'
 import Login from './pages/Login';
+
 
 function onAuthRequired({ history }) {
   history.push('/login');
@@ -34,7 +35,7 @@ class App extends Component {
             <Route path="/contact-us" component={ContactUs} />
             <Route path='/login' render={() => <Login baseUrl='https://dev-228327.okta.com' />} />
             <Route path='/implicit/callback' component={ImplicitCallback} />
-            <SecureRoute path="/admin-dashboard" component={AdminDashboard} />
+            <SecureRoute exact path="/admin-dashboard" component={AdminDashboard} />
           </div>
         </Security>
       </Router>
