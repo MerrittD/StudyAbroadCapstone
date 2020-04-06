@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import NavBar from '../components/NavBar'
 import SearchBar from '../components/SearchBar'
 
-/* Take in data from database and pass down data to SearchBar via props to populate dropdowns */
+/* Take in program data from database into an array, and pass down data to SearchBar via props to populate dropdowns */
 class SearchBarParent extends Component {
 
     /* Sets the programs array to empty initially */
@@ -13,7 +13,7 @@ class SearchBarParent extends Component {
         };
     }
     /* Function that lets us fetch from the database
-        Data passed into an array of object called programs*/
+        Data of all programs passed into an array of object called programs*/
     componentDidMount() {
         let initialPrograms = [];
         /* Fetch the data from the database */
@@ -37,7 +37,7 @@ class SearchBarParent extends Component {
             });
     }
 
-
+    /* What we actually see on the webpage—SearchBar */
     render() {
         return (
             <div>
