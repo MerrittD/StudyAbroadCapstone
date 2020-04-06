@@ -4,6 +4,7 @@ import { Security, SecureRoute, ImplicitCallback } from '@okta/okta-react'
 import './App.css';
 import './css/bootstrap.min.css';
 import Home from './pages/Home';
+import SearchBarParent from './components/SearchBarParent'
 import HowTo from './pages/HowTo';
 import ContactUs from './pages/ContactUs';
 import AdminDashboard from './pages/AdminDashboard';
