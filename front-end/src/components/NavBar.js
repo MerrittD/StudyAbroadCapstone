@@ -7,8 +7,8 @@ const NavBar = () => {
     /* Variable to store information on whether user is logged in or not
        Uses Okta's provided useOktaAuth method to determine this  */
     const { authState, authService } = useOktaAuth();
-    /* This is essentially the function that we perform to signify the user should be logged out
-      e.g. When the user clicks 'Log out', we will invoke this  */
+    /* Whenever the const logout is invoked, we will log the user out by calling the function authService.logout()
+      e.g. When the user clicks 'Log out', we will invoke authService.logout() function provided by Okta  */
     const logout = async () => authService.logout('/');
 
     return (
@@ -18,7 +18,7 @@ const NavBar = () => {
             <a className="btn" href="/how-to">HOW TO</a>
             <a className="btn" href="/contact-us">CONTACT US</a>
             <a className="btn" href="/admin-dashboard">ADMIN</a>
-
+            {/* Only display the logout tag in the navbar when an admin user is logged in */}
             {authState.isAuthenticated && <a className="btn" onClick={logout}>LOG OUT</a>}
         </div>
     );

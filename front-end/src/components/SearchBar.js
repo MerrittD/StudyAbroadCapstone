@@ -7,6 +7,7 @@ class SearchBar extends Component {
         super();
     }
 
+    /* Takes out all duplicates of the array passed in */
     getUnique(arr) {
 
         return arr.filter((e, i) => arr.indexOf(e) >= i)
@@ -14,9 +15,15 @@ class SearchBar extends Component {
 
 
     render() {
-        /* Pass down array prop holding all programs */
+        /* Take in the passed down program array and store it for easy access*/
         let programs = this.props.state.programs;
-        /* Fill an array with all possible terms (by mapping through every program) */
+
+        /* The following code blocks labeled 1, 2, 3, and 4 each create an array (4 total)
+            These arrays hold all available program terms, countries, areas of study, and languages respectively, with no duplicates
+            e.g. code block 1. will create an array such as [Spring, Summer, Fall] */
+
+
+        /* 1. Fill an array with all possible terms (by mapping through every program) */
         let allProgramTerms = programs.map((program) =>
             program.term
         );
@@ -29,7 +36,7 @@ class SearchBar extends Component {
             <option key={i}>{program}</option>
         );
 
-        /* Repeat for countries */
+        /* 2. Repeat for countries */
         let allProgramCountries = programs.map((program) =>
             program.country
         );
@@ -39,7 +46,7 @@ class SearchBar extends Component {
             <option key={i}>{program}</option>
         );
 
-        /* Repeat for areas of study */
+        /* 3. Repeat for areas of study */
         let allProgramAreasOfStudy = programs.map((program) =>
             program.areaOfStudy
         );
@@ -49,7 +56,7 @@ class SearchBar extends Component {
             <option key={i}>{program}</option>
         );
 
-        /* Repeat for languages */
+        /* 4. Repeat for languages */
         let allProgramLanguages = programs.map((program) =>
             program.language
         );
@@ -59,6 +66,7 @@ class SearchBar extends Component {
             <option key={i}>{program}</option>
         );
 
+        /* Display 4 dropdowns (populated with terms, countries, areas of study, and languages respectively) and a Search button */
         return (
             <div>
                 <select style={{ relative: 'center' }}>
