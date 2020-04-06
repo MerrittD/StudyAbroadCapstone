@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Switch, Route, useHistory } from 'react-router-dom'
-import { Security, SecureRoute, ImplicitCallback } from '@okta/okta-react'
+import { Security, SecureRoute, LoginCallback } from '@okta/okta-react'
 import './App.css';
 import './css/bootstrap.min.css';
 import Home from './pages/Home';
@@ -40,7 +40,7 @@ class App extends Component {
             <Route path="/ResultPage" component={ResultPage} />
             <Route path="/how-to" component={HowTo} />
             <Route path="/contact-us" component={ContactUs} />
-            <Route path='/implicit/callback' component={ImplicitCallback} />
+            <Route path='/implicit/callback' component={LoginCallback} />
             <SecureRoute exact path="/admin-dashboard" component={AdminDashboard} />
           </div>
         </Security>
