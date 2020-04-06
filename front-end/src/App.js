@@ -27,7 +27,8 @@ const config = {
 }
 
 /* Main component which holds the routing to each page 
-  Our routes are wrapped in a Security tag, which is necessary for authentication*/
+  Our routes are wrapped in a Security tag, which is necessary for authentication 
+  We also have a SecureRoute that signifies the user must be authenticated before viewing or accessing that page*/
 class App extends Component {
   render() {
     return (
