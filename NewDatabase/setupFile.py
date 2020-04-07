@@ -1,5 +1,6 @@
 from fullDatabaseRemake import Admin,areas,terms,locations,languages,programs,Program,Area,Term,Location,Language,Provider 
 from databaseTesting import db
+import os
 
 db.create_all()
 db.session.commit()
@@ -132,24 +133,121 @@ def create_new_program(providerName, programName, cost, com, res, intern, descri
         #might need save to db methods
 
 
+def Convert(string): 
+    li = list(string.split("; ")) 
+    return li 
+
+def ConvertLocation(string):
+    l = Convert(string)
+    returnList = []
+    for i in l:
+        returnList.append(list(i.split(", "))) 
+    return returnList
+
+
 def main():
-   #-----------------------------TEMPORARY VARIABLES----------------------------
-    providerName = "A1"
-    programName = "SU Amsterdam"
-    cost = "$6,215" 
-    com = True 
-    res = False
-    intern = True
-    description = "This is the amsterdam description"
-    url = "https://www.southwestern.edu/study-abroad/study-abroad-programs/su-amsterdam/index.php"
+   #-----------------------------TEMPORARY VARIABLES FOR TESTING----------------------------
+#    providerName = "A1"
+#    programName = "SU Amsterdam" 
+#    com = True 
+#    res = False
+#    intern = True
+#    cost = "$6,215"
+#    cost_stipulations = "Schooling Only"
+#    description = "This is the amsterdam description"
+#    url = "https://www.southwestern.edu/study-abroad/study-abroad-programs/su-amsterdam/index.php"
 
     #all relationships will be lists to accomdiate multiple entries
-    areas = ["Computer Science", "Communication"]
-    terms = ["Summer 1"]
-    languages = ["Dutch"]
-    locations = [["Amsterdam", "Netherlands"]]    #This will be a list of list like [city name, country name] representing a location
+#    areas = ["Computer Science", "Communication"]
+#    terms = ["Summer 1"]
+#    languages = ["Dutch"]
+#    locations = [["Amsterdam", "Netherlands"]]    #This will be a list of list like [city name, country name] representing a location
 
-    create_new_program(providerName, programName, cost, com, res, intern, description, url, areas, terms, languages, locations)
+
+    # Format for File Reading 
+    # 1. Provider Name
+    # 2. Program Name
+    # 3. Community Engagement 
+    # 4. Research Oppurtinities
+    # 5. Internship Oppurtunities
+    # 6. Cost
+    # 7. Cost Stipulations
+    # 8. Description
+    # 9. Url
+    # 10. Areas
+    # 11. Terms
+    # 12. Languages
+    # 13. Locations
+
+    #References for work: 
+    #https://tecadmin.net/count-number-of-lines-in-file-python/
+    #https://www.geeksforgeeks.org/python-program-convert-string-list/
+    # https://stackoverflow.com/questions/4060221/how-to-reliably-open-a-file-in-the-same-directory-as-a-python-script
+
+    #This is tested in testFileReading.py in previous database test
+
+    fname = "C:\Users\lukey\Documents\GitHub\StudyAbroadCapstone\NewDatabase\DataImportFile.txt"
+    lineCount = 1
+    with open(fname, 'r') as f:
+        for eachLine in f:
+            line = eachLine.strip()
+            if(lineCount % 14 == 1):
+                #Provider
+                providerName = line
+
+            if(lineCount % 14 == 2):
+                #Program
+                programName = line
+
+            if(lineCount % 14 == 3):
+                #Community Engagement
+                com = line
+
+            if(lineCount % 14 == 4):
+                #Research Oppurtinities
+                res = line
+
+            if(lineCount % 14 == 5):
+                #Internship Oppurtunities
+                intern = line
+
+            if(lineCount % 14 == 6):
+                #Cost
+                cost = line 
+
+            if(lineCount % 14 == 7):
+                #Cost Stipulations
+                cost_stipulations = line
+
+            if(lineCount % 14 == 8):
+                #Description
+                description = line
+
+            if(lineCount % 14 == 9):
+                #Url
+                url = line
+
+            if(lineCount % 14 == 10):
+                #Areas
+                areas = Convert(line)
+
+            if(lineCount % 14 == 11):
+                #Terms
+                terms = Convert(line)
+
+            if(lineCount % 14 == 12):
+                #Languages
+                languages = Convert(line)
+
+            if(lineCount % 14 == 13):
+                #Locations
+                locations = ConvertLocation(line)
+
+            if(lineCount % 14 == 0): 
+                create_new_program(providerName, programName, cost, com, res,
+                                  intern, description, url, areas, terms, languages, locations)
+            lineCount += 1
+            
 
 
 if __name__ == '__main__':

@@ -191,7 +191,7 @@ class Location(db.Model):
 
 	#Individual Methods
 	def __repr__(self):
-		return "<City(City ID='%d', Name='%s')>" % (self.id, self.name)
+		return "<Location(id='%d', city name='%s', country name='%s')>" % (self.id, self.city, self.country)
 
 	def __init__(self, nameCity,nameCountry):
 		self.city = nameCity
@@ -264,9 +264,6 @@ class Program(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
 	name = db.Column(db.String(100),unique=True,nullable=False)
 
-	cost = db.Column(db.String(15))
-	cost_stipulations = db.Column(db.String(500), nullable=True)
-
 	comm_eng = db.Column(db.Boolean,nullable=False)		#yes or no
 	research_opp =  db.Column(db.Boolean,nullable=False)	#yes or no
 	intership_opp = db.Column(db.Boolean,nullable=False)	#yes or no
@@ -274,9 +271,12 @@ class Program(db.Model):
 	date_created  = db.Column(db.DateTime, default=db.func.current_timestamp())
 	date_modified = db.Column(db.DateTime, default=db.func.current_timestamp(),
                                        onupdate=db.func.current_timestamp())
+	
+	cost = db.Column(db.String(15), nullable=True)
+	cost_stipulations = db.Column(db.String(500), nullable=True)
 
-	description  = db.Column(db.String(5000))
-	url = db.Column(db.String(5000))
+	description  = db.Column(db.String(5000), nullable=True)
+	url = db.Column(db.String(5000), nullable=True)
 
 	#Relationships
 	area = db.relationship('Area',
@@ -305,13 +305,14 @@ class Program(db.Model):
 	def __repr__(self):
 		return "<Program(Program ID='%d', Name='%s')>" % (self.id, self.name)
 
-	def __init__(self, name, cost, com, res, intern, description, url):
+	def __init__(self, name, com, res, intern, cost, cost_stipulations, description, url):
 		#This initilizes the program specific fields
 		self.name = name
-		self.cost = cost
 		self.comm_eng = com
 		self.research_opp = res
 		self.intership_opp = intern
+		self.cost = cost
+		self.cost_stipulations = cost_stipulations
 		self.description  = description
 		self.url  = url
 
