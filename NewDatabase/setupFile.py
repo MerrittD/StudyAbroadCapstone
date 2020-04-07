@@ -2,8 +2,6 @@ from fullDatabaseRemake import Admin,areas,terms,locations,languages,programs,Pr
 from databaseTesting import db
 import os
 
-db.create_all()
-db.session.commit()
 
 #This file is to be run upon initial setup of the database, and should pull from a 
 #backup file inorder to populate new database 
@@ -186,7 +184,11 @@ def main():
 
     #This is tested in testFileReading.py in previous database test
 
-    fname = "C:\Users\lukey\Documents\GitHub\StudyAbroadCapstone\NewDatabase\DataImportFile.txt"
+    db.create_all()
+    db.session.commit()
+
+
+    fname = "C:\Documents\DataImportFile.txt"
     lineCount = 1
     with open(fname, 'r') as f:
         for eachLine in f:
