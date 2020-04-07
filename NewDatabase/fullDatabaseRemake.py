@@ -3,7 +3,7 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 
 # Written by Luke Yates and Daniel Merritt
-# Last Updated: 3/4/2020
+# Last Updated: 4/7/2020
 # This is the ORM (Object Relationship Model) for the Study Abroad Program Finder
 # 	Other Group Members: Ryan Wheeler, Mason Daniel, and Alyssa Case 
 
