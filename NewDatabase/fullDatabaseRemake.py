@@ -202,7 +202,7 @@ class Location(db.Model):
 		db.session.commit()
 
 	@classmethod
-	def get_Location_id(cls, nameCity, nameCountry):
+	def get_location_id(cls, nameCity, nameCountry):
 		id = db.session.query(cls).filter(cls.city == nameCity).filter(cls.country == nameCountry).first()
 		if id is None: 
 			return -1
@@ -234,7 +234,7 @@ class Language(db.Model):
 		return "<Language(id='%d', name='%s')>" % (self.id, self.name)
 
 	def __init__(self, name):
-		self.area_name = name
+		self.name = name
 
 	def save_to_db(self):
 		db.session.add(self)
@@ -340,11 +340,11 @@ class Program(db.Model):
 	def remove_term(self, oldTerm): 
 		self.term.remove(oldTerm)
 
-	def add_location(self, newCity,newCountry):
-		self.location.append(newCity,newCountry)
+	def add_location(self, newLocation):
+		self.location.append(newLocation)
 
-	def remove_Location(self, oldCity,oldCountry): 
-		self.location.remove(oldCity,oldCountry)
+	def remove_Location(self, oldLocation): 
+		self.location.remove(oldLocation)
 
 
 	#These methods will be used for sorting when the user initilizes 

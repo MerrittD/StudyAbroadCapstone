@@ -121,11 +121,11 @@ def create_new_program(providerName, programName, cost, com, res, intern, descri
     # Cyle through all term names: check to see if the term already exist in the db, 
     #    if it doesn't, add it to the program and create the relationship. 
     for i in locations:
-        if(Location.get_location_id(i[1], i[2]) == -1):
-            tempLocation = Location(i[1], i[2])
+        if(Location.get_location_id(i[0], i[1]) == -1):
+            tempLocation = Location(i[0], i[1])
             tempLocation.save_to_db()
         else: 
-            tempLocation = Location.find_by_name(i[1], i[2])
+            tempLocation = Location.find_by_name(i[0], i[1])
         
         prog.add_location(tempLocation)
         prog.save_to_db()
@@ -133,10 +133,6 @@ def create_new_program(providerName, programName, cost, com, res, intern, descri
 
 
 def main():
-    db.create_all()
-
-    print("Hello")
-
    #-----------------------------TEMPORARY VARIABLES----------------------------
     providerName = "A1"
     programName = "SU Amsterdam"
