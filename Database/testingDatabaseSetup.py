@@ -1,15 +1,19 @@
 from fullDatabaseRemake import Admin,areas,terms,locations,languages,programs,Program,Area,Term,Location,Language,Provider 
 from databaseTesting import db
 
+# Written by Luke Yates 
+# Last Updated: 4/10/2020 
+# 	Other Group Members: Daniel Merritt, Ryan Wheeler, Mason Daniel, and Alyssa Case 
+
 
 #This file is to be run upon initial setup of the database, and should pull from a 
-#backup file inorder to populate new database 
-
+#   backup file inorder to populate new database.
+# The testing for removing and modifing programs is contained in the file "testingDatabaseAdd+Remove.py"
 
 
 # Constructors: 
 #   - Provider(self, name):
-#   - Program(self, name, cost, com, res, intern, description, url):
+#   - Program(self, name, com, res, intern, cost, cost_stipulations, description, url):
 #   - Language(self, name):
 #   - Location(self, city, country):
 #   - Term(self, name):
@@ -47,8 +51,7 @@ from databaseTesting import db
 # This script below is to test all methods for the database
 #    I have used the data on the "Dummy Study Abroad Programs Data" on the Project Drive
 
-#This is a generic script to populate an entire program
-# These are data sheets that can be filled in with different information
+#This is a generic script to populate an entire new program
 def create_new_program(providerName, programName, com, res, intern, cost, cost_stipulations, description, url, areas, terms, languages, locations): 
     #-----------------------------PROVIDER RELATIONSHIP----------------------------
     # Check if the provider already exist, if it doesn't then make a new provider
@@ -143,7 +146,7 @@ def ConvertLocation(string):
 
 
 def main():
-    #-----------------------------TEMPORARY VARIABLES FOR TESTING----------------------------
+    #-----------------------------Setting Up File with Tables----------------------------
     db.create_all()
     db.session.commit()
 
@@ -187,7 +190,6 @@ def main():
     create_new_program(providerName, programName, com, res, intern, cost, cost_stipulations, description, url, areas, terms, languages, locations)
 
 
-
     #-----------------------------TEST PROGRAM # 3-------------------------------
     providerName = "C3"
     programName = "SU European Cultural Exploration" 
@@ -206,7 +208,6 @@ def main():
     locations = [["Lisbon", "Portugal"], ["Grenoble", "France"], ["Budapest", "Hungary"]]    #This will be a list of list like [city name, country name] representing a location
 
     create_new_program(providerName, programName, com, res, intern, cost, cost_stipulations, description, url, areas, terms, languages, locations)
-
 
 
     #-----------------------------TEST PROGRAM # 4-------------------------------
@@ -229,7 +230,6 @@ def main():
     create_new_program(providerName, programName, com, res, intern, cost, cost_stipulations, description, url, areas, terms, languages, locations)
 
 
-
      #-----------------------------TEST PROGRAM # 5-------------------------------
     providerName = "E5"
     programName = "SU London" 
@@ -248,8 +248,6 @@ def main():
     locations = [["London", "England"]]    #This will be a list of list like [city name, country name] representing a location
 
     create_new_program(providerName, programName, com, res, intern, cost, cost_stipulations, description, url, areas, terms, languages, locations)
-
-
 
 
      #-----------------------------TEST PROGRAM # 6-------------------------------
@@ -271,6 +269,8 @@ def main():
 
     create_new_program(providerName, programName, com, res, intern, cost, cost_stipulations, description, url, areas, terms, languages, locations)
 
+
+#---------------------------------------------------File Reading Comments-----------------------------------
 
     # Format for File Reading 
     # 1. Provider Name
