@@ -1,5 +1,5 @@
 from fullDatabaseRemake import Admin,areas,terms,locations,languages,programs,Program,Area,Term,Location,Language,Provider 
-import os
+from databaseTesting import db
 
 
 #This file is to be run upon initial setup of the database, and should pull from a 
@@ -195,14 +195,14 @@ def main():
     res = True
     intern = False
     cost = "TBD"
-    cost_stipulations = NULL
+    cost_stipulations = None
     description = "Courses TBD"
     url = "https://www.southwestern.edu/study-abroad/study-abroad-programs/su-european-cultural-exploration/"
 
     #all relationships will be lists to accomdiate multiple entries
     areas = ["Mathamatics"]
     terms = ["Summer 2"]
-    languages = [NULL]
+    languages = []
     locations = [["Lisbon", "Portugal"], ["Grenoble", "France"], ["Budapest", "Hungary"]]    #This will be a list of list like [city name, country name] representing a location
 
     create_new_program(providerName, programName, com, res, intern, cost, cost_stipulations, description, url, areas, terms, languages, locations)
@@ -236,7 +236,7 @@ def main():
     com = False 
     res = False
     intern = False
-    cost = NULL
+    cost = None
     cost_stipulations = "Equal to Southwestern’s on-campus tuition, room, and board charges for the fall semester of the academic year during which the program is run"
     description = "Students will participate in several local cultural excursions in London throughout the semester.  Previous activities and excursions have included: a backstage tour of the West End Theatre, a guided tour of the Globe Exhibition, cream tea, attendance at the Tower of London Key Ceremony, attendance at a professional soccer (football) game, and a tour of the British Museum. Day trips or overnight trips to the following locations are also cultural components of the program: Bath and Cambridge.  The day trip to Cambridge trip includes round-trip bus transportation and a guided tour of the city. The overnight trip to Bath includes round-trip bus transportation, a guided tour, and admission to Stonehenge. Additionally, students participate in a two-night/three-day field trip to Edinburgh, Scotland.  This field trip includes transportation to and from Edinburgh.  Students share rooms in a hostel on this trip.  Breakfast is included each day.  A visit to the Highland Safari Deer Experience and to the Edinburgh Castle are components of this field trip."
     url = "https://www.southwestern.edu/study-abroad/study-abroad-programs/southwestern-london-program/"
@@ -266,7 +266,7 @@ def main():
     #all relationships will be lists to accomdiate multiple entries
     areas = ["Environmental Studies"]
     terms = ["Summer 1"]
-    languages = [NULL]
+    languages = []
     locations = [["Lugano", "Switzerland"]]    #This will be a list of list like [city name, country name] representing a location
 
     create_new_program(providerName, programName, com, res, intern, cost, cost_stipulations, description, url, areas, terms, languages, locations)
@@ -292,12 +292,15 @@ def main():
     #https://www.geeksforgeeks.org/python-program-convert-string-list/
     # https://stackoverflow.com/questions/4060221/how-to-reliably-open-a-file-in-the-same-directory-as-a-python-script
 
-    #This is tested in testFileReading.py in previous database test
+    
 
     
 
+# The code below is written to pull new program information from a text documnet in hopes of easy 
+#   testing. The code could not work for me, but i believe it us useful for initial database population. 
 
-#    fname = "C:\Documents\DataImportFile.txt"
+#This is tested in testFileReading.py in previous database test
+#    fname = 'DataImportFile.txt'
 #    lineCount = 1
 #    with open(fname, 'r') as f:
 #    for eachLine in f:
