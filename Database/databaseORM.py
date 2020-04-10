@@ -1,4 +1,4 @@
-from databaseTesting import db
+from databaseConfiguration import db
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 
@@ -104,7 +104,7 @@ class Provider(db.Model):
 		else:
 			return id
 
-	# finds a row by specific username given as a parameter
+	# finds a row by specific name given as a parameter
 	@classmethod
 	def find_by_name(cls, _name):
 		return cls.query.filter_by(name=_name).first()
@@ -216,7 +216,7 @@ class Location(db.Model):
 
 	# finds a row by specific username given as a parameter
 	@classmethod
-	def find_by_name(cls, _city):
+	def find_by_name(cls, _city, _country):
 		return cls.query.filter_by(city=_city).filter_by(country=_country).first()
 
 
@@ -344,7 +344,7 @@ class Program(db.Model):
 	def add_location(self, newLocation):
 		self.location.append(newLocation)
 
-	def remove_Location(self, oldLocation): 
+	def remove_location(self, oldLocation): 
 		self.location.remove(oldLocation)
 
 

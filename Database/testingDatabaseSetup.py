@@ -1,5 +1,5 @@
-from fullDatabaseRemake import Admin,areas,terms,locations,languages,programs,Program,Area,Term,Location,Language,Provider 
-from databaseTesting import db
+from databaseORM import Admin,areas,terms,locations,languages,programs,Program,Area,Term,Location,Language,Provider 
+from databaseConfiguration import db
 
 # Written by Luke Yates 
 # Last Updated: 4/10/2020 
