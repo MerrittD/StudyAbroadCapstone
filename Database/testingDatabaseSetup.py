@@ -50,6 +50,7 @@ from databaseTesting import db
 
 # This script below is to test all methods for the database
 #    I have used the data on the "Dummy Study Abroad Programs Data" on the Project Drive
+# https://docs.google.com/spreadsheets/d/1T_cO_Zb0LjXWC506Ji134R-u3nhHM4E-GgsWaxd-maw/edit?usp=sharing
 
 #This is a generic script to populate an entire new program
 def create_new_program(providerName, programName, com, res, intern, cost, cost_stipulations, description, url, areas, terms, languages, locations): 
