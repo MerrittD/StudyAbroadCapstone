@@ -2,11 +2,10 @@
 Routes and views for the flask application.
 """
 
-from datetime import datetime
 import databaseORM
-from flask import render_template
+from flask import render_template,request, jsonify
 import flask
-from flask import request, jsonify
+
 
 app = flask.Flask(__name__)
 app.config["DEBUG"] = True
@@ -18,13 +17,12 @@ app.config["DEBUG"] = True
 #browse, and result
 @app.route('/', methods=['GET'])
 def home():
-    return  jasonify(databaseORM.Program.return_all_programs())
+    return  jsonify(databaseORM.Program.return_all_programs())
 
 #checking verbs of incoming request
 @app.route('/check', methods=['GET','POST', 'PUT', 'DELETE'])
 def check():
     if request.method == GET:
-        
         return "REQUEST TYPE: GET"
     elif request.method == POST:
         return "REQUEST TYPE: POST"
@@ -35,9 +33,10 @@ def check():
 
 
 # A route to return all of the available entries in our catalog.
-@app.route('/api/v1/resources/books/all', methods=['GET'])
-def api_all():
-    return jsonify(books)
+#@app.route('/api/v1/resources/books/all', methods=['GET'])
+#def api_all():
+#    return jsonify(books)
 
-app.run()
+if True:
+    app.run()
 
