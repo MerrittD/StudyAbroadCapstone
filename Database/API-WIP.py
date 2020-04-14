@@ -3,7 +3,7 @@ Routes and views for the flask application.
 """
 
 from datetime import datetime
-from Database import databaseORM
+import databaseORM
 from flask import render_template
 import flask
 from flask import request, jsonify
@@ -21,7 +21,7 @@ def home():
     return  jasonify(databaseORM.Program.return_all_programs())
 
 #checking verbs of incoming request
-@app.route('/check', methods=[GET, POST, PUT, DELETE])
+@app.route('/check', methods=['GET','POST', 'PUT', 'DELETE'])
 def check():
     if request.method == GET:
         
@@ -40,3 +40,4 @@ def api_all():
     return jsonify(books)
 
 app.run()
+
