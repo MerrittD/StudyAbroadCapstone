@@ -18,13 +18,13 @@ app.config["DEBUG"] = True
 #browse, and result
 @app.route('/', methods=['GET'])
 def home():
-    return '''<h1>Distant Reading Archive</h1>
-<p>A prototype API for distant reading of science fiction novels.</p>'''
+    return  jasonify(databaseORM.Program.return_all_programs())
 
 #checking verbs of incoming request
 @app.route('/check', methods=[GET, POST, PUT, DELETE])
 def check():
     if request.method == GET:
+        
         return "REQUEST TYPE: GET"
     elif request.method == POST:
         return "REQUEST TYPE: POST"
