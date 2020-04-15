@@ -18,10 +18,12 @@ app.config["DEBUG"] = True
 #browse, and result
 @app.route('/', methods=['GET'])
 def home():
+    proglist = []
     programs = Program.return_all_programs()
     for prog in programs:
-        return jsonify(prog.name)
-    return  jsonify(programs)
+        proglist.append(prog)
+    
+    return  jsonify(json_list = [i.serialize for i in proglist])
 
 #checking verbs of incoming request
 @app.route('/check', methods=['GET','POST', 'PUT', 'DELETE'])

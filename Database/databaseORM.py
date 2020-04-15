@@ -2,6 +2,14 @@ from databaseConfiguration import db
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 
+
+# used for deseralization for jsonify 
+# code from https://stackoverflow.com/questions/7102754/jsonify-a-sqlalchemy-result-set-in-flask
+def dump_datetime(val):
+	if val is None:
+		return None
+	return [val.strftime("%Y-%m-%d"), val.strftime("%H:%M:%S")]
+
 # Written by Luke Yates and Daniel Merritt
 # Last Updated: 4/7/2020
 # This is the ORM (Object Relationship Model) for the Study Abroad Program Finder
@@ -386,6 +394,45 @@ class Program(db.Model):
 	@classmethod
 	def find_by_name(cls, _name):
 		return cls.query.filter_by(name=_name).first()
+
+	@property
+	def serialize(self):
+		#id = db.Column(db.Integer, primary_key=True)
+		#name = db.Column(db.String(100),unique=True,nullable=False)
+
+		#comm_eng = db.Column(db.Boolean,nullable=False)		#yes or no
+		#research_opp =  db.Column(db.Boolean,nullable=False)	#yes or no
+		#intership_opp = db.Column(db.Boolean,nullable=False)	#yes or no
+
+		#date_created  = db.Column(db.DateTime, default=db.func.current_timestamp())
+		#date_modified = db.Column(db.DateTime, default=db.func.current_timestamp(),
+                                       #onupdate=db.func.current_timestamp())
+	
+		#cost = db.Column(db.String(15), nullable=True)
+		#cost_stipulations = db.Column(db.String(500), nullable=True)
+
+		#description  = db.Column(db.String(5000), nullable=True)
+		#url = db.Column(db.String(5000), nullable=True)
+		return{ 
+			'id': self.id,
+			'name':self.name,
+			'comm':self.comm_eng,
+			'research':self.research_opp,
+			'intern':self.intership_opp,
+			'create':dump_datetime(self.date_created),
+			'mod':dump_datetime(self.date_modified),
+			'cost':self.cost,
+			'stip':self.cost_stipulations,
+			'desc':self.description,
+			'url':self.url,
+			'area':self.seralize_manyToMany(self.area),
+			'lang':self.seralize_manyToMany(self.language),
+			'loc':self.seralize_manyToMany(self.location),
+			'term':self.seralize_manyToMany(self.location)
+			}
+	@property
+	def seralize_manyToMany(rel):
+		return [i.serialize for i in rel]
 
 
 		
