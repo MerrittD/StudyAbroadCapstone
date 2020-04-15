@@ -2,12 +2,13 @@
 Routes and views for the flask application.
 """
 
-import databaseORM
-from flask import render_template,request, jsonify
-import flask
+from databaseORM import Program
+from  databaseConfiguration import app
+from flask import render_template,request, jsonify, Flask
 
 
-app = flask.Flask(__name__)
+
+#app = Flask(__name__)
 app.config["DEBUG"] = True
 
 #psuedo code from book for api
@@ -17,7 +18,10 @@ app.config["DEBUG"] = True
 #browse, and result
 @app.route('/', methods=['GET'])
 def home():
-    return  jsonify(databaseORM.Program.return_all_programs())
+    programs = Program.return_all_programs()
+    for prog in programs:
+        return jsonify(prog.name)
+    return  jsonify(programs)
 
 #checking verbs of incoming request
 @app.route('/check', methods=['GET','POST', 'PUT', 'DELETE'])
