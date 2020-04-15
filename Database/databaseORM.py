@@ -424,11 +424,11 @@ class Program(db.Model):
 			'cost':self.cost,
 			'stip':self.cost_stipulations,
 			'desc':self.description,
-			'url':self.url,
-			'area':self.seralize_manyToMany(self.area),
-			'lang':self.seralize_manyToMany(self.language),
-			'loc':self.seralize_manyToMany(self.location),
-			'term':self.seralize_manyToMany(self.location)
+			'url':self.url
+			#'area':self.seralize_manyToMany(self.area),
+			#'lang':self.seralize_manyToMany(self.language),
+			#'loc':self.seralize_manyToMany(self.location),
+			#'term':self.seralize_manyToMany(self.location)
 			}
 	@property
 	def seralize_manyToMany(rel):
