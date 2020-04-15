@@ -117,6 +117,13 @@ class Provider(db.Model):
 	def find_by_name(cls, _name):
 		return cls.query.filter_by(name=_name).first()
 
+	@property
+	def serialize(self):
+		return{
+			'id':self.id,
+			'name':self.name
+			}
+
 #This class defines the area class. It is to hold all areas of study that can exist 
 #	throught a study abroad program
 #	It has a relationship back to the program class
@@ -151,6 +158,13 @@ class Area(db.Model):
 	def find_by_name(cls, _name):
 		return cls.query.filter_by(name=_name).first()
 
+	@property
+	def serialize(self):
+		return{
+			'id':self.id,
+			'name':self.name
+			}
+
 
 #This class defines the term table which holds all terms offered by a program
 # It has a relationship back to the program class
@@ -184,6 +198,13 @@ class Term(db.Model):
 	@classmethod
 	def find_by_name(cls, _name):
 		return cls.query.filter_by(name=_name).first()
+
+	@property
+	def serialize(self):
+		return{
+			'id':self.id,
+			'name':self.name
+			}
 
 
 #This class defines the city table which holds all cities a program can be offered in
@@ -226,6 +247,14 @@ class Location(db.Model):
 	@classmethod
 	def find_by_name(cls, _city, _country):
 		return cls.query.filter_by(city=_city).filter_by(country=_country).first()
+	
+	@property
+	def serialize(self):
+		return{
+			'id':self.id,
+			'city':self.city,
+			'country':self.country
+			}
 
 
 # This class defines the Langue class which holds all foreign languages a proram can offer to teach
@@ -260,6 +289,13 @@ class Language(db.Model):
 	@classmethod
 	def find_by_name(cls, _name):
 		return cls.query.filter_by(name=_name).first()
+
+	@property
+	def serialize(self):
+		return{
+			'id':self.id,
+			'name':self.name
+			}
 
 
 #This class defines the table for all programs stored. The table holds specific attributes listed under 
