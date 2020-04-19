@@ -131,19 +131,7 @@ def create_new_program(providerName, programName, com, res, intern, cost, cost_s
         
         prog.add_location(tempLocation)
         prog.save_to_db()
-        #might need save to db methods
-
-
-def Convert(string): 
-    li = list(string.split("; ")) 
-    return li 
-
-def ConvertLocation(string):
-    l = Convert(string)
-    returnList = []
-    for i in l:
-        returnList.append(list(i.split(", "))) 
-    return returnList
+        
 
 
 def main():
@@ -270,116 +258,5 @@ def main():
 
     create_new_program(providerName, programName, com, res, intern, cost, cost_stipulations, description, url, areas, terms, languages, locations)
 
-
-#---------------------------------------------------File Reading Comments-----------------------------------
-
-    # Format for File Reading 
-    # 1. Provider Name
-    # 2. Program Name
-    # 3. Community Engagement 
-    # 4. Research Oppurtinities
-    # 5. Internship Oppurtunities
-    # 6. Cost
-    # 7. Cost Stipulations
-    # 8. Description
-    # 9. Url
-    # 10. Areas
-    # 11. Terms
-    # 12. Languages
-    # 13. Locations
-
-    #References for work: 
-    #https://tecadmin.net/count-number-of-lines-in-file-python/
-    #https://www.geeksforgeeks.org/python-program-convert-string-list/
-    # https://stackoverflow.com/questions/4060221/how-to-reliably-open-a-file-in-the-same-directory-as-a-python-script
-
-    
-
-    
-
-# The code below is written to pull new program information from a text documnet in hopes of easy 
-#   testing. The code could not work for me, but i believe it us useful for initial database population. 
-
-#This is tested in testFileReading.py in previous database test
-#    fname = 'DataImportFile.txt'
-#    lineCount = 1
-#    with open(fname, 'r') as f:
-#    for eachLine in f:
-#    line = eachLine.strip()
-#    if(lineCount % 14 == 1):
-#    #Provider
-#    providerName = line
-#
-#    if(lineCount % 14 == 2):
-#    #Program
-#    programName = line
-#
-#    if(lineCount % 14 == 3):
-#    #Community Engagement
-#    com = line
-#
-#    if(lineCount % 14 == 4):
-#    #Research Oppurtinities
-#    res = line
-#
-#    if(lineCount % 14 == 5):
-#    #Internship Oppurtunities
-#    intern = line
-#
-#    if(lineCount % 14 == 6):
-#    #Cost
-#    cost = line 
-#
-#    if(lineCount % 14 == 7):
-#    #Cost Stipulations
-#    cost_stipulations = line
-#
-#    if(lineCount % 14 == 8):
-#    #Description
-#    description = line
-#
-#    if(lineCount % 14 == 9):
-#    #Url
-#    url = line
-#
-#    if(lineCount % 14 == 10):
-#    #Areas
-#    areas = Convert(line)
-#
-#    if(lineCount % 14 == 11):
-#    #Terms
-#    terms = Convert(line)
-#
-#    if(lineCount % 14 == 12):
-#    #Languages
-#    languages = Convert(line)
-#
-#    if(lineCount % 14 == 13):
-#    #Locations
-#    locations = ConvertLocation(line)
-#
-#    if(lineCount % 14 == 0): 
-#    create_new_program(providerName, programName, cost, com, res,
-#                    intern, description, url, areas, terms, languages, locations)
-#    lineCount += 1
-            
-
-
 if __name__ == '__main__':
     main()
-
-
-#Here will be a loop to add data to the database from files 
-# For every program in the file for database population
-    # create the program
-    #newprogram = Program('all things needed')
-    #db.session.add(newprogram)
-#once we are done adding programs,      
-#db.session.commit()
-#admins can be loaded in with a different loop before the commit
-#if we use a text document to populate, we can take the strings in and use .split()
- #however, this isnt secure and there has to be a better way 
-#newAdmin= Admin("test","1234")
-#newProgram = Program("TestingProgram","30",True,True,True, "This is for testing","CS","Spanish","Madrid","Spain","Spring")
-#Newprogram = Program("Spain shit", "500",True,True,True,"This is for testing, we wish a study abroad only cost 500","Spanish","Buisness","Spring","Madrid","Spain")
-#Newprogram.save_to_db()
