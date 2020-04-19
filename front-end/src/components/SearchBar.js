@@ -32,8 +32,8 @@ class SearchBar extends Component {
         /* Sort the terms into alphabetical order */
         allProgramTerms.sort()
         /* Make it into an array of options so that we can insert them into our dropdown (below) */
-        allProgramTerms = allProgramTerms.map((program, i) =>
-            <option key={i}>{program}</option>
+        allProgramTerms = allProgramTerms.map((programTermValue, i) =>
+            <option key={i}>{programTermValue}</option>
         );
 
         /* 2. Repeat for countries */
@@ -42,8 +42,8 @@ class SearchBar extends Component {
         );
         allProgramCountries = this.getUnique(allProgramCountries)
         allProgramCountries.sort()
-        allProgramCountries = allProgramCountries.map((program, i) =>
-            <option key={i}>{program}</option>
+        allProgramCountries = allProgramCountries.map((programCountryValue, i) =>
+            <option key={i}>{programCountryValue}</option>
         );
 
         /* 3. Repeat for areas of study */
@@ -52,8 +52,8 @@ class SearchBar extends Component {
         );
         allProgramAreasOfStudy = this.getUnique(allProgramAreasOfStudy)
         allProgramAreasOfStudy.sort()
-        allProgramAreasOfStudy = allProgramAreasOfStudy.map((program, i) =>
-            <option key={i}>{program}</option>
+        allProgramAreasOfStudy = allProgramAreasOfStudy.map((programAreaOfStudyValue, i) =>
+            <option key={i}>{programAreaOfStudyValue}</option>
         );
 
         /* 4. Repeat for languages */
@@ -62,8 +62,8 @@ class SearchBar extends Component {
         );
         allProgramLanguages = this.getUnique(allProgramLanguages)
         allProgramLanguages.sort()
-        allProgramLanguages = allProgramLanguages.map((program, i) =>
-            <option key={i}>{program}</option>
+        allProgramLanguages = allProgramLanguages.map((programLanguageValue, i) =>
+            <option key={i}>{programLanguageValue}</option>
         );
 
         /* Display 4 dropdowns (populated with terms, countries, areas of study, and languages respectively) and a Search button */
@@ -85,7 +85,7 @@ class SearchBar extends Component {
                     <option default value="Any">Any</option>
                     {allProgramLanguages}
                 </select>
-                <a href="/ResultPage"> <button>Search
+                <a> <button onClick={this.searchBy}>Search
                     </button></a>
             </div >
         )

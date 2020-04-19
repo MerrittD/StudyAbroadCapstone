@@ -1,9 +1,10 @@
 import React, { Component } from 'react'
-import NavBar from '../components/NavBar'
 import SearchBar from '../components/SearchBar'
 
+/* This is the parent component for the search feature. Its children include SearchBar and SearchResults */
+
 /* Take in program data from database into an array, and pass down data to SearchBar via props to populate dropdowns */
-class SearchBarParent extends Component {
+class SearchComponent extends Component {
 
     /* Sets the programs array to empty initially */
     constructor() {
@@ -47,4 +48,4 @@ class SearchBarParent extends Component {
     }
 }
 
-export default SearchBarParent;
+export default SearchComponent;

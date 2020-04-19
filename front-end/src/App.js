@@ -7,7 +7,6 @@ import Home from './pages/Home';
 import HowTo from './pages/HowTo';
 import ContactUs from './pages/ContactUs';
 import AdminDashboard from './pages/AdminDashboard';
-import ResultPage from './pages/ResultPage';
 import NavBar from './components/NavBar'
 
 /* Variables used by Okta for authentication */
@@ -37,7 +36,6 @@ class App extends Component {
           <NavBar />
           <div className="container">
             <Route exact path="/" component={Home} />
-            <Route path="/ResultPage" component={ResultPage} />
             <Route path="/how-to" component={HowTo} />
             <Route path="/contact-us" component={ContactUs} />
             <Route path='/implicit/callback' component={LoginCallback} />
