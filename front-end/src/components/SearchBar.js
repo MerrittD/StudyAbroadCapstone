@@ -4,8 +4,8 @@ import SearchResults from './SearchResults'
 /* Dropdown filters */
 class SearchBar extends Component {
     /* Constructor to initialize props passed down */
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
     }
 
     /* Takes out all duplicates of the array passed in */

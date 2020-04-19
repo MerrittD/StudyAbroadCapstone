@@ -1,78 +1,16 @@
 import React, { Component } from 'react'
 
 class SearchResults extends Component {
+    constructor(props) {
+        super(props);
+        console.log(this.props);
+    }
+
     render() {
         return (
-            <div className="result">
-                <table>
-                    <tr>
-                        <td className="result-country">Australia</td>
-                        <td className="result-prog-name">Exchange Program Name</td>
-                        <td>English</td>
-                        <td>Australia</td>
-                        <td>Exchange Program Name</td>
-                        <td>English</td>
-                        <td>Australia</td>
-                        <td>Exchange Program Name</td>
-                        <td>English</td>
-                    </tr>
-                    <tr>
-                        <td>Australia</td>
-                        <td>Exchange Program Name</td>
-                        <td>English</td>
-                        <td>Australia</td>
-                        <td>Exchange Program Name</td>
-                        <td>English</td>
-                        <td>Australia</td>
-                        <td>Exchange Program Name</td>
-                        <td>English</td>
-                    </tr>
-                    <tr>
-                        <td>Australia</td>
-                        <td>Exchange Program Name</td>
-                        <td>English</td>
-                        <td>Australia</td>
-                        <td>Exchange Program Name</td>
-                        <td>English</td>
-                        <td>Australia</td>
-                        <td>Exchange Program Name</td>
-                        <td>English</td>
-                    </tr>
-                    <tr>
-                        <td>Australia</td>
-                        <td>Exchange Program Name</td>
-                        <td>English</td>
-                        <td>Australia</td>
-                        <td>Exchange Program Name</td>
-                        <td>English</td>
-                        <td>Australia</td>
-                        <td>Exchange Program Name</td>
-                        <td>English</td>
-                    </tr>
-                    <tr>
-                        <td>Australia</td>
-                        <td>Exchange Program Name</td>
-                        <td>English</td>
-                        <td>Australia</td>
-                        <td>Exchange Program Name</td>
-                        <td>English</td>
-                        <td>Australia</td>
-                        <td>Exchange Program Name</td>
-                        <td>English</td>
-                    </tr>
-                    <tr>
-                        <td>Australia</td>
-                        <td>Exchange Program Name</td>
-                        <td>English</td>
-                        <td>Australia</td>
-                        <td>Exchange Program Name</td>
-                        <td>English</td>
-                        <td>Australia</td>
-                        <td>Exchange Program Name</td>
-                        <td>English</td>
-                    </tr>
-                </table>
-            </div>
+            <div></div>
+
+
         )
     }
 }
