@@ -460,15 +460,25 @@ class Program(db.Model):
 			'cost':self.cost,
 			'stip':self.cost_stipulations,
 			'desc':self.description,
-			'url':self.url
-			#'area':self.seralize_manyToMany(self.area),
-			#'lang':self.seralize_manyToMany(self.language),
-			#'loc':self.seralize_manyToMany(self.location),
-			#'term':self.seralize_manyToMany(self.location)
+			'url':self.url,
+			'area':self.seralize_manyToManyArea,
+			'lang':self.seralize_manyToManyLang,
+			'loc':self.seralize_manyToManyLoc,
+			'term':self.seralize_manyToManyTerm
 			}
 	@property
-	def seralize_manyToMany(rel):
-		return [i.serialize for i in rel]
+	def seralize_manyToManyArea(self):
+		return [i.serialize for i in self.area]
+	@property
+	def seralize_manyToManyLang(self):
+		return [i.serialize for i in self.language]
+	@property
+	def seralize_manyToManyLoc(self):
+		return [i.serialize for i in self.location]
+	@property
+	def seralize_manyToManyTerm(self):
+		return [i.serialize for i in self.term]
+
 
 
 		
