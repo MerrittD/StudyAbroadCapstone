@@ -2,6 +2,14 @@ from databaseConfiguration import db
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 
+
+# used for deseralization for jsonify 
+# code from https://stackoverflow.com/questions/7102754/jsonify-a-sqlalchemy-result-set-in-flask
+def dump_datetime(val):
+	if val is None:
+		return None
+	return [val.strftime("%Y-%m-%d"), val.strftime("%H:%M:%S")]
+
 # Written by Luke Yates and Daniel Merritt
 # Last Updated: 4/7/2020
 # This is the ORM (Object Relationship Model) for the Study Abroad Program Finder
@@ -109,6 +117,13 @@ class Provider(db.Model):
 	def find_by_name(cls, _name):
 		return cls.query.filter_by(name=_name).first()
 
+	@property
+	def serialize(self):
+		return{
+			'id':self.id,
+			'name':self.name
+			}
+
 #This class defines the area class. It is to hold all areas of study that can exist 
 #	throught a study abroad program
 #	It has a relationship back to the program class
@@ -143,6 +158,13 @@ class Area(db.Model):
 	def find_by_name(cls, _name):
 		return cls.query.filter_by(name=_name).first()
 
+	@property
+	def serialize(self):
+		return{
+			'id':self.id,
+			'name':self.name
+			}
+
 
 #This class defines the term table which holds all terms offered by a program
 # It has a relationship back to the program class
@@ -176,6 +198,13 @@ class Term(db.Model):
 	@classmethod
 	def find_by_name(cls, _name):
 		return cls.query.filter_by(name=_name).first()
+
+	@property
+	def serialize(self):
+		return{
+			'id':self.id,
+			'name':self.name
+			}
 
 
 #This class defines the city table which holds all cities a program can be offered in
@@ -218,6 +247,14 @@ class Location(db.Model):
 	@classmethod
 	def find_by_name(cls, _city, _country):
 		return cls.query.filter_by(city=_city).filter_by(country=_country).first()
+	
+	@property
+	def serialize(self):
+		return{
+			'id':self.id,
+			'city':self.city,
+			'country':self.country
+			}
 
 
 # This class defines the Langue class which holds all foreign languages a proram can offer to teach
@@ -252,6 +289,13 @@ class Language(db.Model):
 	@classmethod
 	def find_by_name(cls, _name):
 		return cls.query.filter_by(name=_name).first()
+
+	@property
+	def serialize(self):
+		return{
+			'id':self.id,
+			'name':self.name
+			}
 
 
 #This class defines the table for all programs stored. The table holds specific attributes listed under 
@@ -386,6 +430,55 @@ class Program(db.Model):
 	@classmethod
 	def find_by_name(cls, _name):
 		return cls.query.filter_by(name=_name).first()
+
+	@property
+	def serialize(self):
+		#id = db.Column(db.Integer, primary_key=True)
+		#name = db.Column(db.String(100),unique=True,nullable=False)
+
+		#comm_eng = db.Column(db.Boolean,nullable=False)		#yes or no
+		#research_opp =  db.Column(db.Boolean,nullable=False)	#yes or no
+		#intership_opp = db.Column(db.Boolean,nullable=False)	#yes or no
+
+		#date_created  = db.Column(db.DateTime, default=db.func.current_timestamp())
+		#date_modified = db.Column(db.DateTime, default=db.func.current_timestamp(),
+                                       #onupdate=db.func.current_timestamp())
+	
+		#cost = db.Column(db.String(15), nullable=True)
+		#cost_stipulations = db.Column(db.String(500), nullable=True)
+
+		#description  = db.Column(db.String(5000), nullable=True)
+		#url = db.Column(db.String(5000), nullable=True)
+		return{ 
+			'id': self.id,
+			'name':self.name,
+			'comm':self.comm_eng,
+			'research':self.research_opp,
+			'intern':self.intership_opp,
+			'create':dump_datetime(self.date_created),
+			'mod':dump_datetime(self.date_modified),
+			'cost':self.cost,
+			'stip':self.cost_stipulations,
+			'desc':self.description,
+			'url':self.url,
+			'area':self.seralize_manyToManyArea,
+			'lang':self.seralize_manyToManyLang,
+			'loc':self.seralize_manyToManyLoc,
+			'term':self.seralize_manyToManyTerm
+			}
+	@property
+	def seralize_manyToManyArea(self):
+		return [i.serialize for i in self.area]
+	@property
+	def seralize_manyToManyLang(self):
+		return [i.serialize for i in self.language]
+	@property
+	def seralize_manyToManyLoc(self):
+		return [i.serialize for i in self.location]
+	@property
+	def seralize_manyToManyTerm(self):
+		return [i.serialize for i in self.term]
+
 
 
 		
