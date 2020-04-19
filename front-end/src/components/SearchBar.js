@@ -88,7 +88,7 @@ class SearchBar extends Component {
                 </select>
                 <a> <button onClick={this.searchBy}>Search
                     </button></a>
-                <SearchResults userArray={userArray} />
+                <SearchResults />
             </div >
         )
     }
