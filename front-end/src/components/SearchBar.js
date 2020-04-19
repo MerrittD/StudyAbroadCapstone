@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import SearchResults from './SearchResults'
 
 /* Dropdown filters */
 class SearchBar extends Component {
@@ -87,6 +88,7 @@ class SearchBar extends Component {
                 </select>
                 <a> <button onClick={this.searchBy}>Search
                     </button></a>
+                <SearchResults userArray={userArray} />
             </div >
         )
     }
