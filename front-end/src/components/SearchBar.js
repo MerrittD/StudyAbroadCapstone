@@ -1,10 +1,11 @@
 import React, { Component } from 'react'
+import SearchResults from './SearchResults'
 
 /* Dropdown filters */
 class SearchBar extends Component {
     /* Constructor to initialize props passed down */
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
     }
 
     /* Takes out all duplicates of the array passed in */
@@ -85,8 +86,9 @@ class SearchBar extends Component {
                     <option default value="Any">Any</option>
                     {allProgramLanguages}
                 </select>
-                <a> <button onClick={this.searchBy}>Search
+                <a> <button>Search
                     </button></a>
+                <SearchResults />
             </div >
         )
     }
