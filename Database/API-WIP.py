@@ -31,7 +31,7 @@ def results():
     locationRequest = flask.request.values.get('loc')
     areaRequest = flask.request.values.get('area')
     termRequest = flask.request.values.get('term')
-    providerRequest = flask.request.values.get('prov')
+    #providerRequest = flask.request.values.get('prov')
 
    
     filterResults = None
@@ -57,7 +57,7 @@ def check():
         locationRequest = flask.request.values.get('loc')
         areaRequest = flask.request.values.get('area')
         termRequest = flask.request.values.get('term')
-        providerRequest = flask.request.values.get('prov')
+        #providerRequest = flask.request.values.get('prov')
 
     
         filterResults = None
@@ -76,7 +76,9 @@ def check():
         programID = flask.request.values.get('id')
         updateName = flask.request.values.get('uName')
         # each new update variable will be named and received in a simmilar fasion. It will look messy
-
+        #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        #AJ: Look into using a json for this. look into the flask request api
+        #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         
         #find the program
         #modify the selected values with data given
