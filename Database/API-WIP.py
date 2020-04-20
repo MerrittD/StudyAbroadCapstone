@@ -33,9 +33,14 @@ def results():
     areaRequest = flask.request.values.get('area')
     termRequest = flask.request.values.get('term')
     #providerRequest = flask.request.values.get('prov')
+    #http://127.0.0.1:5000/results?loc=Spain,Madrid&lan=Spanish 
+    # /request = approute 
+    #? = query 
+    #loc=Spain,Madrid = the location is sent two or more locatons using ,. These could be grouped using (Spain,Madrid)
+    #& is used to add another value 
 
    
-    filterResults = None
+    filterResults = []
      # here should be the methods to filter
 
 
@@ -44,7 +49,7 @@ def results():
 
     #after results are gathered
     json_list = [i.serialize for i in filterResults]
-    return jsonify(json_list)
+    return jsonify(locationRequest + languageRequest)
 
     return 
 
