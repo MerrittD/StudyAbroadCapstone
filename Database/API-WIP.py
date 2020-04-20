@@ -4,7 +4,7 @@ Routes and views for the flask application.
 
 from databaseORM import Admin,areas,terms,locations,languages,programs,Program,Area,Term,Location,Language,Provider 
 from  databaseConfiguration import app, db
-from flask import render_template,request, jsonify, Flask
+from flask import render_template,request, jsonify, flask
 
 
 
@@ -18,22 +18,83 @@ app.config["DEBUG"] = True
 #browse, and result
 @app.route('/', methods=['GET'])
 def home():
-    
     programs = Program.return_all_programs()
-  
     json_list=[i.serialize for i in programs]
     return  jsonify(json_list)
 
+
+@app.route('/results', methods=['GET'])
+def results():
+    # the following values are taken from the get request and can be used to filter
+    #if null, dont filter by it
+    languageRequest = flask.request.values.get('lan')
+    locationRequest = flask.request.values.get('loc')
+    areaRequest = flask.request.values.get('area')
+    termRequest = flask.request.values.get('term')
+    providerRequest = flask.request.values.get('prov')
+
+   
+    filterResults = None
+     # here should be the methods to filter
+
+
+
+
+
+    #after results are gathered
+    json_list = [i.serialize for i in filterResults]
+    return jsonify(json_list)
+
+    return 
+
+
+
 #checking verbs of incoming request
-@app.route('/check', methods=['GET','POST', 'PUT', 'DELETE'])
+@app.route('/admin', methods=['GET','POST', 'PUT', 'DELETE'])
 def check():
     if request.method == GET:
-        return "REQUEST TYPE: GET"
+        languageRequest = flask.request.values.get('lan')
+        locationRequest = flask.request.values.get('loc')
+        areaRequest = flask.request.values.get('area')
+        termRequest = flask.request.values.get('term')
+        providerRequest = flask.request.values.get('prov')
+
+    
+        filterResults = None
+     # here should be the methods to filter
+
+
+
+
+
+    #after results are gathered
+        json_list = [i.serialize for i in filterResults]
+        return jsonify(json_list)
+
     elif request.method == POST:
-        return "REQUEST TYPE: POST"
+        #use post to update
+        programID = flask.request.values.get('id')
+        updateName = flask.request.values.get('uName')
+        # each new update variable will be named and received in a simmilar fasion. It will look messy
+
+        
+        #find the program
+        #modify the selected values with data given
+        #update modified date
+        # if the program is successfully modified 
+            #return jsonify("success")
+        #else, return either a message saying it failed or render the page with an error sent 
+
     elif request.method == PUT:
-        return "REQUEST TYPE: PUT"
+
+        # same as above, only it doesnt need to look up anything, just take in the values and use them to make a program. 
+        #id not required, but the database should be checked to see if a program of the same name exists. 
+        #if it does, do nothing and return an error
+        return None
     elif request.method == DELETE:
+
+        #given the id of a program, delete it from database
+        programID= flask.request.values.get('id')
         return "REQUEST TYPE: DELETE"
 
 
