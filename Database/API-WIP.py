@@ -4,7 +4,8 @@ Routes and views for the flask application.
 
 from databaseORM import Admin,areas,terms,locations,languages,programs,Program,Area,Term,Location,Language,Provider 
 from  databaseConfiguration import app, db
-from flask import render_template,request, jsonify, flask
+from flask import render_template,request, jsonify, Flask
+import flask
 
 
 
@@ -47,7 +48,10 @@ def results():
 
     return 
 
-
+@app.route('/login',methods=['GET','PUT'])
+def login():
+    #methods might be needed here to log in fully. 
+    return None
 
 #checking verbs of incoming request
 @app.route('/admin', methods=['GET','POST', 'PUT', 'DELETE'])
