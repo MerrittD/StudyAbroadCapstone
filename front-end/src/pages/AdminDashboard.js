@@ -69,7 +69,7 @@ class AdminDashboard extends Component {
 
     updateProgram() {
         let { country, term, name, language, cost } = this.state.editProgramData;
-        axios.put('https://my-json-server.typicode.com/MasonTDaniel/capstonedummydata/allPrograms' + this.state.editProgramData.id, {
+        axios.put('https://my-json-server.typicode.com/MasonTDaniel/capstonedummydata/allPrograms' + '/' + this.state.editProgramData.id, {
             country, term, name, language, cost
         })
             .then(response => {
@@ -85,6 +85,13 @@ class AdminDashboard extends Component {
                         cost: ''
                     }
                 });
+            })
+    }
+
+    deleteProgram(id) {
+        axios.delete('https://my-json-server.typicode.com/MasonTDaniel/capstonedummydata/allPrograms' + '/' + id)
+            .then(response => {
+                this.refreshPrograms();
             })
     }
 
@@ -108,6 +115,8 @@ class AdminDashboard extends Component {
         });
     }
 
+
+
     render() {
         let programs = this.state.programs.map((program) => {
             return (
@@ -120,7 +129,7 @@ class AdminDashboard extends Component {
                     <td>{program.Cost}</td>
                     <td>
                         <Button color="success" size="sm" className="mr-2 mb-1" onClick={this.editProgram.bind(this, program.id, program.country, program.term, program.name, program.language, program.cost)}>Edit</Button>
-                        <Button color="danger" size="sm">Delete</Button>
+                        <Button color="danger" size="sm" onClick={this.deleteProgram.bind(this, program.id)} >Delete</Button>
                     </td>
                 </tr>
             )
