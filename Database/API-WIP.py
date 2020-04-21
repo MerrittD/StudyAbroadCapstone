@@ -6,6 +6,7 @@ from databaseORM import Admin,areas,terms,locations,languages,programs,Program,A
 from  databaseConfiguration import app, db
 from flask import render_template,request, jsonify, Flask
 import flask
+import json
 
 
 
@@ -81,25 +82,63 @@ def check():
 
     elif request.method == POST:
         #use post to update
-        programID = flask.request.values.get('id')
-        updateName = flask.request.values.get('uName')
+        originalName = flask.request.values.get('name')
+        updateJson  = flask.request.get_json()
         # each new update variable will be named and received in a simmilar fasion. It will look messy
         #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        #AJ: Look into using a json for this. look into the flask request api
+        #AJ, Look into using a json for this. look into the flask request api
         #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        
+       
+        #These are all the possible things that can be updated. If null, it wont be changed or removed
+        updateName,updateComm,updateResearch,updateIntern,updateCost,updateStipulations,updateDesc, updateUrl,updateArea,updateLang,updateLoc,updateTerm,updateProvider = None
+
+        if 'upname' in updateJson:
+            updateName=updateJson['upname']
+        elif 'upcom' in updateJson:
+            updateName=updateJson['upcom']
+        elif 'upre' in updateJson:
+            updateName=updateJson['upre']
+        elif 'upin' in updateJson:
+            updateName=updateJson['upin']
+        elif 'upcos' in updateJson:
+            updateName=updateJson['upcos']
+        elif 'upsti' in updateJson:
+            updateName=updateJson['upsti']
+        elif 'updesc' in updateJson:
+            updateName=updateJson['updesc']
+        elif 'upurl' in updateJson:
+            updateName=updateJson['upurl']
+        elif 'uplang' in updateJson:
+            updateName=updateJson['uplang']
+        elif 'uploc' in updateJson:
+            updateName=updateJson['uploc']
+        elif 'upter' in updateJson:
+            updateName=updateJson['upter']
+        elif 'uparea' in updateJson:
+            updateName=updateJson['uparea']
+        elif 'upprov' in updateJson:
+            updateName=updateJson['upprov']
+       
         #find the program
+        programToModify = Program.find_by_name(originalName)
         #modify the selected values with data given
+        #data will be in the variables and should be type cast as needed. 
+
+
+
+
         #update modified date
+
+
         # if the program is successfully modified 
             #return jsonify("success")
         #else, return either a message saying it failed or render the page with an error sent 
 
     elif request.method == PUT:
 
-        # same as above, only it doesnt need to look up anything, just take in the values and use them to make a program. 
-        #id not required, but the database should be checked to see if a program of the same name exists. 
-        #if it does, do nothing and return an error
+ 
+
+
         return None
     elif request.method == DELETE:
 
