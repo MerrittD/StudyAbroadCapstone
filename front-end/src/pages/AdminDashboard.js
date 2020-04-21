@@ -3,8 +3,19 @@ import { Table, Button, Modal, ModalHeader, ModalBody, ModalFooter, FormGroup, L
 import axios from 'axios'
 import ProgramList from '../components/ProgramList'
 
+/* **Protected Route, Admin Only** 
+    Displays all programs in the database, allowing the admin to add, edit, and delete programs
+*/
 class AdminDashboard extends Component {
 
+    /* Set the initial state:
+        @programs: holds data for each program :: for displaying the list of programs
+        @newProgramData: holds the data for the program that the user wants to add :: for sending HTTP post requests and updating the DOM
+        @editProgramData: (similar to newProgramData) holds the data for the program that is being updated :: for sending HTTP put requests 
+                            and updating DOM
+        @newProgramModal: toggles the Add a Program window :: for knowing when the window should be opened and closed
+        @editProgramModal: toggles the Edit a Program window :: for knowing when the window should be opened and closed
+    */
     constructor() {
         super();
         this.state = {
@@ -29,32 +40,35 @@ class AdminDashboard extends Component {
         };
 
     }
-
+    /* Run after initial render */
     componentDidMount() {
         this.refreshPrograms();
 
     }
 
+    /* Toggles Add a Program window */
     toggleNewProgramModal() {
         this.setState({
             newProgramModal: !this.state.newProgramModal
         });
     }
 
+    /* Toggles Edit a Program window */
     toggleEditProgramModal() {
         this.setState({
             editProgramModal: !this.state.editProgramModal
         });
     }
 
+    /* Perform a post request to add a new program to the database */
     addProgram() {
+        // Access api route and pass along newProgramData, which holds user input from the Add a Program window
         axios.post('https://my-json-server.typicode.com/MasonTDaniel/capstonedummydata/allPrograms', this.state.newProgramData)
             .then(response => {
+                //Add the new program to the existing programs
                 let { programs } = this.state;
-
-
                 programs.push(response.data);
-                console.log(programs);
+                // Toggle (close) the Add a Program window, clear the current-program-added var for future use
                 this.setState({
                     programs, newProgramModal: false, newProgramData: {
                         country: '',
@@ -67,14 +81,29 @@ class AdminDashboard extends Component {
             });
     }
 
+    /* Open the Edit a Program window with fields prefilled with data corresponding to the program being edited */
+    editProgram(id, country, term, name, language, cost) {
+        this.setState({
+            editProgramData: { id, country, term, name, language, cost },
+            editProgramModal: !this.state.editProgramModal
+        });
+    }
+
+    /* Perform a put request to edit an existing program in the database when the user clicks Update
+        Keep in mind that at this point, editProgramData was called and the user is assumed to have entered the updated info.
+        Now, we must transfer that new information to the database
+    */
     updateProgram() {
+        // Extract the users input for updated info
         let { country, term, name, language, cost } = this.state.editProgramData;
+        // Alter the database by passing that info through an http request
         axios.put('https://my-json-server.typicode.com/MasonTDaniel/capstonedummydata/allPrograms' + '/' + this.state.editProgramData.id, {
             country, term, name, language, cost
         })
             .then(response => {
+                // Re-call the database to show updated program list in DOM
                 this.refreshPrograms();
-
+                // Toggle (close) Edit a Program window, clear the current-program-edited var for future use
                 this.setState({
                     editProgramModal: !this.state.editProgramModal, editProgramData: {
                         id: '',
@@ -88,6 +117,7 @@ class AdminDashboard extends Component {
             })
     }
 
+    // Delete a program from the database, re-call the database to show updated program list
     deleteProgram(id) {
         axios.delete('https://my-json-server.typicode.com/MasonTDaniel/capstonedummydata/allPrograms' + '/' + id)
             .then(response => {
@@ -98,7 +128,7 @@ class AdminDashboard extends Component {
     refreshPrograms() {
         /* Fetch the data from the database */
         axios.get('https://my-json-server.typicode.com/MasonTDaniel/capstonedummydata/allPrograms')
-            /* Response and promises */
+            /* Store the response (an array of all programs) into programs */
             .then(response => {
                 this.setState({
                     programs: response.data
@@ -108,16 +138,8 @@ class AdminDashboard extends Component {
             });
     }
 
-    editProgram(id, country, term, name, language, cost) {
-        this.setState({
-            editProgramData: { id, country, term, name, language, cost },
-            editProgramModal: !this.state.editProgramModal
-        });
-    }
-
-
-
     render() {
+        // Make a table of programs and store it
         let programs = this.state.programs.map((program) => {
             return (
                 <tr key={program.id}>
@@ -137,6 +159,7 @@ class AdminDashboard extends Component {
         });
         return (
             <div>
+
                 <Button color="primary" onClick={this.toggleNewProgramModal.bind(this)}>Add Program</Button>
                 <Modal isOpen={this.state.newProgramModal} toggle={this.toggleNewProgramModal.bind(this)}>
                     <ModalHeader toggle={this.toggleNewProgramModal.bind(this)}>Add a new program</ModalHeader>
