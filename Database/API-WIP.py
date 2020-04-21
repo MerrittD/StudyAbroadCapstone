@@ -33,23 +33,38 @@ def results():
     areaRequest = flask.request.values.get('area')
     termRequest = flask.request.values.get('term')
     #providerRequest = flask.request.values.get('prov')
+
+    #the following handles the presence of multiple values per param by
+    #splitting them into an array. all values are strings
+    langArray = []
+    locArray=[]
+    areaArray=[]
+    termArray=[]
+    if languageRequest is not None:
+        langArray = languageRequest.split(',')
+    if locationRequest is not None:
+        locArray = locationRequest.split(',')
+    if areaRequest is not None:
+        areaArray = areaRequest.split(',')
+    if termRequest is not None:
+        termArray = termRequest.split(',')
+    #provArray = providerRequest.split(',')
     #http://127.0.0.1:5000/results?loc=Spain,Madrid&lan=Spanish 
     # /request = approute 
     #? = query 
-    #loc=Spain,Madrid = the location is sent two or more locatons using ,. These could be grouped using (Spain,Madrid)
+    #loc=Spain,Madrid = the location is sent two or more locatons using ,. These could be grouped using (Spain Madrid)
     #& is used to add another value 
 
-   
-    filterResults = []
      # here should be the methods to filter
-
+     #the filters should go through each array and use them for the filter inputs 
+     #these should be put in a variable called filterResults
 
 
 
 
     #after results are gathered
-    json_list = [i.serialize for i in filterResults]
-    return jsonify(locationRequest + languageRequest)
+    #json_list = [i.serialize for i in filterResults]
+    return jsonify(langArray)
 
     return 
 
@@ -62,23 +77,7 @@ def login():
 @app.route('/admin', methods=['GET','POST', 'PUT', 'DELETE'])
 def check():
     if request.method == GET:
-        languageRequest = flask.request.values.get('lan')
-        locationRequest = flask.request.values.get('loc')
-        areaRequest = flask.request.values.get('area')
-        termRequest = flask.request.values.get('term')
-        #providerRequest = flask.request.values.get('prov')
-
-    
-        filterResults = None
-     # here should be the methods to filter
-
-
-
-
-
-    #after results are gathered
-        json_list = [i.serialize for i in filterResults]
-        return jsonify(json_list)
+       results()
 
     elif request.method == POST:
         #use post to update
@@ -105,8 +104,12 @@ def check():
     elif request.method == DELETE:
 
         #given the id of a program, delete it from database
-        programID= flask.request.values.get('id')
-        return "REQUEST TYPE: DELETE"
+        programName= flask.request.values.get('progname')
+        providerName = flask.request.values.get('provname')
+        #take in the id and use that to delete 
+        Provider.find_by_name(providerName).remove_program(Program.find_by_name(programName))
+        db.session.commit()
+        return "Program: " + programName+ " Deleted"
 
 
 # A route to return all of the available entries in our catalog.

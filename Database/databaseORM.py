@@ -121,9 +121,14 @@ class Provider(db.Model):
 	def serialize(self):
 		return{
 			'id':self.id,
-			'name':self.name
+			'name':self.name,
+			'programs':self.programSerial
 			}
 
+	@property
+	def programSerial(self):
+		return [i.serialize for i in self.program]
+		
 #This class defines the area class. It is to hold all areas of study that can exist 
 #	throught a study abroad program
 #	It has a relationship back to the program class
