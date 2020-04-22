@@ -7,7 +7,7 @@ const Programs = ({ programs }) => {
 
             {
                 programs.map((program) => (
-                    <div class="card">
+                    <div class="result-table">
                         <table>
                             <tr>
                                 <th>{program.country}</th>
