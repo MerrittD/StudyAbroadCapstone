@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { Table, Button, Modal, ModalHeader, ModalBody, ModalFooter, FormGroup, Label, Input } from 'reactstrap'
 import axios from 'axios'
-import ProgramList from '../components/ProgramList'
 
 /* **Protected Route, Admin Only** 
     Displays all programs in the database, allowing the admin to add, edit, and delete programs
