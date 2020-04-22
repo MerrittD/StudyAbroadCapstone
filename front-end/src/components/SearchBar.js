@@ -1,11 +1,22 @@
 import React, { Component } from 'react'
 import SearchResults from './SearchResults'
+import { FormGroup, Label, Input, Button } from 'reactstrap'
+import axios from 'axios'
 
 /* Dropdown filters */
 class SearchBar extends Component {
     /* Constructor to initialize props passed down */
     constructor(props) {
         super(props);
+        this.state = {
+            filters: {
+                termFilter: 'Any',
+                countryFilter: 'Any',
+                areaOfStudyFilter: 'Any',
+                languageFilter: 'Any'
+            },
+            filteredProgramList: []
+        }
     }
 
     /* Takes out all duplicates of the array passed in */
@@ -14,9 +25,20 @@ class SearchBar extends Component {
         return arr.filter((e, i) => arr.indexOf(e) >= i)
     }
 
+    onSearch() {
+        axios.get('https://my-json-server.typicode.com/MasonTDaniel/capstonedummydata/allPrograms')
+            .then(response => {
+                this.setState({
+                    filteredProgramList: response.data
+                });
+            }, (error) => {
+                console.log(error);
+            });
+    }
+
 
     render() {
-        /* Take in the passed down program array and store it for easy access*/
+        // Take in the passed down program array and store it for easy access
         let programs = this.props.state.programs;
 
         /* The following code blocks labeled 1, 2, 3, and 4 each create an array (4 total)
@@ -28,11 +50,13 @@ class SearchBar extends Component {
         let allProgramTerms = programs.map((program) =>
             program.term
         );
-        /* Remove all duplicate terms */
+        // Remove all duplicate terms 
         allProgramTerms = this.getUnique(allProgramTerms)
-        /* Sort the terms into alphabetical order */
+        //  Sort the terms into alphabetical order 
         allProgramTerms.sort()
-        /* Make it into an array of options so that we can insert them into our dropdown (below) */
+        // Add 'Any' option to the beginning of the array
+        allProgramTerms.unshift('Any')
+        //  Make it into an array of options so that we can insert them into our dropdown (below) 
         allProgramTerms = allProgramTerms.map((programTermValue, i) =>
             <option key={i}>{programTermValue}</option>
         );
@@ -43,6 +67,7 @@ class SearchBar extends Component {
         );
         allProgramCountries = this.getUnique(allProgramCountries)
         allProgramCountries.sort()
+        allProgramCountries.unshift('Any')
         allProgramCountries = allProgramCountries.map((programCountryValue, i) =>
             <option key={i}>{programCountryValue}</option>
         );
@@ -53,6 +78,7 @@ class SearchBar extends Component {
         );
         allProgramAreasOfStudy = this.getUnique(allProgramAreasOfStudy)
         allProgramAreasOfStudy.sort()
+        allProgramAreasOfStudy.unshift('Any')
         allProgramAreasOfStudy = allProgramAreasOfStudy.map((programAreaOfStudyValue, i) =>
             <option key={i}>{programAreaOfStudyValue}</option>
         );
@@ -63,32 +89,66 @@ class SearchBar extends Component {
         );
         allProgramLanguages = this.getUnique(allProgramLanguages)
         allProgramLanguages.sort()
+        allProgramLanguages.unshift('Any')
         allProgramLanguages = allProgramLanguages.map((programLanguageValue, i) =>
             <option key={i}>{programLanguageValue}</option>
         );
 
         /* Display 4 dropdowns (populated with terms, countries, areas of study, and languages respectively) and a Search button */
         return (
-            <div>
-                <select style={{ relative: 'center' }}>
-                    <option default value="Any">Any</option>
-                    {allProgramTerms}
-                </select>
-                <select>
-                    <option default value="Any">Any</option>
-                    {allProgramCountries}
-                </select>
-                <select>
-                    <option default value="Any">Any</option>
-                    {allProgramAreasOfStudy}
-                </select>
-                <select>
-                    <option default value="Any">Any</option>
-                    {allProgramLanguages}
-                </select>
-                <a> <button>Search
-                    </button></a>
-                <SearchResults />
+            <div className="form-inline">
+                <div className="mr-20 ml-20">
+                    <FormGroup >
+                        <Label for="termFilter">Term</Label>
+                        <Input type="select" value={this.state.filters.termFilter} onChange={(e) => {
+                            let { filters } = this.state;
+                            filters.termFilter = e.target.value;
+                            this.setState({ filters });
+                        }}>
+                            {allProgramTerms}
+                        </Input>
+                    </FormGroup>
+                </div>
+                <div className="mr-20 ml-20">
+                    <FormGroup>
+                        <Label for="countryFilter">Country</Label>
+                        <Input type="select" id="countryFilter" value={this.state.filters.countryFilter} onChange={(e) => {
+                            let { filters } = this.state;
+                            filters.countryFilter = e.target.value;
+                            this.setState({ filters });
+                        }}>
+                            {allProgramCountries}
+                        </Input>
+                    </FormGroup>
+                </div>
+                <div className="mr-20 ml-20">
+                    <FormGroup >
+                        <Label for="areaOfStudyFilter">Area of Study</Label>
+                        <Input type="select" id="areaOfStudyFilter" value={this.state.filters.areaOfStudyFilter} onChange={(e) => {
+                            let { filters } = this.state;
+                            filters.areaOfStudyFilter = e.target.value;
+                            this.setState({ filters });
+                        }}>
+                            {allProgramAreasOfStudy}
+                        </Input>
+                    </FormGroup>
+                </div>
+                <div className="mr-20 ml-20">
+                    <FormGroup >
+                        <Label for="languageFilter">Language</Label>
+                        <Input type="select" id="languageFilter" value={this.state.filters.languageFilter} onChange={(e) => {
+                            let { filters } = this.state;
+                            filters.languageFilter = e.target.value;
+                            this.setState({ filters });
+                        }}>
+                            {allProgramLanguages}
+                        </Input>
+                    </FormGroup>
+                </div >
+
+                <a> <Button className="btn-yellow" onClick={this.onSearch.bind(this)}>Search
+                    </Button></a>
+                <SearchResults state={this.state} />
             </div >
         )
     }
