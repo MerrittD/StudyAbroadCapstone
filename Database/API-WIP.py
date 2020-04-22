@@ -77,47 +77,62 @@ def login():
 #checking verbs of incoming request
 @app.route('/admin', methods=['GET','POST', 'PUT', 'DELETE'])
 def check():
-    if request.method == GET:
+    if request.method == 'GET':
        results()
 
-    elif request.method == POST:
+    elif request.method == 'POST':
         #use post to update
-        originalName = flask.request.values.get('name')
-        updateJson  = flask.request.get_json()
+        originalName = flask.request.values.get('originalName')
+        updateJson  = flask.request.get_json(force=True)
         # each new update variable will be named and received in a simmilar fasion. It will look messy
         #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         #AJ, Look into using a json for this. look into the flask request api
         #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
        
         #These are all the possible things that can be updated. If null, it wont be changed or removed
-        updateName,updateComm,updateResearch,updateIntern,updateCost,updateStipulations,updateDesc, updateUrl,updateArea,updateLang,updateLoc,updateTerm,updateProvider = None
+        print(originalName)
+        print(updateJson)
+        print(type(updateJson))
+        updateName= None
+        updateComm= None
+        updateResearch= None
+        updateIntern= None
+        updateCost= None
+        updateStipulations= None
+        updateDesc= None
+        updateUrl= None
+        updateArea= None
+        updateLang= None
+        updateLoc= None
+        updateTerm= None
+        updateProvider = None
 
         if 'upname' in updateJson:
             updateName=updateJson['upname']
-        elif 'upcom' in updateJson:
-            updateName=updateJson['upcom']
-        elif 'upre' in updateJson:
-            updateName=updateJson['upre']
-        elif 'upin' in updateJson:
-            updateName=updateJson['upin']
-        elif 'upcos' in updateJson:
-            updateName=updateJson['upcos']
-        elif 'upsti' in updateJson:
-            updateName=updateJson['upsti']
-        elif 'updesc' in updateJson:
-            updateName=updateJson['updesc']
-        elif 'upurl' in updateJson:
-            updateName=updateJson['upurl']
-        elif 'uplang' in updateJson:
-            updateName=updateJson['uplang']
-        elif 'uploc' in updateJson:
-            updateName=updateJson['uploc']
-        elif 'upter' in updateJson:
-            updateName=updateJson['upter']
-        elif 'uparea' in updateJson:
-            updateName=updateJson['uparea']
-        elif 'upprov' in updateJson:
-            updateName=updateJson['upprov']
+        if 'upcom' in updateJson:
+            updateComm=updateJson['upcom']
+        if 'upre' in updateJson:
+            updateResearch=updateJson['upre']
+        if 'upin' in updateJson:
+            updateIntern=updateJson['upin']
+        if 'upcos' in updateJson:
+            updateCost=updateJson['upcos']
+        if 'upsti' in updateJson:
+            updateStipulations=updateJson['upsti']
+        if 'updesc' in updateJson:
+            updateDesc=updateJson['updesc']
+        if 'upurl' in updateJson:
+            updateUrl=updateJson['upurl']
+        if 'uplang' in updateJson:
+            updateLang=updateJson['uplang']
+        if 'uploc' in updateJson:
+            updateLoc=updateJson['uploc']
+        if 'upter' in updateJson:
+            updateTerm=updateJson['upter']
+        if 'uparea' in updateJson:
+            updateArea=updateJson['uparea']
+        if 'upprov' in updateJson:
+            updateProvider=updateJson['upprov']
        
         #find the program
         programToModify = Program.find_by_name(originalName)
@@ -129,18 +144,19 @@ def check():
 
         #update modified date
 
+        return updateProvider
 
         # if the program is successfully modified 
             #return jsonify("success")
         #else, return either a message saying it failed or render the page with an error sent 
 
-    elif request.method == PUT:
+    elif request.method == 'PUT':
 
  
 
 
         return None
-    elif request.method == DELETE:
+    elif request.method == 'DELETE':
 
         #given the id of a program, delete it from database
         programName= flask.request.values.get('progname')
