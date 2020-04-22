@@ -15,7 +15,8 @@ class SearchBar extends Component {
                 areaOfStudyFilter: 'Any',
                 languageFilter: 'Any'
             },
-            filteredProgramList: []
+            filteredProgramList: [],
+            displayResults: false
         }
     }
 
@@ -29,11 +30,14 @@ class SearchBar extends Component {
         axios.get('https://my-json-server.typicode.com/MasonTDaniel/capstonedummydata/allPrograms')
             .then(response => {
                 this.setState({
-                    filteredProgramList: response.data
+                    filteredProgramList: response.data,
+                    displayResults: !this.state.displayResults
                 });
+                console.log('searched: ' + this.state.filteredProgramList)
             }, (error) => {
                 console.log(error);
             });
+
     }
 
 
@@ -94,6 +98,14 @@ class SearchBar extends Component {
             <option key={i}>{programLanguageValue}</option>
         );
 
+        if (this.state.displayResults) {
+            this.state.filteredProgramList = (
+                <div>
+                    <SearchResults filteredProgramList={this.filteredProgramList} />
+                </div>
+            )
+        }
+
         /* Display 4 dropdowns (populated with terms, countries, areas of study, and languages respectively) and a Search button */
         return (
             <div className="form-inline">
@@ -148,7 +160,8 @@ class SearchBar extends Component {
 
                 <a> <Button className="btn-yellow" onClick={this.onSearch.bind(this)}>Search
                     </Button></a>
-                <SearchResults state={this.state} />
+                {console.log('current filteredProgramList: ' + this.state.filteredProgramList)}
+                {this.state.filteredProgramList}
             </div >
         )
     }
