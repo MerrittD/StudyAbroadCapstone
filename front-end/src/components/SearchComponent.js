@@ -7,8 +7,8 @@ import SearchBar from '../components/SearchBar'
 class SearchComponent extends Component {
 
     /* Sets the programs array to empty initially */
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
             programs: [],
         };

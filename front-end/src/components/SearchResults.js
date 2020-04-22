@@ -6,9 +6,12 @@ class SearchResults extends Component {
         super(props);
         console.log('props: ' + this.props.filteredPrograms);
     }
+    componentDidMount() {
+
+    }
     render() {
         // Make a table of programs and store it
-        let filteredPrograms = this.props.filteredPrograms.map((program) => {
+        let filteredPrograms = this.props.state.filteredProgramList.map((program) => {
             return (
                 <tr key={program.id}>
                     <td>{program.id}</td>

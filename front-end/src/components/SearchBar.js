@@ -26,14 +26,15 @@ class SearchBar extends Component {
         return arr.filter((e, i) => arr.indexOf(e) >= i)
     }
 
-    onSearch() {
+    onSearch = (displayRes) => {
         axios.get('https://my-json-server.typicode.com/MasonTDaniel/capstonedummydata/allPrograms')
             .then(response => {
+                console.log('about to search, displayResults: ' + this.state.displayResults)
                 this.setState({
                     filteredProgramList: response.data,
-                    displayResults: !this.state.displayResults
+                    displayResults: displayRes
                 });
-                console.log('searched: ' + this.state.filteredProgramList)
+                console.log('searched, displayResults: ' + this.state.displayResults)
             }, (error) => {
                 console.log(error);
             });
@@ -98,14 +99,6 @@ class SearchBar extends Component {
             <option key={i}>{programLanguageValue}</option>
         );
 
-        if (this.state.displayResults) {
-            this.state.filteredProgramList = (
-                <div>
-                    <SearchResults filteredProgramList={this.filteredProgramList} />
-                </div>
-            )
-        }
-
         /* Display 4 dropdowns (populated with terms, countries, areas of study, and languages respectively) and a Search button */
         return (
             <div className="form-inline">
@@ -158,11 +151,11 @@ class SearchBar extends Component {
                     </FormGroup>
                 </div >
 
-                <a> <Button className="btn-yellow" onClick={this.onSearch.bind(this)}>Search
+                <a> <Button className="btn-yellow" onClick={this.onSearch.bind(this, true)}>Search
                     </Button></a>
-                {console.log('current filteredProgramList: ' + this.state.filteredProgramList)}
-                {this.state.filteredProgramList}
-            </div >
+                {console.log('current filters: ' + this.state.filters)}
+                {this.state.displayResults && <SearchResults state={this.state} />}
+            </div>
         )
     }
 }
