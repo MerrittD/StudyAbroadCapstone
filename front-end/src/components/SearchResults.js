@@ -4,7 +4,7 @@ import { Table } from 'reactstrap'
 class SearchResults extends Component {
     constructor(props) {
         super(props);
-        console.log('jaundice ' + this.props.state.filteredPrograms);
+        console.log('props: ' + this.props.state.filteredPrograms);
     }
     render() {
         // Make a table of programs and store it
