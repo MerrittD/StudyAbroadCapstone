@@ -101,60 +101,64 @@ class SearchBar extends Component {
 
         /* Display 4 dropdowns (populated with terms, countries, areas of study, and languages respectively) and a Search button */
         return (
-            <div className="form-inline">
-                <div className="mr-20 ml-20">
-                    <FormGroup >
-                        <Label for="termFilter">Term</Label>
-                        <Input type="select" value={this.state.filters.termFilter} onChange={(e) => {
-                            let { filters } = this.state;
-                            filters.termFilter = e.target.value;
-                            this.setState({ filters });
-                        }}>
-                            {allProgramTerms}
-                        </Input>
-                    </FormGroup>
-                </div>
-                <div className="mr-20 ml-20">
-                    <FormGroup>
-                        <Label for="countryFilter">Country</Label>
-                        <Input type="select" id="countryFilter" value={this.state.filters.countryFilter} onChange={(e) => {
-                            let { filters } = this.state;
-                            filters.countryFilter = e.target.value;
-                            this.setState({ filters });
-                        }}>
-                            {allProgramCountries}
-                        </Input>
-                    </FormGroup>
-                </div>
-                <div className="mr-20 ml-20">
-                    <FormGroup >
-                        <Label for="areaOfStudyFilter">Area of Study</Label>
-                        <Input type="select" id="areaOfStudyFilter" value={this.state.filters.areaOfStudyFilter} onChange={(e) => {
-                            let { filters } = this.state;
-                            filters.areaOfStudyFilter = e.target.value;
-                            this.setState({ filters });
-                        }}>
-                            {allProgramAreasOfStudy}
-                        </Input>
-                    </FormGroup>
-                </div>
-                <div className="mr-20 ml-20">
-                    <FormGroup >
-                        <Label for="languageFilter">Language</Label>
-                        <Input type="select" id="languageFilter" value={this.state.filters.languageFilter} onChange={(e) => {
-                            let { filters } = this.state;
-                            filters.languageFilter = e.target.value;
-                            this.setState({ filters });
-                        }}>
-                            {allProgramLanguages}
-                        </Input>
-                    </FormGroup>
-                </div >
+            <div>
+                <div className="form-inline align-center">
+                    <div className="mr-20 ml-20">
+                        <FormGroup >
+                            <Label for="termFilter">Term</Label>
+                            <Input type="select" value={this.state.filters.termFilter} onChange={(e) => {
+                                let { filters } = this.state;
+                                filters.termFilter = e.target.value;
+                                this.setState({ filters });
+                            }}>
+                                {allProgramTerms}
+                            </Input>
+                        </FormGroup>
+                    </div>
+                    <div className="mr-20 ml-20">
+                        <FormGroup>
+                            <Label for="countryFilter">Country</Label>
+                            <Input type="select" id="countryFilter" value={this.state.filters.countryFilter} onChange={(e) => {
+                                let { filters } = this.state;
+                                filters.countryFilter = e.target.value;
+                                this.setState({ filters });
+                            }}>
+                                {allProgramCountries}
+                            </Input>
+                        </FormGroup>
+                    </div>
+                    <div className="mr-20 ml-20">
+                        <FormGroup >
+                            <Label for="areaOfStudyFilter">Area of Study</Label>
+                            <Input type="select" id="areaOfStudyFilter" value={this.state.filters.areaOfStudyFilter} onChange={(e) => {
+                                let { filters } = this.state;
+                                filters.areaOfStudyFilter = e.target.value;
+                                this.setState({ filters });
+                            }}>
+                                {allProgramAreasOfStudy}
+                            </Input>
+                        </FormGroup>
+                    </div>
+                    <div className="mr-20 ml-20">
+                        <FormGroup >
+                            <Label for="languageFilter">Language</Label>
+                            <Input type="select" id="languageFilter" value={this.state.filters.languageFilter} onChange={(e) => {
+                                let { filters } = this.state;
+                                filters.languageFilter = e.target.value;
+                                this.setState({ filters });
+                            }}>
+                                {allProgramLanguages}
+                            </Input>
+                        </FormGroup>
+                    </div >
 
-                <a> <Button className="btn-yellow" onClick={this.onSearch.bind(this, true)}>Search
+                    <a> <Button className="btn" style={{ "background": "#FFCD00", "border": "none", "color": "#000000", "margin-left": "7px" }} onClick={this.onSearch.bind(this, true)}>Search
                     </Button></a>
-                {console.log('current filters: ' + this.state.filters)}
-                {this.state.displayResults && <SearchResults state={this.state} />}
+                    {console.log('current filters: ' + this.state.filters)}
+                </div>
+                <div>
+                    {this.state.displayResults && <SearchResults state={this.state} />}
+                </div>
             </div>
         )
     }
