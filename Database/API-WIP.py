@@ -344,7 +344,7 @@ def create_new_program(providerName, programName, com, res, intern, cost, cost_s
 #   program- (string) name of program that the terms are being changed for
 #   terms- (list) names of terms being added or removed from program
 # Return True if completed
-def add_or_remove_term(change, program, terms):
+def change_or_remove_terms_for_program(change, program, terms):
     
     prog = Program.find_by_name(programName)
 
@@ -395,7 +395,7 @@ def add_or_remove_term(change, program, terms):
 #   program- (string) name of program that the areas are being changed for
 #   areas- (list) names of areas being added or removed from program
 # Return True if completed
-def add_or_remove_area(change, program, areas):
+def change_or_remove_areas_for_program(change, program, areas):
     
     prog = Program.find_by_name(programName)
 
@@ -446,7 +446,7 @@ def add_or_remove_area(change, program, areas):
 #   program- (string) name of program that the languages are being changed for
 #   languages- (list) names of languages being added or removed from program
 # Return True if completed
-def add_or_remove_language(change, program, languages):
+def change_or_remove_languages_for_program(change, program, languages):
     
     prog = Program.find_by_name(programName)
 
@@ -499,7 +499,7 @@ def add_or_remove_language(change, program, languages):
 #   locations- (list) names of locations being added or removed from program. List of List in form\
 #       [[CityName, CountryName], [CityName, CountryName]]
 # Return True if completed
-def change_or_remove_location(change, program, locations):
+def change_or_remove_locations_for_program(change, program, locations):
     
     prog = Program.find_by_name(programName)
 
@@ -511,7 +511,7 @@ def change_or_remove_location(change, program, locations):
     if(change == "add"):
         for i in locations:
             tempLocation = Location.find_by_name(i[0], i[1])
-            if(Location.get_location_id(i[0], i[1]) == None):
+            if(tempLocation == None):
                 tempLocation = Location(i[0], i[1])
                 tempLocation.save_to_db()
                     
@@ -541,6 +541,36 @@ def change_or_remove_location(change, program, locations):
     return True
 
 
+
+
+
+def remove_programs_from_provider(providerName, programs): 
+
+    prov = Provider.find_by_name(providerName)
+    if(prov == None):
+        raise ValueError
+    
+    for i in programs:
+        tempProgram = Program.find_by_name(i)
+
+        if(tempProgram == None):
+            raise ValueError
+
+        prov.remove_location(tempProgram)
+        prog.save_to_db()
+
+    
+    #This if statement checks to see if the resulting Provider has any more existing relationships
+    #   If there are none, then delete the provider from the database 
+    if(Providers.query.join(Programs_Providers).filter((Programs_Providers.c.provider_id == tempProvider.id)).first() == None):
+        prov.delete()
+
+    session.commit()
+    return True
+
+
+
+
 #This method will define changing or removing any attribute for a specific 
 #   program that already exist
 
@@ -557,7 +587,7 @@ def change_or_remove_location(change, program, locations):
 # Any value that is None is unchanged
 
 # Return True if completed
-def change_Program(programName, com, res, intern, cost, cost_stipulations, description, url): 
+def change_program(programName, com, res, intern, cost, cost_stipulations, description, url): 
 
     prog = Program.find_by_name(programName)
 
@@ -588,12 +618,7 @@ def change_Program(programName, com, res, intern, cost, cost_stipulations, descr
     return True
 
 
-def remove_Program_from_Provider(providerName, programName): 
-    #Check if they both exist. 
-    #Remove the program from the provider
 
-
-    return True
 
 #
 def remove_program(programName):
@@ -603,14 +628,19 @@ def remove_program(programName):
     if(prog == None):
         return ValueError
 
-    change_or_remove_location("remove", prog, prog.locations)
-    change_or_remove_term("remove", prog, prog.terms)
-    change_or_remove_language("remove", prog, prog.languages)
-    change_or_remove_area("remove", prog, prog.areas)
+    change_or_remove_locations_for_program("remove", prog, prog.locations)
+    change_or_remove_terms_for_program("remove", prog, prog.terms)
+    change_or_remove_languages_for_program("remove", prog, prog.languages)
+    change_or_remove_areas_for_program("remove", prog, prog.areas)
 
     #check for provider to see if there are any more programs and delete if not. 
 
     return True
+
+
+def remove_provider(providerName): 
+
+    return True;
 
 #Refrences Used: 
 # https://stackoverflow.com/questions/41270319/how-do-i-query-an-association-table-in-sqlalchemy
