@@ -402,7 +402,7 @@ def add_or_remove_area(change, program, areas):
     if(prog == None):
         raise ValueError
     if(areas == []):
-        raise ValueError
+        raise True
 
     if(change == "add"):
         for i in areas:
@@ -453,7 +453,7 @@ def add_or_remove_language(change, program, languages):
     if(prog == None):
         raise ValueError
     if(languages == []):
-        raise ValueError
+        raise True
 
     if(change == "add"):
         for i in languages:
@@ -506,7 +506,7 @@ def change_or_remove_location(change, program, locations):
     if(prog == None):
         raise ValueError
     if(locations == []):
-        raise ValueError
+        raise True
 
     if(change == "add"):
         for i in locations:
@@ -541,10 +541,76 @@ def change_or_remove_location(change, program, locations):
     return True
 
 
+#This method will define changing or removing any attribute for a specific 
+#   program that already exist
 
-#Need to add provider and program add and remove method
+#Parameters: 
+#   programName- (string) name of program that the languages are being changed for
+#   com- (boolean) value of community engagement oppurtunity presence 
+#   res- (boolean) value of research oppurtunity presence
+#   intern- (boolean) value of internship oppurtunity presence
+#   cost- (string) cost of program
+#   cost_stipulations- (string) string of stipulations for costs
+#   descriptions- (string) description for program
+#   url- (string) url of program 
+#   
+# Any value that is None is unchanged
+
+# Return True if completed
+def change_Program(programName, com, res, intern, cost, cost_stipulations, description, url): 
+
+    prog = Program.find_by_name(programName)
+
+    if(prog == None):
+        raise ValueError
+
+    if(com != None):
+        prog.comm_eng = com
+
+    if(res != None):
+        prog.research_opp = res
+
+    if(intern != None):
+        prog.internship_opp = intern
+
+    if(cost != None):
+        prog.cost = cost
+
+    if(cost_stipulations != None):
+        prog.cost_stipulations = cost_stipulations
+
+    if(description != None):
+        prog.description = description
+
+    if(url != None):
+        prog.url = url
+
+    return True
 
 
+def remove_Program_from_Provider(providerName, programName): 
+    #Check if they both exist. 
+    #Remove the program from the provider
+
+
+    return True
+
+#
+def remove_program(programName):
+
+    prog = Program.find_by_name(programName)
+
+    if(prog == None):
+        return ValueError
+
+    change_or_remove_location("remove", prog, prog.locations)
+    change_or_remove_term("remove", prog, prog.terms)
+    change_or_remove_language("remove", prog, prog.languages)
+    change_or_remove_area("remove", prog, prog.areas)
+
+    #check for provider to see if there are any more programs and delete if not. 
+
+    return True
 
 #Refrences Used: 
 # https://stackoverflow.com/questions/41270319/how-do-i-query-an-association-table-in-sqlalchemy
