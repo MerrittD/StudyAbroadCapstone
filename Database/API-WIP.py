@@ -20,8 +20,8 @@ app.config["DEBUG"] = True
 #browse, and result
 @app.route('/', methods=['GET'])
 def home():
-    programs = Program.return_all_programs()
-    json_list=[i.serialize for i in programs]
+    providers = Provider.return_all_providers()
+    json_list=[i.serialize for i in providers]
     return  jsonify(json_list)
 
 
@@ -103,7 +103,8 @@ def check():
         updateUrl= None
         updateArea= None
         updateLang= None
-        updateLoc= None
+        updateLocCity= None
+        updateLocCountry =None
         updateTerm= None
         updateProvider = None
 
@@ -125,14 +126,24 @@ def check():
             updateUrl=updateJson['upurl']
         if 'uplang' in updateJson:
             updateLang=updateJson['uplang']
-        if 'uploc' in updateJson:
-            updateLoc=updateJson['uploc']
+        if 'uploccit' in updateJson:
+            updateLocCity=updateJson['uploccit']
+        if 'uploccou' in updateJson:
+            updateLocCountry=updateJson['uploccou']
         if 'upter' in updateJson:
             updateTerm=updateJson['upter']
         if 'uparea' in updateJson:
             updateArea=updateJson['uparea']
         if 'upprov' in updateJson:
             updateProvider=updateJson['upprov']
+        updateAreas = updateArea.split(',')
+        updateTerms =updateTerm.split(',')
+        updateLanguages = updateLang.split(',')
+        updateCities = updateLocCity.splut(',')
+        updateCountries = updateLocCountry.split(',')
+        updateLocations = []
+        for i in range(0,len(updateCities)):
+            updateCountry.append([updateCities[i],updateCountries[i]])
        
         #find the program
         programToModify = Program.find_by_name(originalName)
@@ -151,11 +162,68 @@ def check():
         #else, return either a message saying it failed or render the page with an error sent 
 
     elif request.method == 'PUT':
+        updateJson  = flask.request.get_json(force=True)
+        # each new update variable will be named and received in a simmilar fasion. It will look messy
+        #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        #AJ, Look into using a json for this. look into the flask request api
+        #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+       
+        #These are all the possible things that can be updated. If null, it wont be changed or removed
+        updateName= None
+        updateComm= None
+        updateResearch= None
+        updateIntern= None
+        updateCost= None
+        updateStipulations= None
+        updateDesc= None
+        updateUrl= None
+        updateArea= None
+        updateLang= None
+        updateLocCity= None
+        updateLocCountry =None
+        updateTerm= None
+        updateProvider = None
 
- 
+        if 'upname' in updateJson:
+            updateName=updateJson['upname']
+        if 'upcom' in updateJson:
+            updateComm=updateJson['upcom']
+        if 'upre' in updateJson:
+            updateResearch=updateJson['upre']
+        if 'upin' in updateJson:
+            updateIntern=updateJson['upin']
+        if 'upcos' in updateJson:
+            updateCost=updateJson['upcos']
+        if 'upsti' in updateJson:
+            updateStipulations=updateJson['upsti']
+        if 'updesc' in updateJson:
+            updateDesc=updateJson['updesc']
+        if 'upurl' in updateJson:
+            updateUrl=updateJson['upurl']
+        if 'uplang' in updateJson:
+            updateLang=updateJson['uplang']
+        if 'uploccit' in updateJson:
+            updateLocCity=updateJson['uploccit']
+        if 'uploccou' in updateJson:
+            updateLocCountry=updateJson['uploccou']
+        if 'upter' in updateJson:
+            updateTerm=updateJson['upter']
+        if 'uparea' in updateJson:
+            updateArea=updateJson['uparea']
+        if 'upprov' in updateJson:
+            updateProvider=updateJson['upprov']
+        updateAreas = updateArea.split(',')
+        updateTerms =updateTerm.split(',')
+        updateLanguages = updateLang.split(',')
+        updateCities = updateLocCity.splut(',')
+        updateCountries = updateLocCountry.split(',')
+        updateLocations = []
+        for i in range(0,len(updateCities)):
+            updateCountry.append([updateCities[i],updateCountries[i]])
+        
+        create_new_program(updateProvider, updateName, updateComm, updateResearch, updateIntern, updateCost, updateStipulations, updateDesc, updateUrl, updateAreas, updateTerms, updateLanguages, updateLocations)
 
-
-        return None
+        return "Program added"
     elif request.method == 'DELETE':
 
         #given the id of a program, delete it from database
