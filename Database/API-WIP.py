@@ -262,18 +262,16 @@ if True:
 def create_new_program(providerName, programName, com, res, intern, cost, cost_stipulations, description, url, areas, terms, languages, locations): 
     #-----------------------------PROVIDER RELATIONSHIP----------------------------
     # Check if the provider already exist, if it doesn't then make a new provider
-    if(Provider.get_provider_id(providerName) == -1):
+    prov = Provider.find_by_name(providerName)
+    if(prov == None):
         prov = Provider(providerName)
         prov.save_to_db()
-    else: 
-        prov = Provider.find_by_name(providerName)
 
     # Check if the program already exist, if it doesn't then make a new program
-    if(Program.get_program_id(programName) == -1):
+    prog = Program.find_by_name(programName)
+    if(prog == None):
         prog = Program(programName, com, res, intern, cost, cost_stipulations, description, url)
-        prog.save_to_db()
-    else: 
-        prog = Program.find_by_name(programName)
+        prog.save_to_db()  
 
     #Add the program to the provider
     prov.add_program(prog)
@@ -287,11 +285,10 @@ def create_new_program(providerName, programName, com, res, intern, cost, cost_s
     # Cyle through all area names: check to see if the area already exist in the db, 
     #    if it doesn't, add it to the program and create the relationship. 
     for i in areas:
-        if(Area.get_area_id(i) == -1):
+        tempArea = Area.find_by_name(i)
+        if(Area.get_area_id(i) == None):
             tempArea = Area(i)
-            tempArea.save_to_db()
-        else: 
-            tempArea = Area.find_by_name(i)
+            tempArea.save_to_db()     
         
         prog.add_area(tempArea)
         prog.save_to_db()
@@ -301,11 +298,10 @@ def create_new_program(providerName, programName, com, res, intern, cost, cost_s
     # Cyle through all term names: check to see if the term already exist in the db, 
     #    if it doesn't, add it to the program and create the relationship. 
     for i in terms:
-        if(Term.get_term_id(i) == -1):
+        tempTerm = Term.find_by_name(i)
+        if(Term.get_term_id(i) == None):
             tempTerm = Term(i)
-            tempTerm.save_to_db()
-        else: 
-            tempTerm = Term.find_by_name(i)
+            tempTerm.save_to_db() 
         
         prog.add_term(tempTerm)
         prog.save_to_db()
@@ -315,11 +311,10 @@ def create_new_program(providerName, programName, com, res, intern, cost, cost_s
     # Cyle through all term names: check to see if the term already exist in the db, 
     #    if it doesn't, add it to the program and create the relationship. 
     for i in languages:
-        if(Language.get_language_id(i) == -1):
+        tempLanguage = Language.find_by_name(i)
+        if(Language.get_language_id(i) == None):
             tempLanguage = Language(i)
             tempLanguage.save_to_db()
-        else: 
-            tempLanguage = Language.find_by_name(i)
         
         prog.add_language(tempLanguage)
         prog.save_to_db()
@@ -329,12 +324,11 @@ def create_new_program(providerName, programName, com, res, intern, cost, cost_s
     # Cyle through all term names: check to see if the term already exist in the db, 
     #    if it doesn't, add it to the program and create the relationship. 
     for i in locations:
-        if(Location.get_location_id(i[0], i[1]) == -1):
+        tempLocation = Location.find_by_name(i[0], i[1])
+        if(Location.get_location_id(i[0], i[1]) == None):
             tempLocation = Location(i[0], i[1])
             tempLocation.save_to_db()
-        else: 
-            tempLocation = Location.find_by_name(i[0], i[1])
-        
+                    
         prog.add_location(tempLocation)
         prog.save_to_db()
 
@@ -387,7 +381,7 @@ def add_or_remove_term(change, program, terms):
 
             prog.save_to_db()
     else:
-        raise ValueError    #IF change is not "add" or "remove"
+        raise ValueError    #If change is not "add" or "remove"
 
     session.commit()
     return True
@@ -496,15 +490,14 @@ def add_or_remove_language(change, program, languages):
 
 
 
-#THIS NEEDS TO BE CHANGED TO ACCOMIDATE CITY AND COUNTRY
-
 #This method will define changing or removing a location from a program
 #   If it is removing, the front end will pass "remove"
 #   If it is adding, the front end will pass "add" for first 
 #Parameters: 
 #   change- (string: "add" or "remove")  specify desired change to db
 #   program- (string) name of program that the languages are being changed for
-#   locations- (list) names of locations being added or removed from program
+#   locations- (list) names of locations being added or removed from program. List of List in form\
+#       [[CityName, CountryName], [CityName, CountryName]]
 # Return True if completed
 def change_or_remove_location(change, program, locations):
     
@@ -517,18 +510,17 @@ def change_or_remove_location(change, program, locations):
 
     if(change == "add"):
         for i in locations:
-            tempLocation = Location.find_by_name(i)
-
-            if(tempLocation == None):
-                tempLocation = Location(i)
+            tempLocation = Location.find_by_name(i[0], i[1])
+            if(Location.get_location_id(i[0], i[1]) == None):
+                tempLocation = Location(i[0], i[1])
                 tempLocation.save_to_db()
-
+                    
             prog.add_location(tempLocation)
             prog.save_to_db()
 
     elif(change == "remove"):
         for i in locations:
-            tempLocation = Location.find_by_name(i)
+            tempLocation = Location.find_by_name(i[0], i[1])
 
             if(tempLocation == None):
                 raise ValueError
