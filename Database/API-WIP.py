@@ -60,7 +60,8 @@ def results():
      #the filters should go through each array and use them for the filter inputs 
      #these should be put in a variable called filterResults
 
-
+     #Message for Daniel: use this webiste to nest queries. 
+     # https://medium.com/shoprunner/multi-table-filters-in-sqlalchemy-d64e2166199f
 
 
     #after results are gathered
