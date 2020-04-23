@@ -151,7 +151,7 @@ def check():
         #modify the selected values with data given
         #data will be in the variables and should be type cast as needed. 
 
-
+        change_program(programName, com, res, intern, cost, cost_stipulations, description, url)
 
 
         #update modified date
@@ -229,10 +229,9 @@ def check():
 
         #given the id of a program, delete it from database
         programName= flask.request.values.get('progname')
-        providerName = flask.request.values.get('provname')
+       
         #take in the id and use that to delete 
-        Provider.find_by_name(providerName).remove_program(Program.find_by_name(programName))
-        db.session.commit()
+        remove_program(programName)
         return "Program: " + programName+ " Deleted"
 
 
