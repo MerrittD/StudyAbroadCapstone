@@ -117,6 +117,10 @@ class Provider(db.Model):
 	def find_by_name(cls, _name):
 		return cls.query.filter_by(name=_name).first()
 
+	@classmethod
+	def return_all_providers(cls):
+		return cls.query.order_by(cls.name).all()
+
 	@property
 	def serialize(self):
 		return{
