@@ -152,8 +152,8 @@ class SearchBar extends Component {
                         </FormGroup>
                     </div >
 
-                    <a> <Button className="btn" style={{ "background": "#FFCD00", "border": "none", "color": "#000000", "margin-left": "7px" }} onClick={this.onSearch.bind(this, true)}>Search
-                    </Button></a>
+                    <Button className="btn" style={{ "background": "#FFCD00", "border": "none", "color": "#000000", "marginLeft": "7px" }} onClick={this.onSearch.bind(this, true)}>Search
+                    </Button>
                     {console.log('current filters: ' + this.state.filters)}
                 </div>
                 <div>
