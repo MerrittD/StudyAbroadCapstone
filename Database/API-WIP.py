@@ -84,6 +84,10 @@ def check():
     elif request.method == 'POST':
         #use post to update
         originalName = flask.request.values.get('originalName')
+        addOrRemoveLang = flask.request.values.get('langPar')
+        addOrRemoveTerm= flask.request.values.get('termPar')
+        addOrRemoveArea= flask.request.values.get('areaPar')
+        addOrRemoveLoc= flask.request.values.get('locPar')
         updateJson  = flask.request.get_json(force=True)
         # each new update variable will be named and received in a simmilar fasion. It will look messy
         #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -144,19 +148,29 @@ def check():
         updateCountries = updateLocCountry.split(',')
         updateLocations = []
         for i in range(0,len(updateCities)):
-            updateCountry.append([updateCities[i],updateCountries[i]])
-       
+            updateCountry.append([str(updateCities[i]),str(updateCountries[i])])
+            
         #find the program
         programToModify = Program.find_by_name(originalName)
         #modify the selected values with data given
         #data will be in the variables and should be type cast as needed. 
+        addOrRemoveLang = flask.request.values.get('langPar')
+        addOrRemoveTerm= flask.request.values.get('termPar')
+        addOrRemoveArea= flask.request.values.get('areaPar')
+        addOrRemoveLoc= flask.request.values.get('locPar')
 
-        change_program(programName, com, res, intern, cost, cost_stipulations, description, url)
+        change_program(originalName, updateComm, updateResearch, updateIntern, updateCost, updateStipulations, updateDesc, updateUrl)
+        change_or_remove_areas_for_program(addOrRemoveArea, originalName, updateAreas)
+        change_or_remove_terms_for_program(addOrRemoveTerm, originalName, updateTerms)
+        change_or_remove_languages_for_program(addOrRemoveLang, originalName, updateLanguages)
+        change_or_remove_locations_for_program(addOrRemoveLoc,originalName, updateLocations)
+
+       
 
 
         #update modified date
 
-        return updateProvider
+        return (str(orioriginalName) + " modified")
 
         # if the program is successfully modified 
             #return jsonify("success")
@@ -232,7 +246,7 @@ def check():
        
         #take in the id and use that to delete 
         remove_program(programName)
-        return "Program: " + programName+ " Deleted"
+        return ("Program: " + str(programName)+ " Deleted")
 
 
 # A route to return all of the available entries in our catalog.
