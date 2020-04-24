@@ -140,7 +140,7 @@ def check():
         updateAreas = updateArea.split(',')
         updateTerms =updateTerm.split(',')
         updateLanguages = updateLang.split(',')
-        updateCities = updateLocCity.splut(',')
+        updateCities = updateLocCity.split(',')
         updateCountries = updateLocCountry.split(',')
         updateLocations = []
         for i in range(0,len(updateCities)):
