@@ -1,4 +1,4 @@
-from databaseORM import Admin,areas,terms,locations,languages,programs,Program,Area,Term,Location,Language,Provider 
+from databaseORM import Admin,Programs_Areas,Programs_Terms,Programs_Locations,Programs_Languages,Programs_Providers,Program,Area,Term,Location,Language,Provider 
 from databaseConfiguration import db
 
 # Written by Luke Yates

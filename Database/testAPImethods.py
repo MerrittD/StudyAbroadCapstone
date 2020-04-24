@@ -1,4 +1,4 @@
-from databaseORM import Admin,areas,terms,locations,languages,programs,Program,Area,Term,Location,Language,Provider 
+from databaseORM import Admin,Programs_Areas,Programs_Terms,Programs_Locations,Programs_Languages,Programs_Providers,Program,Area,Term,Location,Language,Provider 
 from databaseConfiguration import db
 
 
@@ -6,6 +6,7 @@ from databaseConfiguration import db
 
 #This file will be to test the methods below taken from the API-WIP and make sure 
 #   They modify the database correctly
+#Any changes to the methods here will also be updated to the API-WIP.py
 
 
 #This is a generic script to populate an entire new program
@@ -174,14 +175,14 @@ def change_or_remove_areas_for_program(change, programName, areas):
 
             #This if statement checks to see if the removed Language has any more existing relationships
             #   If there are none, then delete the language from the database 
-            if(Areas.query.join(Programs_Areas).filter((Programs_Areas.c.area_id == tempArea.id)).first() == None):
-                tempArea.delete()
+            if(Area.query.join(Programs_Areas).filter((Programs_Areas.c.area_id == tempArea.id)).first() == None):
+                db.session.delete(tempArea)
 
             prog.save_to_db()
     else:
         raise ValueError
 
-    session.commit()
+    db.session.commit()
     return True
 
 
@@ -227,13 +228,13 @@ def change_or_remove_terms_for_program(change, programName, terms):
             #This if statement checks to see if the removed Language has any more existing relationships
             #   If there are none, then delete the language from the database 
             if(Term.query.join(Programs_Terms).filter((Programs_Terms.c.term_id == tempTerm.id)).first() == None):
-                tempLanguage.delete()
+                db.session.delete(tempTerm)
 
             prog.save_to_db()
     else:
         raise ValueError    #If change is not "add" or "remove"
 
-    session.commit()
+    db.session.commit()
     return True
 
 
@@ -278,14 +279,14 @@ def change_or_remove_languages_for_program(change, programName, languages):
 
             #This if statement checks to see if the removed Language has any more existing relationships
             #   If there are none, then delete the language from the database 
-            if(Languages.query.join(Programs_Languages).filter((Programs_Languages.c.language_id == tempLanguage.id)).first() == None):
-                tempLanguage.delete()
+            if(Language.query.join(Programs_Languages).filter((Programs_Languages.c.language_id == tempLanguage.id)).first() == None):
+                db.session.delete(tempLanguage)
 
             prog.save_to_db()
     else:
         raise ValueError
 
-    session.commit()
+    db.session.commit()
     return True
 
 
@@ -330,14 +331,14 @@ def change_or_remove_locations_for_program(change, programName, locations):
 
             #This if statement checks to see if the removed Language has any more existing relationships
             #   If there are none, then delete the language from the database 
-            if(Locations.query.join(Programs_Locations).filter((Programs_Locations.c.location_id == tempLocation.id)).first() == None):
-                tempLocation.delete()
+            if(Location.query.join(Programs_Locations).filter((Programs_Locations.c.location_id == tempLocation.id)).first() == None):
+                db.session.delete(tempLocation)
 
             prog.save_to_db()
     else:
         raise ValueError
 
-    session.commit()
+    db.session.commit()
     return True
 
 
@@ -359,16 +360,16 @@ def remove_programs_from_provider(providerName, programs):
         if(tempProgram == None):
             raise ValueError
 
-        prov.remove_location(tempProgram)
-        prog.save_to_db()
+        prov.remove_program(tempProgram)
+        prov.save_to_db()
 
     
     #This if statement checks to see if the resulting Provider has any more existing relationships
     #   If there are none, then delete the provider from the database 
-    if(Providers.query.join(Programs_Providers).filter((Programs_Providers.c.provider_id == prov.id)).first() == None):
-        prov.delete()
+    if(Provider.query.join(Programs_Providers).filter((Programs_Providers.c.provider_id == prov.id)).first() == None):
+        db.session.delete(prov)
 
-    session.commit()
+    db.session.commit()
     return True
 
 
@@ -386,7 +387,7 @@ def remove_program(programName):
 
     locations = []
     for i in prog.location:
-        locations.append(list(i.city, i.country))
+        locations.append([i.city, i.country])
 
     terms = []
     for i in prog.term:
@@ -401,18 +402,18 @@ def remove_program(programName):
         areas.append(i.name)
 
     change_or_remove_locations_for_program("remove", programName, locations)
-    change_or_remove_terms_for_program("remove", programName, prog.term)
-    change_or_remove_languages_for_program("remove", programName, prog.language)
-    change_or_remove_areas_for_program("remove", programName, prog.area)
+    change_or_remove_terms_for_program("remove", programName, terms)
+    change_or_remove_languages_for_program("remove", programName, languages)
+    change_or_remove_areas_for_program("remove", programName, areas)
 
     #check for provider to see if there are any more programs and delete if not. 
-    prov = Providers.query.join(Programs_Providers).filter((Programs_Providers.c.program_id == prog.id)).first()
+    prov = Provider.query.join(Programs_Providers).filter((Programs_Providers.c.program_id == prog.id)).first()
     if(prov != None):
-        remove_programs_from_provider(prov, list(programName))
+        remove_programs_from_provider(prov.name, [programName])
 
-    prog.delete()
+    db.session.delete(prog)
 
-    session.commit()
+    db.session.commit()
 
     return True
 
@@ -422,6 +423,7 @@ def remove_program(programName):
 
 
 
+#These methods all work to remove the specified type, but I still need to test adding. 
 
 def main():
     setup = False
