@@ -62,7 +62,7 @@ class AdminDashboard extends Component {
     /* Perform a post request to add a new program to the database */
     addProgram() {
         // Access api route and pass along newProgramData, which holds user input from the Add a Program window
-        axios.post('https://my-json-server.typicode.com/MasonTDaniel/capstonedummydata/allPrograms', this.state.newProgramData)
+        axios.put('https://my-json-server.typicode.com/MasonTDaniel/capstonedummydata/allPrograms', this.state.newProgramData)
             .then(response => {
                 //Add the new program to the existing programs
                 let { programs } = this.state;
@@ -96,7 +96,7 @@ class AdminDashboard extends Component {
         // Extract the users input for updated info
         let { country, term, name, language, cost } = this.state.editProgramData;
         // Alter the database by passing that info through an http request
-        axios.put('https://my-json-server.typicode.com/MasonTDaniel/capstonedummydata/allPrograms' + '/' + this.state.editProgramData.id, {
+        axios.post('https://my-json-server.typicode.com/MasonTDaniel/capstonedummydata/allPrograms' + '/' + this.state.editProgramData.id, {
             country, term, name, language, cost
         })
             .then(response => {
@@ -117,6 +117,7 @@ class AdminDashboard extends Component {
     }
 
     // Delete a program from the database, re-call the database to show updated program list
+    // Program name
     deleteProgram(id) {
         axios.delete('https://my-json-server.typicode.com/MasonTDaniel/capstonedummydata/allPrograms' + '/' + id)
             .then(response => {
