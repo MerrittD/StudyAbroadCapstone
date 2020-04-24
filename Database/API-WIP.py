@@ -60,7 +60,8 @@ def results():
      #the filters should go through each array and use them for the filter inputs 
      #these should be put in a variable called filterResults
 
-
+     #Message for Daniel: use this webiste to nest queries. 
+     # https://medium.com/shoprunner/multi-table-filters-in-sqlalchemy-d64e2166199f
 
 
     #after results are gathered
@@ -150,7 +151,7 @@ def check():
         #modify the selected values with data given
         #data will be in the variables and should be type cast as needed. 
 
-
+        change_program(programName, com, res, intern, cost, cost_stipulations, description, url)
 
 
         #update modified date
@@ -228,10 +229,9 @@ def check():
 
         #given the id of a program, delete it from database
         programName= flask.request.values.get('progname')
-        providerName = flask.request.values.get('provname')
+       
         #take in the id and use that to delete 
-        Provider.find_by_name(providerName).remove_program(Program.find_by_name(programName))
-        db.session.commit()
+        remove_program(programName)
         return "Program: " + programName+ " Deleted"
 
 
@@ -249,31 +249,51 @@ if True:
 
 
 
+# The methods below are as follows (for Daniel's Use): 
+
+#   1.   create_new_program(programName(string), com(boolean), res(boolean), intern(boolean), 
+#                           cost(string), cost_stipulations(string), description(string), url(string) 
+#                           areas(list:strings), terms(list:strings), languages(list:strings), locations(list:strings))
+
+#   2.   change_program(programName(string), com(boolean), res(boolean), intern(boolean), 
+#                       cost(string), cost_stipulations(string), description(string), url(string))
+
+#   3.   change_or_remove_areas_for_program(change(string: "add" or "remove"), program(string), areas(list:strings))
+#   4.   change_or_remove_terms_for_program(change(string: "add" or "remove"), program(string), terms(list:strings))
+#   5.   change_or_remove_languages_for_program(change(string: "add" or "remove"), program(string), languages(list:strings))
+#   6.   change_or_remove_locations_for_program(change(string: "add" or "remove"), program(string), locations(list:strings))
+
+#   7.   remove_programs_from_provider(providerName(string), programs(list: strings))
+#   8.   remove_program(programName(string))
+
+#Notes: 
+#  - A remove_provider method is unnecessary becasue the programs will not be deleted. 
+#  - All back removal of unused languages, locations, terms, areas, and providers will be deleted. 
+#       It was a design decision that a progam should only be removed with a remove program method call. 
+#  - If the method calls for a parameter, but that parameter does not need to be changed, then pass
+#       "None" in it's place for a single data type and an [](empty list) for any parameter that is a list
+#       and the parameter will be ignored. 
+
+#  - For future develoupment: the methods below could be moved to the database with a little bit of recoding. 
 
 
 
-
-
-
-#Below Contains code for the updating, removing, and adding information in the database
 #This is a generic script to populate an entire new program
 #   If a parameter is optional, then pass "None" for the value: cost, cost_stipulations, description, url (optional)
 #   If it is meant to be a list, then leave the list empty "[]": areas, terms, languages, locations (optional)
 def create_new_program(providerName, programName, com, res, intern, cost, cost_stipulations, description, url, areas, terms, languages, locations): 
     #-----------------------------PROVIDER RELATIONSHIP----------------------------
     # Check if the provider already exist, if it doesn't then make a new provider
-    if(Provider.get_provider_id(providerName) == -1):
+    prov = Provider.find_by_name(providerName)
+    if(prov == None):
         prov = Provider(providerName)
         prov.save_to_db()
-    else: 
-        prov = Provider.find_by_name(providerName)
 
     # Check if the program already exist, if it doesn't then make a new program
-    if(Program.get_program_id(programName) == -1):
+    prog = Program.find_by_name(programName)
+    if(prog == None):
         prog = Program(programName, com, res, intern, cost, cost_stipulations, description, url)
-        prog.save_to_db()
-    else: 
-        prog = Program.find_by_name(programName)
+        prog.save_to_db()  
 
     #Add the program to the provider
     prov.add_program(prog)
@@ -287,11 +307,10 @@ def create_new_program(providerName, programName, com, res, intern, cost, cost_s
     # Cyle through all area names: check to see if the area already exist in the db, 
     #    if it doesn't, add it to the program and create the relationship. 
     for i in areas:
-        if(Area.get_area_id(i) == -1):
+        tempArea = Area.find_by_name(i)
+        if(Area.get_area_id(i) == None):
             tempArea = Area(i)
-            tempArea.save_to_db()
-        else: 
-            tempArea = Area.find_by_name(i)
+            tempArea.save_to_db()     
         
         prog.add_area(tempArea)
         prog.save_to_db()
@@ -301,11 +320,10 @@ def create_new_program(providerName, programName, com, res, intern, cost, cost_s
     # Cyle through all term names: check to see if the term already exist in the db, 
     #    if it doesn't, add it to the program and create the relationship. 
     for i in terms:
-        if(Term.get_term_id(i) == -1):
+        tempTerm = Term.find_by_name(i)
+        if(Term.get_term_id(i) == None):
             tempTerm = Term(i)
-            tempTerm.save_to_db()
-        else: 
-            tempTerm = Term.find_by_name(i)
+            tempTerm.save_to_db() 
         
         prog.add_term(tempTerm)
         prog.save_to_db()
@@ -315,11 +333,10 @@ def create_new_program(providerName, programName, com, res, intern, cost, cost_s
     # Cyle through all term names: check to see if the term already exist in the db, 
     #    if it doesn't, add it to the program and create the relationship. 
     for i in languages:
-        if(Language.get_language_id(i) == -1):
+        tempLanguage = Language.find_by_name(i)
+        if(Language.get_language_id(i) == None):
             tempLanguage = Language(i)
             tempLanguage.save_to_db()
-        else: 
-            tempLanguage = Language.find_by_name(i)
         
         prog.add_language(tempLanguage)
         prog.save_to_db()
@@ -329,71 +346,65 @@ def create_new_program(providerName, programName, com, res, intern, cost, cost_s
     # Cyle through all term names: check to see if the term already exist in the db, 
     #    if it doesn't, add it to the program and create the relationship. 
     for i in locations:
-        if(Location.get_location_id(i[0], i[1]) == -1):
+        tempLocation = Location.find_by_name(i[0], i[1])
+        if(Location.get_location_id(i[0], i[1]) == None):
             tempLocation = Location(i[0], i[1])
             tempLocation.save_to_db()
-        else: 
-            tempLocation = Location.find_by_name(i[0], i[1])
-        
+                    
         prog.add_location(tempLocation)
         prog.save_to_db()
 
 
 
+#This method will define changing or removing any attribute for a specific 
+#   program that already exist
 
-
-#This method will define changing or removing a term from a program
-#   If it is removing, the front end will pass "remove"
-#   If it is adding, the front end will pass "add" for first 
 #Parameters: 
-#   change- (string: "add" or "remove")  specify desired change to db
-#   program- (string) name of program that the terms are being changed for
-#   terms- (list) names of terms being added or removed from program
+#   programName- (string) name of program that the languages are being changed for
+#   com- (boolean) value of community engagement oppurtunity presence 
+#   res- (boolean) value of research oppurtunity presence
+#   intern- (boolean) value of internship oppurtunity presence
+#   cost- (string) cost of program
+#   cost_stipulations- (string) string of stipulations for costs
+#   descriptions- (string) description for program
+#   url- (string) url of program 
+#   
+# Any value that is None is unchanged
+
 # Return True if completed
-def add_or_remove_term(change, program, terms):
-    
+def change_program(programName, com, res, intern, cost, cost_stipulations, description, url): 
+
     prog = Program.find_by_name(programName)
 
     if(prog == None):
         raise ValueError
-    if(terms == []):
-        raise ValueError
 
-    if(change == "add"):
-        for i in terms:
-            tempTerm = Term.find_by_name(i)
+    if(com != None):
+        prog.comm_eng = com
 
-            if(tempTerm == None):
-                tempTerm = Term(i)
-                tempTerm.save_to_db()
+    if(res != None):
+        prog.research_opp = res
 
-            prog.add_term(tempTerm)
-            prog.save_to_db()
+    if(intern != None):
+        prog.internship_opp = intern
 
-    elif(change == "remove"):
-        for i in terms:
-            tempTerm = Term.find_by_name(i)
+    if(cost != None):
+        prog.cost = cost
 
-            if(tempTerm == None):
-                raise ValueError
+    if(cost_stipulations != None):
+        prog.cost_stipulations = cost_stipulations
 
-            prog.remove_term(tempTerm)
-            prog.save_to_db()
+    if(description != None):
+        prog.description = description
 
-            #This if statement checks to see if the removed Language has any more existing relationships
-            #   If there are none, then delete the language from the database 
-            if(Term.query.join(Programs_Terms).filter((Programs_Terms.c.term_id == tempTerm.id)).first() == None):
-                tempLanguage.delete()
+    if(url != None):
+        prog.url = url
 
-            prog.save_to_db()
-    else:
-        raise ValueError    #IF change is not "add" or "remove"
-
-    session.commit()
     return True
 
 
-#This method will define changing or removing a area from a program
+
+        #This method will define changing or removing a area from a program
 #   If it is removing, the front end will pass "remove"
 #   If it is adding, the front end will pass "add" for first 
 #Parameters: 
@@ -401,14 +412,14 @@ def add_or_remove_term(change, program, terms):
 #   program- (string) name of program that the areas are being changed for
 #   areas- (list) names of areas being added or removed from program
 # Return True if completed
-def add_or_remove_area(change, program, areas):
+def change_or_remove_areas_for_program(change, program, areas):
     
     prog = Program.find_by_name(programName)
 
     if(prog == None):
         raise ValueError
     if(areas == []):
-        raise ValueError
+        return True
 
     if(change == "add"):
         for i in areas:
@@ -444,6 +455,59 @@ def add_or_remove_area(change, program, areas):
     return True
 
 
+
+#This method will define changing or removing a term from a program
+#   If it is removing, the front end will pass "remove"
+#   If it is adding, the front end will pass "add" for first 
+#Parameters: 
+#   change- (string: "add" or "remove")  specify desired change to db
+#   program- (string) name of program that the terms are being changed for
+#   terms- (list) names of terms being added or removed from program
+# Return True if completed
+def change_or_remove_terms_for_program(change, program, terms):
+    
+    prog = Program.find_by_name(programName)
+
+    if(prog == None):
+        raise ValueError
+    if(terms == []):
+        return True
+
+    if(change == "add"):
+        for i in terms:
+            tempTerm = Term.find_by_name(i)
+
+            if(tempTerm == None):
+                tempTerm = Term(i)
+                tempTerm.save_to_db()
+
+            prog.add_term(tempTerm)
+            prog.save_to_db()
+
+    elif(change == "remove"):
+        for i in terms:
+            tempTerm = Term.find_by_name(i)
+
+            if(tempTerm == None):
+                raise ValueError
+
+            prog.remove_term(tempTerm)
+            prog.save_to_db()
+
+            #This if statement checks to see if the removed Language has any more existing relationships
+            #   If there are none, then delete the language from the database 
+            if(Term.query.join(Programs_Terms).filter((Programs_Terms.c.term_id == tempTerm.id)).first() == None):
+                tempLanguage.delete()
+
+            prog.save_to_db()
+    else:
+        raise ValueError    #If change is not "add" or "remove"
+
+    session.commit()
+    return True
+
+
+
 #This method will define changing or removing a language from a program
 #   If it is removing, the front end will pass "remove"
 #   If it is adding, the front end will pass "add" for first 
@@ -452,14 +516,14 @@ def add_or_remove_area(change, program, areas):
 #   program- (string) name of program that the languages are being changed for
 #   languages- (list) names of languages being added or removed from program
 # Return True if completed
-def add_or_remove_language(change, program, languages):
+def change_or_remove_languages_for_program(change, program, languages):
     
     prog = Program.find_by_name(programName)
 
     if(prog == None):
         raise ValueError
     if(languages == []):
-        raise ValueError
+        return True
 
     if(change == "add"):
         for i in languages:
@@ -496,39 +560,37 @@ def add_or_remove_language(change, program, languages):
 
 
 
-#THIS NEEDS TO BE CHANGED TO ACCOMIDATE CITY AND COUNTRY
-
 #This method will define changing or removing a location from a program
 #   If it is removing, the front end will pass "remove"
 #   If it is adding, the front end will pass "add" for first 
 #Parameters: 
 #   change- (string: "add" or "remove")  specify desired change to db
 #   program- (string) name of program that the languages are being changed for
-#   locations- (list) names of locations being added or removed from program
+#   locations- (list) names of locations being added or removed from program. List of List in form\
+#       [[CityName, CountryName], [CityName, CountryName]]
 # Return True if completed
-def change_or_remove_location(change, program, locations):
+def change_or_remove_locations_for_program(change, program, locations):
     
     prog = Program.find_by_name(programName)
 
     if(prog == None):
         raise ValueError
     if(locations == []):
-        raise ValueError
+        return True
 
     if(change == "add"):
         for i in locations:
-            tempLocation = Location.find_by_name(i)
-
+            tempLocation = Location.find_by_name(i[0], i[1])
             if(tempLocation == None):
-                tempLocation = Location(i)
+                tempLocation = Location(i[0], i[1])
                 tempLocation.save_to_db()
-
+                    
             prog.add_location(tempLocation)
             prog.save_to_db()
 
     elif(change == "remove"):
         for i in locations:
-            tempLocation = Location.find_by_name(i)
+            tempLocation = Location.find_by_name(i[0], i[1])
 
             if(tempLocation == None):
                 raise ValueError
@@ -550,8 +612,59 @@ def change_or_remove_location(change, program, locations):
 
 
 
-#Need to add provider and program add and remove method
+#This method removes the list of programs from the provided provider and back deletes
+# Any unused provider after removing specific methods will be deleted. 
+# Parameters: 
+#   providerName - (string) name of provider to have programs removed from
+#   programs - (list of strings) list of program names that are to be deleted from provider
+def remove_programs_from_provider(providerName, programs): 
 
+    prov = Provider.find_by_name(providerName)
+    if(prov == None):
+        raise ValueError
+    
+    for i in programs:
+        tempProgram = Program.find_by_name(i)
+
+        if(tempProgram == None):
+            raise ValueError
+
+        prov.remove_location(tempProgram)
+        prog.save_to_db()
+
+    
+    #This if statement checks to see if the resulting Provider has any more existing relationships
+    #   If there are none, then delete the provider from the database 
+    if(Providers.query.join(Programs_Providers).filter((Programs_Providers.c.provider_id == prov.id)).first() == None):
+        prov.delete()
+
+    session.commit()
+    return True
+
+
+
+# This method removes a program from the database, 
+#       all back updates to other tables are carried out
+# Paramter: 
+#   - programName: (string) name of the program to be deleted
+def remove_program(programName):
+
+    prog = Program.find_by_name(programName)
+
+    if(prog == None):
+        raise ValueError
+
+    change_or_remove_locations_for_program("remove", prog, prog.locations)
+    change_or_remove_terms_for_program("remove", prog, prog.terms)
+    change_or_remove_languages_for_program("remove", prog, prog.languages)
+    change_or_remove_areas_for_program("remove", prog, prog.areas)
+
+    #check for provider to see if there are any more programs and delete if not. 
+    prov = Providers.query.join(Programs_Providers).filter((Programs_Providers.c.program_id == prog.id)).first()
+    if(prov != None):
+        remove_programs_from_provider(prov, list(programName))
+
+    return True
 
 
 #Refrences Used: 
