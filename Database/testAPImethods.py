@@ -1,297 +1,11 @@
-"""
-Routes and views for the flask application.
-"""
-
 from databaseORM import Admin,areas,terms,locations,languages,programs,Program,Area,Term,Location,Language,Provider 
-from  databaseConfiguration import app, db
-from flask import render_template,request, jsonify, Flask
-import flask
-import json
-
-
-
-#app = Flask(__name__)
-app.config["DEBUG"] = True
-
-#psuedo code from book for api
-#might need to do one for each page,
-#need to look more into this
-#so we'll need one for the admin dash, admin login
-#browse, and result
-@app.route('/', methods=['GET'])
-def home():
-    providers = Provider.return_all_providers()
-    json_list=[i.serialize for i in providers]
-    return  jsonify(json_list)
-
-
-@app.route('/results', methods=['GET'])
-def results():
-    # the following values are taken from the get request and can be used to filter
-    #if null, dont filter by it
-    languageRequest = flask.request.values.get('lan')
-    locationRequest = flask.request.values.get('loc')
-    areaRequest = flask.request.values.get('area')
-    termRequest = flask.request.values.get('term')
-    #providerRequest = flask.request.values.get('prov')
-
-    #the following handles the presence of multiple values per param by
-    #splitting them into an array. all values are strings
-    langArray = []
-    locArray=[]
-    areaArray=[]
-    termArray=[]
-    if languageRequest is not None:
-        langArray = languageRequest.split(',')
-    if locationRequest is not None:
-        locArray = locationRequest.split(',')
-    if areaRequest is not None:
-        areaArray = areaRequest.split(',')
-    if termRequest is not None:
-        termArray = termRequest.split(',')
-    #provArray = providerRequest.split(',')
-    #http://127.0.0.1:5000/results?loc=Spain,Madrid&lan=Spanish 
-    # /request = approute 
-    #? = query 
-    #loc=Spain,Madrid = the location is sent two or more locatons using ,. These could be grouped using (Spain Madrid)
-    #& is used to add another value 
-
-     # here should be the methods to filter
-     #the filters should go through each array and use them for the filter inputs 
-     #these should be put in a variable called filterResults
-
-     #Message for Daniel: use this webiste to nest queries. 
-     # https://medium.com/shoprunner/multi-table-filters-in-sqlalchemy-d64e2166199f
-
-
-    #after results are gathered
-    #json_list = [i.serialize for i in filterResults]
-    return jsonify(langArray)
-
-    return 
-
-@app.route('/login',methods=['GET','PUT'])
-def login():
-    #methods might be needed here to log in fully. 
-    return None
-
-#checking verbs of incoming request
-@app.route('/admin', methods=['GET','POST', 'PUT', 'DELETE'])
-def check():
-    if request.method == 'GET':
-       results()
-
-    elif request.method == 'POST':
-        #use post to update
-        originalName = flask.request.values.get('originalName')
-        addOrRemoveLang = flask.request.values.get('langPar')
-        addOrRemoveTerm= flask.request.values.get('termPar')
-        addOrRemoveArea= flask.request.values.get('areaPar')
-        addOrRemoveLoc= flask.request.values.get('locPar')
-        updateJson  = flask.request.get_json(force=True)
-        # each new update variable will be named and received in a simmilar fasion. It will look messy
-        #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        #AJ, Look into using a json for this. look into the flask request api
-        #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-       
-        #These are all the possible things that can be updated. If null, it wont be changed or removed
-        print(originalName)
-        print(updateJson)
-        print(type(updateJson))
-        updateName= None
-        updateComm= None
-        updateResearch= None
-        updateIntern= None
-        updateCost= None
-        updateStipulations= None
-        updateDesc= None
-        updateUrl= None
-        updateArea= None
-        updateLang= None
-        updateLocCity= None
-        updateLocCountry =None
-        updateTerm= None
-        updateProvider = None
-
-        if 'upname' in updateJson:
-            updateName=updateJson['upname']
-        if 'upcom' in updateJson:
-            updateComm=updateJson['upcom']
-        if 'upre' in updateJson:
-            updateResearch=updateJson['upre']
-        if 'upin' in updateJson:
-            updateIntern=updateJson['upin']
-        if 'upcos' in updateJson:
-            updateCost=updateJson['upcos']
-        if 'upsti' in updateJson:
-            updateStipulations=updateJson['upsti']
-        if 'updesc' in updateJson:
-            updateDesc=updateJson['updesc']
-        if 'upurl' in updateJson:
-            updateUrl=updateJson['upurl']
-        if 'uplang' in updateJson:
-            updateLang=updateJson['uplang']
-        if 'uploccit' in updateJson:
-            updateLocCity=updateJson['uploccit']
-        if 'uploccou' in updateJson:
-            updateLocCountry=updateJson['uploccou']
-        if 'upter' in updateJson:
-            updateTerm=updateJson['upter']
-        if 'uparea' in updateJson:
-            updateArea=updateJson['uparea']
-        if 'upprov' in updateJson:
-            updateProvider=updateJson['upprov']
-        updateAreas = updateArea.split(',')
-        updateTerms =updateTerm.split(',')
-        updateLanguages = updateLang.split(',')
-        updateCities = updateLocCity.split(',')
-        updateCountries = updateLocCountry.split(',')
-        updateLocations = []
-        for i in range(0,len(updateCities)):
-            updateCountry.append([str(updateCities[i]),str(updateCountries[i])])
-            
-        #find the program
-        programToModify = Program.find_by_name(originalName)
-        #modify the selected values with data given
-        #data will be in the variables and should be type cast as needed. 
-        addOrRemoveLang = flask.request.values.get('langPar')
-        addOrRemoveTerm= flask.request.values.get('termPar')
-        addOrRemoveArea= flask.request.values.get('areaPar')
-        addOrRemoveLoc= flask.request.values.get('locPar')
-
-        change_program(originalName, updateComm, updateResearch, updateIntern, updateCost, updateStipulations, updateDesc, updateUrl)
-        change_or_remove_areas_for_program(addOrRemoveArea, originalName, updateAreas)
-        change_or_remove_terms_for_program(addOrRemoveTerm, originalName, updateTerms)
-        change_or_remove_languages_for_program(addOrRemoveLang, originalName, updateLanguages)
-        change_or_remove_locations_for_program(addOrRemoveLoc,originalName, updateLocations)
-
-       
-
-
-        #update modified date
-
-        return (str(orioriginalName) + " modified")
-
-        # if the program is successfully modified 
-            #return jsonify("success")
-        #else, return either a message saying it failed or render the page with an error sent 
-
-    elif request.method == 'PUT':
-        updateJson  = flask.request.get_json(force=True)
-        # each new update variable will be named and received in a simmilar fasion. It will look messy
-        #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        #AJ, Look into using a json for this. look into the flask request api
-        #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-       
-        #These are all the possible things that can be updated. If null, it wont be changed or removed
-        updateName= None
-        updateComm= None
-        updateResearch= None
-        updateIntern= None
-        updateCost= None
-        updateStipulations= None
-        updateDesc= None
-        updateUrl= None
-        updateArea= None
-        updateLang= None
-        updateLocCity= None
-        updateLocCountry =None
-        updateTerm= None
-        updateProvider = None
-
-        if 'upname' in updateJson:
-            updateName=updateJson['upname']
-        if 'upcom' in updateJson:
-            updateComm=updateJson['upcom']
-        if 'upre' in updateJson:
-            updateResearch=updateJson['upre']
-        if 'upin' in updateJson:
-            updateIntern=updateJson['upin']
-        if 'upcos' in updateJson:
-            updateCost=updateJson['upcos']
-        if 'upsti' in updateJson:
-            updateStipulations=updateJson['upsti']
-        if 'updesc' in updateJson:
-            updateDesc=updateJson['updesc']
-        if 'upurl' in updateJson:
-            updateUrl=updateJson['upurl']
-        if 'uplang' in updateJson:
-            updateLang=updateJson['uplang']
-        if 'uploccit' in updateJson:
-            updateLocCity=updateJson['uploccit']
-        if 'uploccou' in updateJson:
-            updateLocCountry=updateJson['uploccou']
-        if 'upter' in updateJson:
-            updateTerm=updateJson['upter']
-        if 'uparea' in updateJson:
-            updateArea=updateJson['uparea']
-        if 'upprov' in updateJson:
-            updateProvider=updateJson['upprov']
-        updateAreas = updateArea.split(',')
-        updateTerms =updateTerm.split(',')
-        updateLanguages = updateLang.split(',')
-        updateCities = updateLocCity.splut(',')
-        updateCountries = updateLocCountry.split(',')
-        updateLocations = []
-        for i in range(0,len(updateCities)):
-            updateCountry.append([updateCities[i],updateCountries[i]])
-        
-        create_new_program(updateProvider, updateName, updateComm, updateResearch, updateIntern, updateCost, updateStipulations, updateDesc, updateUrl, updateAreas, updateTerms, updateLanguages, updateLocations)
-
-        return "Program added"
-    elif request.method == 'DELETE':
-
-        #given the id of a program, delete it from database
-        programName= flask.request.values.get('progname')
-       
-        #take in the id and use that to delete 
-        remove_program(programName)
-        return ("Program: " + str(programName)+ " Deleted")
-
-
-# A route to return all of the available entries in our catalog.
-#@app.route('/api/v1/resources/books/all', methods=['GET'])
-#def api_all():
-#    return jsonify(books)
-
-if True:
-    app.run()
+from databaseConfiguration import db
 
 
 
 
-
-
-
-# The methods below are as follows (for Daniel's Use): 
-
-#   1.   create_new_program(programName(string), com(boolean), res(boolean), intern(boolean), 
-#                           cost(string), cost_stipulations(string), description(string), url(string) 
-#                           areas(list:strings), terms(list:strings), languages(list:strings), locations(list:strings))
-
-#   2.   change_program(programName(string), com(boolean), res(boolean), intern(boolean), 
-#                       cost(string), cost_stipulations(string), description(string), url(string))
-
-#   3.   change_or_remove_areas_for_program(change(string: "add" or "remove"), program(string), areas(list:strings))
-#   4.   change_or_remove_terms_for_program(change(string: "add" or "remove"), program(string), terms(list:strings))
-#   5.   change_or_remove_languages_for_program(change(string: "add" or "remove"), program(string), languages(list:strings))
-#   6.   change_or_remove_locations_for_program(change(string: "add" or "remove"), program(string), locations(list:strings))
-
-#   7.   remove_programs_from_provider(providerName(string), programs(list: strings))
-#   8.   remove_program(programName(string))
-
-#Notes: 
-#  - A remove_provider method is unnecessary becasue the programs will not be deleted so there is nothing to back update. 
-#  - All back removal of unused languages, locations, terms, areas, and providers will be deleted. 
-#  - It was a design decision that a progam should only be removed with a remove program method call. 
-#  - If the method calls for a parameter, but that parameter does not need to be changed, then pass
-#       "None" in it's place for a single data type and an [](empty list) for any parameter that is a list
-#       and the parameter will be ignored. 
-
-#  - For future develoupment: the methods below could be moved to the database with a little bit of recoding. 
-
-#  - The methods below were tested using the file named testAPImethods.py They were copied and pasted 
-#       becasue API-WIP is not a valid python file name so they had to be copied. 
+#This file will be to test the methods below taken from the API-WIP and make sure 
+#   They modify the database correctly
 
 
 #This is a generic script to populate an entire new program
@@ -702,5 +416,168 @@ def remove_program(programName):
 
     return True
 
-#Refrences Used: 
-# https://stackoverflow.com/questions/41270319/how-do-i-query-an-association-table-in-sqlalchemy
+
+
+
+
+
+
+
+def main():
+    setup = False
+
+    if(setup == True):
+        db.create_all()
+        db.session.commit()
+
+        #-----------------------------TEST PROGRAM # 1-------------------------------
+        providerName = "A1"
+        programName = "SU Amsterdam" 
+        com = True 
+        res = False
+        intern = True
+        cost = "$6,215"
+        cost_stipulations = "Schooling Only"
+        description = "This course is designed to increase awareness and knowledge of cross cultural differences in sexual attitudes and behaviors. Specifically, students will learn how sex education, sex work, and sexual health differ in the Netherlands compared to the United States.  In addition to this in-depth comparative analysis of sexuality, students will study the history of marginalized groups in the Netherlands, including the LGBT community. Students will also be immersed in Dutch culture through guided tours, visits to museums, and participation in other cultural activities. There are no prerequisites for this program."
+        url = "https://www.southwestern.edu/study-abroad/study-abroad-programs/su-amsterdam/index.php"
+
+        #all relationships will be lists to accomdiate multiple entries
+        areas = ["Computer Science", "Communication"]
+        terms = ["Summer 1"]
+        languages = ["Dutch"]
+        locations = [["Amsterdam", "Netherlands"]]    #This will be a list of list like [city name, country name] representing a location
+
+        create_new_program(providerName, programName, com, res, intern, cost, cost_stipulations, description, url, areas, terms, languages, locations)
+
+
+        #-----------------------------TEST PROGRAM # 2-------------------------------
+        providerName = "B2"
+        programName = "SU Buenos Aires" 
+        com = False 
+        res = True
+        intern = True
+        cost = "$6,045 - $6,625"
+        cost_stipulations = "Schooling Only"
+        description = "The program begins "
+        url = "https://www.southwestern.edu/study-abroad/su-buenos-aires-program/"
+
+        #all relationships will be lists to accomdiate multiple entries
+        areas = ["Spanish"]
+        terms = ["Summer 1"]
+        languages = ["Spanish"]
+        locations = [["Buenos Aires", "Argentina"]]    #This will be a list of list like [city name, country name] representing a location
+
+        create_new_program(providerName, programName, com, res, intern, cost, cost_stipulations, description, url, areas, terms, languages, locations)
+
+
+        #-----------------------------TEST PROGRAM # 3-------------------------------
+        providerName = "C3"
+        programName = "SU European Cultural Exploration" 
+        com = False
+        res = True
+        intern = False
+        cost = "TBD"
+        cost_stipulations = None
+        description = "Courses TBD"
+        url = "https://www.southwestern.edu/study-abroad/study-abroad-programs/su-european-cultural-exploration/"
+
+        #all relationships will be lists to accomdiate multiple entries
+        areas = ["Mathamatics"]
+        terms = ["Summer 2"]
+        languages = []
+        locations = [["Lisbon", "Portugal"], ["Grenoble", "France"], ["Budapest", "Hungary"]]    #This will be a list of list like [city name, country name] representing a location
+
+        create_new_program(providerName, programName, com, res, intern, cost, cost_stipulations, description, url, areas, terms, languages, locations)
+
+
+        #-----------------------------TEST PROGRAM # 4-------------------------------
+        providerName = "D4"
+        programName = "SU Granada" 
+        com = True 
+        res = True
+        intern = True
+        cost = "$5,970 -$6,970"
+        cost_stipulations = "All Included"
+        description = "The program begins with a thorough orientation in Granada. "
+        url = "https://www.southwestern.edu/study-abroad/study-abroad-programs/granada-program/"
+
+        #all relationships will be lists to accomdiate multiple entries
+        areas = ["Spanish"]
+        terms = ["Summer 1"]
+        languages = ["Spanish"]
+        locations = [["Granada", "Spain"]]    #This will be a list of list like [city name, country name] representing a location
+
+        create_new_program(providerName, programName, com, res, intern, cost, cost_stipulations, description, url, areas, terms, languages, locations)
+
+
+         #-----------------------------TEST PROGRAM # 5-------------------------------
+        providerName = "E5"
+        programName = "SU London" 
+        com = False 
+        res = False
+        intern = False
+        cost = None
+        cost_stipulations = "Equal to "
+        description = "Students will participate in several local cultural excursions in London throughout the semester.  Previous activities and excursions have included: a backstage tour of the West End Theatre, a guided tour of the Globe Exhibition, cream tea, attendance at the Tower of London Key Ceremony, attendance at a professional soccer (football) game, and a tour of the British Museum. Day trips or overnight trips to the following locations are also cultural components of the program: Bath and Cambridge.  The day trip to Cambridge trip includes round-trip bus transportation and a guided tour of the city. The overnight trip to Bath includes round-trip bus transportation, a guided tour, and admission to Stonehenge. Additionally, students participate in a two-night/three-day field trip to Edinburgh, Scotland.  This field trip includes transportation to and from Edinburgh.  Students share rooms in a hostel on this trip.  Breakfast is included each day.  A visit to the Highland Safari Deer Experience and to the Edinburgh Castle are components of this field trip."
+        url = "https://www.southwestern.edu/study-abroad/study-abroad-programs/southwestern-london-program/"
+
+        #all relationships will be lists to accomdiate multiple entries
+        areas = ["Physics", "Biology"]
+        terms = ["Fall"]
+        languages = ["English"]
+        locations = [["London", "England"]]    #This will be a list of list like [city name, country name] representing a location
+
+        create_new_program(providerName, programName, com, res, intern, cost, cost_stipulations, description, url, areas, terms, languages, locations)
+
+
+        #-----------------------------TEST PROGRAM # 6-------------------------------
+        providerName = "F6"
+        programName = "SU Switzerland" 
+        com = False 
+        res = False
+        intern = True
+        cost = "$6,345"
+        cost_stipulations = "All Included"
+        description = "Excursions Include"
+        url = "https://www.southwestern.edu/study-abroad/study-abroad-programs/su-switzerland/"
+
+        #all relationships will be lists to accomdiate multiple entries
+        areas = ["Environmental Studies"]
+        terms = ["Summer 1"]
+        languages = []
+        locations = [["Lugano", "Switzerland"]]    #This will be a list of list like [city name, country name] representing a location
+
+        create_new_program(providerName, programName, com, res, intern, cost, cost_stipulations, description, url, areas, terms, languages, locations)
+
+
+         #-----------------------------TEST PROGRAM # 7-------------------------------
+         #This is not listed on google drive dummy data, but it is to test remove program 
+        providerName = "G7"
+        programName = "Remove Test" 
+        com = False 
+        res = False
+        intern = True
+        cost = "$6,000"
+        cost_stipulations = "All Included"
+        description = "Excursions Include:  "
+        url = "www.com"
+
+        #all relationships will be lists to accomdiate multiple entries
+        areas = ["Environmental Studies", "Biology", "AreaToBeRemoved"]
+        terms = ["Summer 1", "TermToBeRemoved"]
+        languages = ["Spanish", "LanguageToBeRemoved"]
+        locations = [["Lugano", "Switzerland"], ["CityToBeRemoved", "CountryToBeRemoved"]]    #This will be a list of list like [city name, country name] representing a location
+
+        create_new_program(providerName, programName, com, res, intern, cost, cost_stipulations, description, url, areas, terms, languages, locations)
+
+    else: 
+        #Run testing script
+        remove_program("Remove Test")
+        #When setup is false above, then the modifiying code can run. 
+
+    
+
+
+
+if __name__ == '__main__':
+    main()

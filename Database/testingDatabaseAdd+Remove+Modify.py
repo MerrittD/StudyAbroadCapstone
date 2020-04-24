@@ -18,6 +18,7 @@ from databaseConfiguration import db
 #Everything Tested in the file works. However, when a relationship is removed, it does not check to see 
 #   if the entity that had all connections removed stays in the database as it own object, 
 #   Therefore the object must be deleted in the future. 
+#This is solved in the API methods for changing and removing programs
 
 
 
