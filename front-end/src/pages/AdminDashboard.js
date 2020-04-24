@@ -24,7 +24,8 @@ class AdminDashboard extends Component {
                 term: '',
                 name: '',
                 language: '',
-                cost: ''
+                cost: '',
+                website: ''
             },
             editProgramData: {
                 id: '',
@@ -32,10 +33,12 @@ class AdminDashboard extends Component {
                 term: '',
                 name: '',
                 language: '',
-                cost: ''
+                cost: '',
+                website: ''
             },
             newProgramModal: false,
-            editProgramModal: false
+            editProgramModal: false,
+            isDisabled: true
         };
 
     }
@@ -62,28 +65,34 @@ class AdminDashboard extends Component {
     /* Perform a post request to add a new program to the database */
     addProgram() {
         // Access api route and pass along newProgramData, which holds user input from the Add a Program window
-        axios.put('https://my-json-server.typicode.com/MasonTDaniel/capstonedummydata/allPrograms', this.state.newProgramData)
+        axios.post('https://my-json-server.typicode.com/MasonTDaniel/capstonedummydata/allPrograms', this.state.newProgramData)
             .then(response => {
                 //Add the new program to the existing programs
                 let { programs } = this.state;
+                console.log("cost: " + this.state.newProgramData.cost)
+                console.log("responsedata: " + response.data.cost)
+                console.log("programs: " + programs)
                 programs.push(response.data);
+
                 // Toggle (close) the Add a Program window, clear the current-program-added var for future use
                 this.setState({
-                    programs, newProgramModal: false, newProgramData: {
+                    programs, newProgramModal: false, isDisabled: true, newProgramData: {
+                        id: '',
                         country: '',
                         term: '',
                         name: '',
                         language: '',
-                        cost: ''
+                        cost: '',
+                        website: ''
                     }
                 });
             });
     }
 
     /* Open the Edit a Program window with fields prefilled with data corresponding to the program being edited */
-    editProgram(id, country, term, name, language, cost) {
+    editProgram(id, country, term, name, language, cost, website) {
         this.setState({
-            editProgramData: { id, country, term, name, language, cost },
+            editProgramData: { id, country, term, name, language, cost, website },
             editProgramModal: !this.state.editProgramModal
         });
     }
@@ -94,10 +103,10 @@ class AdminDashboard extends Component {
     */
     updateProgram() {
         // Extract the users input for updated info
-        let { country, term, name, language, cost } = this.state.editProgramData;
+        let { country, term, name, language, cost, website } = this.state.editProgramData;
         // Alter the database by passing that info through an http request
-        axios.post('https://my-json-server.typicode.com/MasonTDaniel/capstonedummydata/allPrograms' + '/' + this.state.editProgramData.id, {
-            country, term, name, language, cost
+        axios.put('https://my-json-server.typicode.com/MasonTDaniel/capstonedummydata/allPrograms' + '/' + this.state.editProgramData.id, {
+            country, term, name, language, cost, website
         })
             .then(response => {
                 // Re-call the database to show updated program list in DOM
@@ -110,7 +119,8 @@ class AdminDashboard extends Component {
                         term: '',
                         name: '',
                         language: '',
-                        cost: ''
+                        cost: '',
+                        website: ''
                     }
                 });
             })
@@ -138,6 +148,18 @@ class AdminDashboard extends Component {
             });
     }
 
+    isDisabled = () => {
+        let empty = '';
+        console.log("disabled before: " + this.state.isDisabled)
+        if (!this.state.newProgramData.country === empty && !this.state.newProgramData.term === empty
+            && !this.state.newProgramData.name === empty && !this.state.newProgramData.language === empty
+            && !this.state.newProgramData.cost === empty && !this.state.newProgramData.website === empty) {
+            this.setState({
+                isDisabled: false
+            })
+        }
+    }
+
     render() {
         // Make a table of programs and store it
         let programs = this.state.programs.map((program) => {
@@ -148,10 +170,17 @@ class AdminDashboard extends Component {
                     <td>{program.term}</td>
                     <td>{program.name}</td>
                     <td>{program.language}</td>
-                    <td>{program.Cost}</td>
-                    <td>
-                        <Button color="success" size="sm" className="mr-2 mb-1" onClick={this.editProgram.bind(this, program.id, program.country, program.term, program.name, program.language, program.cost)}>Edit</Button>
-                        <Button color="danger" size="sm" onClick={this.deleteProgram.bind(this, program.id)} >Delete</Button>
+                    <td>{program.cost}</td>
+                    <td>{program.website}</td>
+                    <td style={{ "width": "10rem" }}>
+                        <Button style={{ "width": "3.75rem", "marginRight": "0.2rem", "marginLeft": "0.2rem" }}
+                            color="success" size="sm"
+                            onClick={this.editProgram.bind(this, program.id, program.country, program.term, program.name, program.language, program.cost, program.website)}>Edit</Button>
+
+                        <Button
+                            style={{ "width": "3.75rem", "marginRight": "0.2rem", "marginLeft": "0.2rem" }}
+                            color="danger" size="sm"
+                            onClick={this.deleteProgram.bind(this, program.id)} >Delete</Button>
                     </td>
                 </tr>
             )
@@ -170,6 +199,8 @@ class AdminDashboard extends Component {
                                 let { newProgramData } = this.state;
                                 newProgramData.country = e.target.value;
                                 this.setState({ newProgramData });
+                                console.log(this.state.newProgramData.country)
+                                this.isDisabled();
                             }} />
                         </FormGroup>
                         <FormGroup>
@@ -178,6 +209,7 @@ class AdminDashboard extends Component {
                                 let { newProgramData } = this.state;
                                 newProgramData.term = e.target.value;
                                 this.setState({ newProgramData });
+
                             }} />
                         </FormGroup>
                         <FormGroup>
@@ -186,6 +218,7 @@ class AdminDashboard extends Component {
                                 let { newProgramData } = this.state;
                                 newProgramData.name = e.target.value;
                                 this.setState({ newProgramData });
+                                this.isDisabled();
                             }} />
                         </FormGroup>
                         <FormGroup>
@@ -194,6 +227,7 @@ class AdminDashboard extends Component {
                                 let { newProgramData } = this.state;
                                 newProgramData.language = e.target.value;
                                 this.setState({ newProgramData });
+                                this.isDisabled();
                             }} />
                         </FormGroup>
                         <FormGroup>
@@ -202,11 +236,21 @@ class AdminDashboard extends Component {
                                 let { newProgramData } = this.state;
                                 newProgramData.cost = e.target.value;
                                 this.setState({ newProgramData });
+                                this.isDisabled();
+                            }} />
+                        </FormGroup>
+                        <FormGroup>
+                            <Label for="Website">Website</Label>
+                            <Input id="website" placeholder='e.g. "www.southwestern.edu"' value={this.state.newProgramData.website} onChange={(e) => {
+                                let { newProgramData } = this.state;
+                                newProgramData.website = e.target.value;
+                                this.setState({ newProgramData });
+                                this.isDisabled();
                             }} />
                         </FormGroup>
                     </ModalBody>
                     <ModalFooter>
-                        <Button color="primary" onClick={this.addProgram.bind(this)}>Add Program</Button>{' '}
+                        <Button disabled={this.state.isDisabled} color="primary" onClick={this.addProgram.bind(this)}>Add Program</Button>{' '}
                         <Button color="secondary" onClick={this.toggleNewProgramModal.bind(this)}>Cancel</Button>
                     </ModalFooter>
                 </Modal>
@@ -254,6 +298,14 @@ class AdminDashboard extends Component {
                                 this.setState({ editProgramData });
                             }} />
                         </FormGroup>
+                        <FormGroup>
+                            <Label for="Website">Website</Label>
+                            <Input id="website" placeholder='e.g. "www.southwestern.edu"' value={this.state.editProgramData.website} onChange={(e) => {
+                                let { editProgramData } = this.state;
+                                editProgramData.website = e.target.value;
+                                this.setState({ editProgramData });
+                            }} />
+                        </FormGroup>
                     </ModalBody>
                     <ModalFooter>
                         <Button color="primary" onClick={this.updateProgram.bind(this)}>Update</Button>{' '}
@@ -270,6 +322,8 @@ class AdminDashboard extends Component {
                             <th>Name</th>
                             <th>Language</th>
                             <th>Cost</th>
+                            <th>Website</th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>

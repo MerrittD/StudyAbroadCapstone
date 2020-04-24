@@ -8,7 +8,6 @@
 }
 
 a, p, h5, button {
-  font-family: 'Nanum Gothic', sans-serif;
 }
 
 a {
@@ -27,7 +26,6 @@ a:hover {
 }
 
 button {
-  font-family: 'Nanum Gothic', sans-serif;
   text-decoration: none;
   color: #000;
   background-color: #FFCD00;

@@ -26,7 +26,14 @@ class SearchBar extends Component {
         return arr.filter((e, i) => arr.indexOf(e) >= i)
     }
 
+
+    /* Perform a get request with filters */
     onSearch = (displayRes) => {
+        // const options = {
+        //      if = any, pass 'None', otherwise the filter
+        //     'loc': this.state.filters.countryFilter
+        // }
+        // figure out axios
         axios.get('https://my-json-server.typicode.com/MasonTDaniel/capstonedummydata/allPrograms')
             .then(response => {
                 console.log('about to search, displayResults: ' + this.state.displayResults)
@@ -102,10 +109,10 @@ class SearchBar extends Component {
         /* Display 4 dropdowns (populated with terms, countries, areas of study, and languages respectively) and a Search button */
         return (
             <div>
-                <div className="form-inline align-center">
-                    <div className="mr-20 ml-20">
+                <div style={{ "justifyContent": "space-evenly", "margin": "3rem" }} className="form-inline">
+                    <div>
                         <FormGroup >
-                            <Label for="termFilter">Term</Label>
+                            <Label style={{ "marginRight": "0.5rem" }} for="termFilter">Term</Label>
                             <Input type="select" value={this.state.filters.termFilter} onChange={(e) => {
                                 let { filters } = this.state;
                                 filters.termFilter = e.target.value;
@@ -117,7 +124,7 @@ class SearchBar extends Component {
                     </div>
                     <div className="mr-20 ml-20">
                         <FormGroup>
-                            <Label for="countryFilter">Country</Label>
+                            <Label style={{ "marginRight": "0.5rem" }} for="countryFilter">Country</Label>
                             <Input type="select" id="countryFilter" value={this.state.filters.countryFilter} onChange={(e) => {
                                 let { filters } = this.state;
                                 filters.countryFilter = e.target.value;
@@ -129,7 +136,7 @@ class SearchBar extends Component {
                     </div>
                     <div className="mr-20 ml-20">
                         <FormGroup >
-                            <Label for="areaOfStudyFilter">Area of Study</Label>
+                            <Label style={{ "marginRight": "0.5rem" }} for="areaOfStudyFilter">Area of Study</Label>
                             <Input type="select" id="areaOfStudyFilter" value={this.state.filters.areaOfStudyFilter} onChange={(e) => {
                                 let { filters } = this.state;
                                 filters.areaOfStudyFilter = e.target.value;
@@ -141,7 +148,7 @@ class SearchBar extends Component {
                     </div>
                     <div className="mr-20 ml-20">
                         <FormGroup >
-                            <Label for="languageFilter">Language</Label>
+                            <Label style={{ "marginRight": "0.5rem" }} for="languageFilter">Language</Label>
                             <Input type="select" id="languageFilter" value={this.state.filters.languageFilter} onChange={(e) => {
                                 let { filters } = this.state;
                                 filters.languageFilter = e.target.value;

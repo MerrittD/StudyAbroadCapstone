@@ -19,7 +19,9 @@ class SearchResults extends Component {
                     <td>{program.term}</td>
                     <td>{program.name}</td>
                     <td>{program.language}</td>
-                    <td>{program.Cost}</td>
+                    <td>{program.cost}</td>
+                    {console.log(program.website)}
+                    <a href={program.website} target="_blank"><td>{program.website}</td></a>
                 </tr>
             )
 
@@ -35,6 +37,7 @@ class SearchResults extends Component {
                             <th>Name</th>
                             <th>Language</th>
                             <th>Cost</th>
+                            <th>Website</th>
                         </tr>
                     </thead>
                     <tbody>

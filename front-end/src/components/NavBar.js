@@ -18,7 +18,7 @@ const NavBar = () => {
             <a className="btn" href="https://www.southwestern.edu/study-abroad/contact-us/" target="_blank">Contact Us</a>
             <a className="btn" href="/admin-dashboard">Admin</a>
             {/* Only display the logout tag in the navbar when an admin user is logged in */}
-            {authState.isAuthenticated && <button style={{ "cursor": "pointer", "margin-left": "5px", "margin-right": "14px" }} onClick={logout}>Log Out</button>}
+            {authState.isAuthenticated && <button style={{ "cursor": "pointer", "marginLeft": "5px", "marginRight": "14px", "color": "#212529" }} onClick={logout}>Log Out</button>}
         </div>
     );
 }
