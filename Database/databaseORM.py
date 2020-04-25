@@ -124,9 +124,9 @@ class Provider(db.Model):
 	@property
 	def serialize(self):
 		return{
-			'id':self.id,
-			'name':self.name,
-			'programs':self.programSerial
+			'ProviderId':self.id,
+			'ProviderName':self.name,
+			'ProviderPrograms':self.programSerial
 			}
 
 	@property
@@ -170,8 +170,8 @@ class Area(db.Model):
 	@property
 	def serialize(self):
 		return{
-			'id':self.id,
-			'name':self.name
+			'AreaId':self.id,
+			'AreaName':self.name
 			}
 
 
@@ -211,8 +211,8 @@ class Term(db.Model):
 	@property
 	def serialize(self):
 		return{
-			'id':self.id,
-			'name':self.name
+			'TermId':self.id,
+			'TermName':self.name
 			}
 
 
@@ -260,7 +260,7 @@ class Location(db.Model):
 	@property
 	def serialize(self):
 		return{
-			'id':self.id,
+			'LocationId':self.id,
 			'city':self.city,
 			'country':self.country
 			}
@@ -302,8 +302,8 @@ class Language(db.Model):
 	@property
 	def serialize(self):
 		return{
-			'id':self.id,
-			'name':self.name
+			'LanguageId':self.id,
+			'LanguageName':self.name
 			}
 
 
@@ -460,8 +460,8 @@ class Program(db.Model):
 		#description  = db.Column(db.String(5000), nullable=True)
 		#url = db.Column(db.String(5000), nullable=True)
 		return{ 
-			'id': self.id,
-			'name':self.name,
+			'ProgramId': self.id,
+			'ProgramName':self.name,
 			'comm':self.comm_eng,
 			'research':self.research_opp,
 			'intern':self.intership_opp,

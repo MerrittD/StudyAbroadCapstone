@@ -49,6 +49,24 @@ def results():
         areaArray = areaRequest.split(',')
     if termRequest is not None:
         termArray = termRequest.split(',')
+
+    toQuery = Program.query
+    if languageRequest is not None:
+        for lang in languageRequest:
+            toQuery.filter(lang in Program.language)
+    if locationRequest is not None:
+        for loc in locationRequest:
+            toQuery.filter(loc in Program.location)
+    if areaRequest is not None:
+        for a in areaRequest:
+            toQuery.filter(a in Program.area)
+    if termRequest is not None:
+        for t in termRequest:
+            toQuery.filter(t in Program.term)
+    toQuery.all()
+    json_results=[i.serialize for i in toQuery]
+    return jsonify(json_results)
+
     #provArray = providerRequest.split(',')
     #http://127.0.0.1:5000/results?loc=Spain,Madrid&lan=Spanish 
     # /request = approute 
