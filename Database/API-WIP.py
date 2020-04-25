@@ -288,10 +288,10 @@ if True:
 #       "None" in it's place for a single data type and an [](empty list) for any parameter that is a list
 #       and the parameter will be ignored. 
 
-#  - For future develoupment: the methods below could be moved to the database with a little bit of recoding. 
+#  - For future develoupment: come of the methods below could be moved to the database with a little bit of recoding. 
 
 #  - The methods below were tested using the file named testAPImethods.py They were copied and pasted 
-#       becasue API-WIP is not a valid python file name so they had to be copied. 
+#       becasue API-WIP is not a valid python file name so they had to be copied instead of imported. 
 
 
 #This is a generic script to populate an entire new program
@@ -416,6 +416,7 @@ def change_program(programName, com, res, intern, cost, cost_stipulations, descr
     if(url != None):
         prog.url = url
 
+    prog.save_to_db()
     return True
 
 

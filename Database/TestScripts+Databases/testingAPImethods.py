@@ -1,12 +1,14 @@
 from databaseORM import Admin,Programs_Areas,Programs_Terms,Programs_Locations,Programs_Languages,Programs_Providers,Program,Area,Term,Location,Language,Provider 
 from databaseConfiguration import db
 
-
+# Written by Luke Yates 
+# Last Updated: 4/25/2020 
+# 	Other Group Members: Daniel Merritt, Ryan Wheeler, Mason Daniel, and Alyssa Case 
 
 
 #This file will be to test the methods below taken from the API-WIP and make sure 
 #   They modify the database correctly
-#Any changes to the methods here will also be updated to the API-WIP.py
+#Any changes to the methods here will also be updated to the same methods in API-WIP.py
 
 
 #This is a generic script to populate an entire new program
@@ -131,6 +133,7 @@ def change_program(programName, com, res, intern, cost, cost_stipulations, descr
     if(url != None):
         prog.url = url
 
+    prog.save_to_db()
     return True
 
 
@@ -423,7 +426,7 @@ def remove_program(programName):
 
 
 
-#These methods all work to remove the specified type, but I still need to test adding. 
+#These methods all work fully. 
 
 def main():
     setup = False
@@ -574,12 +577,23 @@ def main():
 
     else: 
         #Run testing script
-        remove_program("Remove Test")
         #When setup is false above, then the modifiying code can run. 
+        
+        remove_program("Remove Test")
+            #The above script was tested on 4/25/2020 and fully worked. 
 
-    
+        #The script below is to test the adding function of the the above methods. 
+        #Add one that exist and one that does not for each relationship. 
+        change_or_remove_areas_for_program("add", "SU Amsterdam", ["Spanish","TestAdd"])
+        change_or_remove_terms_for_program("add", "SU Buenos Aires", ["Summer 2","TestAdd"])
+        change_or_remove_languages_for_program("add", "SU European Cultural Exploration", ["English","TestAdd"])
+        change_or_remove_locations_for_program("add", "SU Granada", [["London","England"], ["TestAddCity","TestAddCountry"]])
 
+        change_program("SU London", True, True, True, "$15,000", "All included", "Changed description", "new url")
+        change_program("SU Switzerland", None, True, None, None, "Not all included", None, None)
+        #This all works. Including the date modified function. 
 
+        
 
 if __name__ == '__main__':
     main()

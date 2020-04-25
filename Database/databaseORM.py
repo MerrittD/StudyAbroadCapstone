@@ -371,6 +371,7 @@ class Program(db.Model):
 
 
 	def save_to_db(self):
+		self.date_modified = db.func.current_timestamp()
 		db.session.add(self)
 		db.session.commit()
 
