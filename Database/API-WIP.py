@@ -3,7 +3,7 @@ Routes and views for the flask application.
 """
 
 from databaseORM import Admin,Programs_Areas,Programs_Terms,Programs_Locations,Programs_Languages,Programs_Providers,Program,Area,Term,Location,Language,Provider 
-from  databaseConfiguration import app, db
+from databaseConfiguration import app, db
 from flask import render_template,request, jsonify, Flask
 import flask
 import json
