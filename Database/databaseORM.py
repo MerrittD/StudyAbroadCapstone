@@ -50,23 +50,23 @@ class Admin(db.Model):
 
 #Association Tables refrences back to programs: 
 # These tables hold all relationship rows between the 2 respected classes
-areas = db.Table('Programs_Areas',
+Programs_Areas = db.Table('Programs_Areas',
 	db.Column('program_id', db.Integer, db.ForeignKey('Program.id')),
 	db.Column('area_id', db.Integer, db.ForeignKey('Area.id')))
 
-terms = db.Table('Programs_Terms',
+Programs_Terms = db.Table('Programs_Terms',
 	db.Column('program_id', db.Integer, db.ForeignKey('Program.id')),
 	db.Column('term_id', db.Integer, db.ForeignKey('Term.id')))
 
-languages = db.Table('Programs_Languages',
+Programs_Languages = db.Table('Programs_Languages',
 	db.Column('program_id', db.Integer, db.ForeignKey('Program.id')),
 	db.Column('language_id', db.Integer, db.ForeignKey('Language.id')))
 
-locations = db.Table('Programs_Locations',
+Programs_Locations = db.Table('Programs_Locations',
 	db.Column('program_id', db.Integer, db.ForeignKey('Program.id')),
 	db.Column('location_id', db.Integer, db.ForeignKey('Location.id')))
 
-programs = db.Table('Programs_Providers',
+Programs_Providers = db.Table('Programs_Providers',
 	db.Column('provider_id', db.Integer, db.ForeignKey('Provider.id')),
 	db.Column('program_id', db.Integer, db.ForeignKey('Program.id')))
 
@@ -83,7 +83,7 @@ class Provider(db.Model):
 
 
 	program = db.relationship('Program',
-						secondary=programs,  
+						secondary=Programs_Providers,  
 						backref=db.backref('programs',lazy=True)
 						)
 
@@ -333,22 +333,22 @@ class Program(db.Model):
 
 	#Relationships
 	area = db.relationship('Area',
-							secondary=areas, 
+							secondary=Programs_Areas, 
 							backref=db.backref('areas',lazy=True)
 							)
 
 	language = db.relationship('Language',
-								secondary=languages,
+								secondary=Programs_Languages,
 								backref=db.backref('languages',lazy=True)
 								)
 
 	location = db.relationship('Location',
-						secondary=locations, 
+						secondary=Programs_Locations, 
 						backref=db.backref('locations',lazy=True)
 						)
 
 	term = db.relationship('Term',
-						secondary=terms,  
+						secondary=Programs_Terms,  
 						backref=db.backref('terms',lazy=True)
 						)
 	
