@@ -151,9 +151,9 @@ class AdminDashboard extends Component {
     isDisabled = () => {
         let empty = '';
         console.log("disabled before: " + this.state.isDisabled)
-        if (!this.state.newProgramData.country === empty && !this.state.newProgramData.term === empty
-            && !this.state.newProgramData.name === empty && !this.state.newProgramData.language === empty
-            && !this.state.newProgramData.cost === empty && !this.state.newProgramData.website === empty) {
+        if (!this.state.newProgramData.country == empty && !this.state.newProgramData.term == empty
+            && !this.state.newProgramData.name == empty && !this.state.newProgramData.language == empty
+            && !this.state.newProgramData.cost == empty && !this.state.newProgramData.website == empty) {
             this.setState({
                 isDisabled: false
             })
@@ -171,7 +171,7 @@ class AdminDashboard extends Component {
                     <td>{program.name}</td>
                     <td>{program.language}</td>
                     <td>{program.cost}</td>
-                    <td>{program.website}</td>
+                    <a href={program.website} traget="_blank"><td>{program.website}</td></a>
                     <td style={{ "width": "10rem" }}>
                         <Button style={{ "width": "3.75rem", "marginRight": "0.2rem", "marginLeft": "0.2rem" }}
                             color="success" size="sm"
@@ -189,7 +189,7 @@ class AdminDashboard extends Component {
         return (
             <div>
 
-                <Button color="primary" onClick={this.toggleNewProgramModal.bind(this)}>Add Program</Button>
+                <Button style={{ "marginBottom": "1rem" }} color="primary" onClick={this.toggleNewProgramModal.bind(this)}>Add Program</Button>
                 <Modal isOpen={this.state.newProgramModal} toggle={this.toggleNewProgramModal.bind(this)}>
                     <ModalHeader toggle={this.toggleNewProgramModal.bind(this)}>Add a new program</ModalHeader>
                     <ModalBody>
