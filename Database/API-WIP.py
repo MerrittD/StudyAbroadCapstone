@@ -30,10 +30,11 @@ def results():
     # the following values are taken from the get request and can be used to filter
     #if null, dont filter by it
     languageRequest = flask.request.values.get('lan')
-    locationRequest = flask.request.values.get('loc')
+    locationRequestCity = flask.request.values.get('loccity')
+    locationRequestCountry = flask.request.values.get('loccountry')
     areaRequest = flask.request.values.get('area')
     termRequest = flask.request.values.get('term')
-    #providerRequest = flask.request.values.get('prov')
+    #providerRequest = flask.request.values.get('prov')str' object has no attribute '_sa_instance_state
 
     #the following handles the presence of multiple values per param by
     #splitting them into an array. all values are strings
@@ -43,8 +44,8 @@ def results():
     termArray=[]
     if languageRequest is not None:
         langArray = languageRequest.split(',')
-    if locationRequest is not None:
-        locArray = locationRequest.split(',')
+    if locationRequestCity is not None:
+        locArray=[locationRequestCity,locationRequestCountry]
     if areaRequest is not None:
         areaArray = areaRequest.split(',')
     if termRequest is not None:
@@ -52,18 +53,23 @@ def results():
 
     toQuery = Program.query
     if languageRequest is not None:
-        for lang in languageRequest:
-            toQuery.filter(lang in Program.language)
+        for lang in langArray:
+            print(lang)
+            langID=Language.get_language_id(lang)
+            print(langID)
+            toQuery =toQuery.join(Programs_Languages).join(Language).filter(Programs_Languages.c.language_id== langID.id)
     if locationRequest is not None:
-        for loc in locationRequest:
-            toQuery.filter(loc in Program.location)
+        locID = Location.get_location_id(locArray[0],locArray[1])
+        toQuery =toQuery.join(Programs_Locations).join(Location).filter(Programs_Locations.c.location_id== locID.id)
     if areaRequest is not None:
-        for a in areaRequest:
-            toQuery.filter(a in Program.area)
+        for a in areaArray:
+            areaID=Area.get_area_id(a)
+            toQuery =toQuery.join(Programs_Areas).join(Area).filter(Programs_Areas.c.area_id== areaID.id)
     if termRequest is not None:
-        for t in termRequest:
-            toQuery.filter(t in Program.term)
-    toQuery.all()
+        for t in termArray:
+            termID=Term.get_term_id(t)
+            toQuery =toQuery.join(Programs_Terms).join(Term).filter(Programs_Terms.c.term_id== termID.id)
+    
     json_results=[i.serialize for i in toQuery]
     return jsonify(json_results)
 
