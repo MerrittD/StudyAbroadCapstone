@@ -8,7 +8,8 @@ from flask import render_template,request, jsonify, Flask
 import flask
 import json
 
-
+# API Written by Daniel Merritt and Luke Yates
+# additional help from Alyssa Case
 
 #app = Flask(__name__)
 app.config["DEBUG"] = True
@@ -45,7 +46,7 @@ def results():
     if languageRequest is not None:
         langArray = languageRequest.split(',')
     if locationRequestCity is not None:
-        locArray=[locationRequestCity,locationRequestCountry]
+        locArray=[[locationRequestCity,locationRequestCountry]]
     if areaRequest is not None:
         areaArray = areaRequest.split(',')
     if termRequest is not None:
@@ -56,9 +57,9 @@ def results():
         for lang in langArray:
             language = Language.find_by_name(lang)
             toQuery = toQuery.join(Programs_Languages).join(Language).filter(Programs_Languages.c.language_id == language.id)
-    if locationRequest is not None:
+    if locationRequestCity is not None:
         for loc in locArray:
-            location = Language.find_by_name(lang)
+            location = Location.find_by_name(loc[0],loc[1])
             toQuery = toQuery.join(Programs_Locations).join(Location).filter(Programs_Locations.c.location_id == location.id)
     if areaRequest is not None:
         for a in areaArray:
