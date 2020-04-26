@@ -54,21 +54,20 @@ def results():
     toQuery = Program.query
     if languageRequest is not None:
         for lang in langArray:
-            print(lang)
-            langID=Language.get_language_id(lang)
-            print(langID)
-            toQuery =toQuery.join(Programs_Languages).join(Language).filter(Programs_Languages.c.language_id== langID.id)
+            language = Language.find_by_name(lang)
+            toQuery = toQuery.join(Programs_Languages).join(Language).filter(Programs_Languages.c.language_id == language.id)
     if locationRequest is not None:
-        locID = Location.get_location_id(locArray[0],locArray[1])
-        toQuery =toQuery.join(Programs_Locations).join(Location).filter(Programs_Locations.c.location_id== locID.id)
+        for loc in locArray:
+            location = Language.find_by_name(lang)
+            toQuery = toQuery.join(Programs_Locations).join(Location).filter(Programs_Locations.c.location_id == location.id)
     if areaRequest is not None:
         for a in areaArray:
-            areaID=Area.get_area_id(a)
-            toQuery =toQuery.join(Programs_Areas).join(Area).filter(Programs_Areas.c.area_id== areaID.id)
+            area = Area.find_by_name(a)
+            toQuery = toQuery.join(Programs_Areas).join(Area).filter(Programs_Areas.c.area_id == area.id)
     if termRequest is not None:
         for t in termArray:
-            termID=Term.get_term_id(t)
-            toQuery =toQuery.join(Programs_Terms).join(Term).filter(Programs_Terms.c.term_id== termID.id)
+            term = Term.find_by_name(t)
+            toQuery = toQuery.join(Programs_Terms).join(Term).filter(Programs_Terms.c.term_id== term.id)
     
     json_results=[i.serialize for i in toQuery]
     return jsonify(json_results)

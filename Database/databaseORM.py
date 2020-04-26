@@ -11,7 +11,7 @@ def dump_datetime(val):
 	return [val.strftime("%Y-%m-%d"), val.strftime("%H:%M:%S")]
 
 # Written by Luke Yates and Daniel Merritt
-# Last Updated: 4/7/2020
+# Last Updated: 4/26/2020
 # This is the ORM (Object Relationship Model) for the Study Abroad Program Finder
 # 	Other Group Members: Ryan Wheeler, Mason Daniel, and Alyssa Case 
 
@@ -105,12 +105,8 @@ class Provider(db.Model):
 		self.program.remove(oldProgram)
 		
 	@classmethod
-	def get_provider_id(cls, name):
-		id = db.session.query(cls).filter(cls.name == name).first()
-		if id is None: 
-			return -1
-		else:
-			return id
+	def find_by_id(cls, _id):
+		return db.session.query(cls).filter(cls.id == _id).first()
 
 	# finds a row by specific name given as a parameter
 	@classmethod
@@ -155,12 +151,8 @@ class Area(db.Model):
 		db.session.commit()
 
 	@classmethod
-	def get_area_id(cls,name):
-		id = db.session.query(cls).filter(cls.name == name).first()
-		if id is None: 
-			return -1
-		else:
-			return id
+	def find_by_id(cls, _id):
+		return db.session.query(cls).filter(cls.id == _id).first()
 
 	# finds a row by specific username given as a parameter
 	@classmethod
@@ -196,12 +188,8 @@ class Term(db.Model):
 		db.session.commit()
 		
 	@classmethod
-	def get_term_id(cls,name):
-		id = db.session.query(cls).filter(cls.name == name).first()
-		if id is None: 
-			return -1
-		else:
-			return id
+	def find_by_id(cls, _id):
+		return db.session.query(cls).filter(cls.id == _id).first()
 
 	# finds a row by specific username given as a parameter
 	@classmethod
@@ -239,13 +227,6 @@ class Location(db.Model):
 		db.session.add(self)
 		db.session.commit()
 
-	@classmethod
-	def get_location_id(cls, nameCity, nameCountry):
-		id = db.session.query(cls).filter(cls.city == nameCity).filter(cls.country == nameCountry).first()
-		if id is None: 
-			return -1
-		else:
-			return id
 
 	# finds a row by specific id given as a parameter
 	@classmethod
@@ -287,12 +268,8 @@ class Language(db.Model):
 		db.session.commit()
 
 	@classmethod
-	def get_language_id(cls,name):
-		id = db.session.query(cls).filter(cls.name == name).first()
-		if id is None: 
-			return -1
-		else:
-			return id
+	def find_by_id(cls, _id):
+		return db.session.query(cls).filter(cls.id == _id).first()
 
 	# finds a row by specific username given as a parameter
 	@classmethod
@@ -423,13 +400,6 @@ class Program(db.Model):
 	def sort_by_location(cls, desiredCountry):
 		return cls.query.join(Programs_Locations).join(Location).filter(Programs_Locations.c.location_id == get_location_id(desiredCountry)).all()
 
-	@classmethod
-	def get_program_id(cls, name):
-		id = db.session.query(cls).filter(cls.name == name).first()
-		if id is None: 
-			return -1
-		else:
-			return id
 
 	# finds a row by specific id given as a parameter
 	@classmethod
