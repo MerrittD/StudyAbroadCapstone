@@ -484,11 +484,12 @@ class Program(db.Model):
 
 		
 
-# Websites Refrenced used for classes above:
+# Websites Referenced used for classes above:
 
 # Manuels: 
 # https://docs.sqlalchemy.org/en/13/orm/tutorial.html - This website was used for most of the code above. 
 # https://docs.sqlalchemy.org/en/13/orm/basic_relationships.html#many-to-many
+# https://flask-sqlalchemy.palletsprojects.com/en/2.x/
 # 
 # Stack Overflow: 
 # https://stackoverflow.com/questions/41270319/how-do-i-query-an-association-table-in-sqlalchemy - Use this for how to refrence a query
