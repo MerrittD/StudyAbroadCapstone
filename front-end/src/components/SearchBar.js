@@ -195,7 +195,7 @@ class SearchBar extends Component {
 
                     <Button className="btn" style={{ "background": "#FFCD00", "border": "none", "color": "#000000", "marginLeft": "7px" }} onClick={this.onSearch.bind(this, true)}>Search
                     </Button>
-                    <Button className="btn-danger" onClick={this.resetSearch} >Reset</Button>
+                    <Button className="btn-danger" style={{ "background": "#FFCD00", "border": "none", "color": "#000000", "marginLeft": "0.5rem" }} onClick={this.resetSearch} >Reset Search</Button>
                 </div>
                 <div>
                     {this.state.displayResults && <SearchResults state={this.state} />}
