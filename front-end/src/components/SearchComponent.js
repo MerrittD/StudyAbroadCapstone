@@ -18,7 +18,7 @@ class SearchComponent extends Component {
     componentDidMount() {
         let initialPrograms = [];
         /* Fetch the data from the database */
-        fetch('https://my-json-server.typicode.com/MasonTDaniel/capstonedummydata/db')
+        fetch('https://studyabroad-test-server.herokuapp.com/db')
             /* Response and promises */
             .then(response => {
                 return response.json();
