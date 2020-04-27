@@ -1,3 +1,4 @@
+#The configuration of the database os handled in  the file below.
 from databaseConfiguration import db
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
@@ -10,15 +11,17 @@ def dump_datetime(val):
 		return None
 	return [val.strftime("%Y-%m-%d"), val.strftime("%H:%M:%S")]
 
+
 # Written by Luke Yates and Daniel Merritt
-# Last Updated: 4/26/2020
-# This is the ORM (Object Relationship Model) for the Study Abroad Program Finder
+# Last Updated: 4/27/2020
+# This is the ORM (Object Relationship Model) for the Study Abroad Program Finder.
 # 	Other Group Members: Ryan Wheeler, Mason Daniel, and Alyssa Case 
 
 
 #This class handles all admin logins including username and passwords so that admins may edit the 
 #	information on the site. A normal user will only be able to view the information. 
-# This class was written by Daniel Whitney (refrence to GitHub repo at bottom of document)  
+# This class was written by Daniel Whitney: GitHub Repo below  
+# https://github.com/Daniel-Wh/radiosonde/blob/master/models/station_model.py
 class Admin(db.Model):
 
     id = db.Column(db.INTEGER, primary_key=True)  # column in table for id for user, auto incremented
@@ -66,14 +69,15 @@ Programs_Locations = db.Table('Programs_Locations',
 	db.Column('program_id', db.Integer, db.ForeignKey('Program.id')),
 	db.Column('location_id', db.Integer, db.ForeignKey('Location.id')))
 
+#This association class connects all providers to programs.
 Programs_Providers = db.Table('Programs_Providers',
 	db.Column('provider_id', db.Integer, db.ForeignKey('Provider.id')),
 	db.Column('program_id', db.Integer, db.ForeignKey('Program.id')))
 
 
 
-#This class defines the term table which holds all terms offered by a program
-# It has a relationship back to the program class
+#This class defines the Provider table which holds all providers of study abroad programs
+# It has a One-to-Many relationship back to the program class.
 class Provider(db.Model):	
 	__tablename__='Provider'
 	
@@ -81,10 +85,10 @@ class Provider(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
 	name = db.Column(db.String(100),unique=True,nullable=False)
 
-
+	#In the API, this is used like a list. This is shown below in the add_program method
 	program = db.relationship('Program',
-						secondary=Programs_Providers,  
-						backref=db.backref('programs',lazy=True)
+						secondary=Programs_Providers,  #This back updates the association table above
+						backref=db.backref('programs',lazy=True) #This causes for lazy lookups for effiency
 						)
 
 	#Individual Methods
@@ -98,12 +102,15 @@ class Provider(db.Model):
 		db.session.add(self)
 		db.session.commit()
 
+	#This method adds a program to the relationship 
 	def add_program(self, newProgram): 
 		self.program.append(newProgram)
 
 	def remove_program(self, oldProgram): 
 		self.program.remove(oldProgram)
 		
+	#Returns the Entity of a Provider with the given id. 
+	#All class methods are used by placing the class name belofre the class method: Provider.find_by_id("10")
 	@classmethod
 	def find_by_id(cls, _id):
 		return db.session.query(cls).filter(cls.id == _id).first()
@@ -129,9 +136,9 @@ class Provider(db.Model):
 	def programSerial(self):
 		return [i.serialize for i in self.program]
 		
-#This class defines the area class. It is to hold all areas of study that can exist 
-#	throught a study abroad program
-#	It has a relationship back to the program class
+#This class defines the Area class. It is to hold all areas of study that can exist 
+#	at a study abroad program.
+#	It has a Many-to-Many relationship back to the program class
 class Area(db.Model):	
 	__tablename__='Area'
 
@@ -167,8 +174,8 @@ class Area(db.Model):
 			}
 
 
-#This class defines the term table which holds all terms offered by a program
-# It has a relationship back to the program class
+#This class defines the Term table which holds all Terms offered by a Program
+# It has a Many-to-Many relationship back to the program class
 class Term(db.Model):	
 	__tablename__='Term'
 	
@@ -204,14 +211,19 @@ class Term(db.Model):
 			}
 
 
-#This class defines the city table which holds all cities a program can be offered in
-# It has a relationship back to the program class
+#This class defines the Location table which holds all locations where a program can be offered. 
+# This class contains both the city and country of a location due to the complexity of 
+#	having both a city and country with association table in between. The excess storage of the 
+#	association table seemed to outweigh the duplicated city in different countries like 
+#	Paris, Texas and Paris, France.
+# It has a  Many-to-Many relationship back to the program class
 class Location(db.Model):
 	__tablename__='Location'
 	
 	#Individual Attributes
 	id = db.Column(db.Integer, primary_key=True)
 	city = db.Column(db.String(100),nullable=True)
+	#The country is the default value for location by design decision. 
 	country= db.Column(db.String(100),nullable=False)
 	
 
@@ -247,8 +259,8 @@ class Location(db.Model):
 			}
 
 
-# This class defines the Langue class which holds all foreign languages a proram can offer to teach
-#	It has a relationship back to the program class
+# This class defines the Language class which holds all  languages a Program can offer to teach
+#	It has a  Many-to-Many relationship back to the Program class
 class Language(db.Model):
 	__tablename__='Language'
 
@@ -284,9 +296,13 @@ class Language(db.Model):
 			}
 
 
-#This class defines the table for all programs stored. The table holds specific attributes listed under 
-#	Individual Attributes. The relationships define connections to the 4 of the 5 association tables listed above.
-#	The relationships to the "children" classes are only defined here, but backrefrence upon update. 
+#This class defines the table for all Programs stored. The table holds specific attributes listed under 
+#	Individual Attributes. The relationships define connections to the all association tables listed at the top of
+#	this document.
+#	The relationships to the "children" classes are only defined here, but backrefrence upon update.
+#	The removal of attributes from a program are all handled in the API to ensure all back deletes 
+#		For Example: If a program is deleted, but it is the only program which offers to teach "Spanish" 
+#					The API will handle the deletion of Spanish as well if the program is deleted. 
 class Program(db.Model):
 	__tablename__='Program'
 
@@ -294,11 +310,13 @@ class Program(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
 	name = db.Column(db.String(100),unique=True,nullable=False)
 
-	comm_eng = db.Column(db.Boolean,nullable=False)		#yes or no
-	research_opp =  db.Column(db.Boolean,nullable=False)	#yes or no
-	intership_opp = db.Column(db.Boolean,nullable=False)	#yes or no
+	#The default value for the below variables are False assuming it is not given
+	comm_eng = db.Column(db.Boolean,nullable=False)		#True of False
+	research_opp =  db.Column(db.Boolean,nullable=False)	#True of False
+	intership_opp = db.Column(db.Boolean,nullable=False)	#True of False
 
 	date_created  = db.Column(db.DateTime, default=db.func.current_timestamp())
+	#This will be updated any time a program is changed including any change to attributes or relations.
 	date_modified = db.Column(db.DateTime, default=db.func.current_timestamp(),
                                        onupdate=db.func.current_timestamp())
 	
@@ -309,6 +327,8 @@ class Program(db.Model):
 	url = db.Column(db.String(5000), nullable=True)
 
 	#Relationships
+	#These relationships are defined in the same way as the Provider to Program relationship in the 
+	#	Provider class. 
 	area = db.relationship('Area',
 							secondary=Programs_Areas, 
 							backref=db.backref('areas',lazy=True)
@@ -335,6 +355,7 @@ class Program(db.Model):
 	def __repr__(self):
 		return "<Program(Program ID='%d', Name='%s')>" % (self.id, self.name)
 
+
 	def __init__(self, name, com, res, intern, cost, cost_stipulations, description, url):
 		#This initilizes the program specific fields
 		self.name = name
@@ -353,7 +374,7 @@ class Program(db.Model):
 		db.session.commit()
 
 	#These methods will be by the API to add and remove any property that falls 
-	# under the many to many relationship. 
+	# under the many to Many relationship. 
 	def add_language(self, newLanguage): 
 		self.language.append(newLanguage)
 
@@ -463,13 +484,16 @@ class Program(db.Model):
 
 		
 
-#  Websites Refrenced:
-# https://docs.sqlalchemy.org/en/13/orm/tutorial.html
-# https://github.com/Daniel-Wh/radiosonde/blob/master/models/station_model.py
+# Websites Refrenced used for classes above:
+
+# Manuels: 
+# https://docs.sqlalchemy.org/en/13/orm/tutorial.html - This website was used for most of the code above. 
 # https://docs.sqlalchemy.org/en/13/orm/basic_relationships.html#many-to-many
-# Use this for how to refrence a query: 
-#  https://stackoverflow.com/questions/41270319/how-do-i-query-an-association-table-in-sqlalchemy
+# 
+# Stack Overflow: 
+# https://stackoverflow.com/questions/41270319/how-do-i-query-an-association-table-in-sqlalchemy - Use this for how to refrence a query
 # https://stackoverflow.com/questions/32938475/flask-sqlalchemy-check-if-row-exists-in-table
 # https://stackoverflow.com/questions/12154129/how-can-i-automatically-populate-sqlalchemy-database-fields-flask-sqlalchemy
+# 
 
 

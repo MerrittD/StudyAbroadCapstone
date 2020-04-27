@@ -10,6 +10,7 @@ import json
 
 # API Written by Daniel Merritt and Luke Yates
 # additional help from Alyssa Case
+#   Last updated: 4/27/2020
 
 #app = Flask(__name__)
 app.config["DEBUG"] = True
