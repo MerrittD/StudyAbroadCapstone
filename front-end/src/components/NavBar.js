@@ -1,4 +1,6 @@
 import React from 'react';
+import { NavLink, Link } from 'react-router-dom'
+import Logo from '../img/su-logo.png'
 import { useOktaAuth } from '@okta/okta-react';
 
 /* A basic navbar with tabs Browse, How To, Contact Us, Admin, and Log Out (only if admin user is logged in */
@@ -13,10 +15,10 @@ const NavBar = () => {
 
     return (
         <div id="nav" className="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 border-bottom shadow-sm">
-            <a href="/" className="my-0 mr-md-auto align-self-start img-fluid"><img src={window.location.origin + '/img/su-logo.png'} /></a>
-            <a className="btn" href="/">Search</a>
-            <a className="btn" href="https://www.southwestern.edu/study-abroad/contact-us/" target="_blank">Contact Us</a>
-            <a className="btn" href="/admin-dashboard">Admin</a>
+            <Link to="/" className="my-0 mr-md-auto align-self-start img-fluid"><img style={{ "width": "15rem" }} src={Logo} alt="" /></Link>
+            <NavLink to="/" className="btn">Search</NavLink>
+            <a className="btn" href="https://www.southwestern.edu/study-abroad/contact-us/" target="_blank" rel="noopener noreferrer">Contact Us</a>
+            <NavLink to="/admin-dashboard" className="btn">Admin</NavLink>
             {/* Only display the logout tag in the navbar when an admin user is logged in */}
             {authState.isAuthenticated && <button style={{ "cursor": "pointer", "marginLeft": "5px", "marginRight": "14px", "color": "#212529" }} onClick={logout}>Log Out</button>}
         </div>

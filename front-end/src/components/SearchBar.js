@@ -34,18 +34,52 @@ class SearchBar extends Component {
         //     'loc': this.state.filters.countryFilter
         // }
         // figure out axios
-        axios.get('https://my-json-server.typicode.com/MasonTDaniel/capstonedummydata/allPrograms')
+        let filteredPrograms = [];
+        axios.get('https://studyabroad-test-server.herokuapp.com/allPrograms')
             .then(response => {
-                console.log('about to search, displayResults: ' + this.state.displayResults)
+                filteredPrograms = response.data.map((program) => {
+                    return program
+                });
+                filteredPrograms = this.filterPrograms(filteredPrograms);
                 this.setState({
-                    filteredProgramList: response.data,
+                    filteredProgramList: filteredPrograms,
                     displayResults: displayRes
                 });
-                console.log('searched, displayResults: ' + this.state.displayResults)
             }, (error) => {
                 console.log(error);
             });
 
+    }
+
+    /* Filter the program array based on the dropdown filter input */
+    filterPrograms = (programs) => {
+        let filteredPrograms = [];
+        let noFilter = 'Any';
+        for (var i = 0; i < programs.length; i++) {
+            if ((programs[i].term === this.state.filters.termFilter || this.state.filters.termFilter === noFilter)
+                && (programs[i].country === this.state.filters.countryFilter || this.state.filters.countryFilter === noFilter)
+                && (programs[i].areaOfStudy === this.state.filters.areaOfStudyFilter || this.state.filters.areaOfStudyFilter === noFilter)
+                && (programs[i].language === this.state.filters.languageFilter || this.state.filters.languageFilter === noFilter)
+            ) {
+                filteredPrograms.push(programs[i]);
+            }
+        }
+
+        return filteredPrograms
+    }
+
+    /* Reset search parameters */
+    resetSearch = () => {
+        this.setState({
+            filters: {
+                termFilter: 'Any',
+                countryFilter: 'Any',
+                areaOfStudyFilter: 'Any',
+                languageFilter: 'Any'
+            },
+            filteredProgramList: [],
+            displayResults: false
+        });
     }
 
 
@@ -161,7 +195,7 @@ class SearchBar extends Component {
 
                     <Button className="btn" style={{ "background": "#FFCD00", "border": "none", "color": "#000000", "marginLeft": "7px" }} onClick={this.onSearch.bind(this, true)}>Search
                     </Button>
-                    {console.log('current filters: ' + this.state.filters)}
+                    <Button className="btn-danger" onClick={this.resetSearch} >Reset</Button>
                 </div>
                 <div>
                     {this.state.displayResults && <SearchResults state={this.state} />}
