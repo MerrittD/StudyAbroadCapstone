@@ -10,7 +10,7 @@ import json
 
 # API Written by Daniel Merritt and Luke Yates
 # additional help from Alyssa Case
-#   Last updated: 4/27/2020
+#   Last updated: 4/28/2020
 
 #app = Flask(__name__)
 app.config["DEBUG"] = True
@@ -55,12 +55,14 @@ def results():
 
 
     #https://stackoverflow.com/questions/27810523/sqlalchemy-elegant-way-to-deal-with-several-optional-filters used for reference below
-
-    toQuery = session.query(Programs_Areas, Programs_Terms, Programs_Locations, Programs_Languages, Programs_Providers, Program, Area, Term, Location, Language)
+    #here the arrays of values are taken and used to filter the database query before returning it
+    toQuery = db.session.query(Programs_Areas, Programs_Terms, Programs_Locations, Programs_Languages, Programs_Providers, Area, Term, Location,Program, Language)
+    print("Past toQuery")
     if languageRequest is not None:
         for lang in langArray:
             language = Language.find_by_name(lang)
             toQuery = toQuery.filter(Programs_Languages.c.language_id == language.id)
+            print(lang)
     if locationRequestCity is not None:
         for loc in locArray:
             location = Location.find_by_name(loc[0],loc[1])
@@ -75,8 +77,9 @@ def results():
             toQuery = toQuery.filter(Programs_Terms.c.term_id== term.id)
     
     toQuery = toQuery.all()
-
+    # all items returned are converted to a json object and returned 
     json_results=[i.serialize for i in toQuery]
+    print(json_results)
     return jsonify(json_results)
 
     #provArray = providerRequest.split(',')
