@@ -56,25 +56,25 @@ def results():
 
     #https://stackoverflow.com/questions/27810523/sqlalchemy-elegant-way-to-deal-with-several-optional-filters used for reference below
     #here the arrays of values are taken and used to filter the database query before returning it
-    toQuery = db.session.query(Programs_Areas, Programs_Terms, Programs_Locations, Programs_Languages, Programs_Providers, Area, Term, Location,Program, Language)
+    toQuery = Program.query
     print("Past toQuery")
     if languageRequest is not None:
         for lang in langArray:
             language = Language.find_by_name(lang)
-            toQuery = toQuery.filter(Programs_Languages.c.language_id == language.id)
+            toQuery = toQuery.join(Programs_Languages).join(Language).filter(Programs_Langauges.c.language_id==language.id)
             print(lang)
     if locationRequestCity is not None:
         for loc in locArray:
             location = Location.find_by_name(loc[0],loc[1])
-            toQuery = toQuery.filter(Programs_Locations.c.location_id == location.id)
+            toQuery = toQuery.join(Programs_Locations).join(Location).filter(Programs_Locations.c.location_id==location.id)
     if areaRequest is not None:
         for a in areaArray:
             area = Area.find_by_name(a)
-            toQuery = toQuery.filter(Programs_Areas.c.area_id == area.id)
+            toQuery = toQuery.join(Programs_Areas).join(Area).filter(Programs_Areas.c.area_id==area.id)
     if termRequest is not None:
         for t in termArray:
             term = Term.find_by_name(t)
-            toQuery = toQuery.filter(Programs_Terms.c.term_id== term.id)
+            toQuery = toQuery.join(Programs_Terms).join(Term).filter(Programs_Terms.c.term_id==term.id)
     
     toQuery = toQuery.all()
     # all items returned are converted to a json object and returned 
