@@ -16,8 +16,7 @@ organizational pruposes.
  - testingAPImethods.py: tests all methods in API which directly interact with the database
  - testingDatabaseAdd+Remove+Modify.py: test database ORM to ensure proper database relationships and entity functions.
  - testingDatabaseSetup: tests creating tables and adding programs
- - PreviousDatabaseTests: contains many databases that were used during testing. Each database is in a different state 
-				depending on what was being tested. 
+
  
 
 ## Known Issues
