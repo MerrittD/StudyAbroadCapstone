@@ -143,7 +143,7 @@ class SearchBar extends Component {
         /* Display 4 dropdowns (populated with terms, countries, areas of study, and languages respectively) and a Search button */
         return (
             <div>
-                <div style={{ "justifyContent": "space-evenly", "margin": "3rem" }} className="form-inline">
+                <div style={{ "justifyContent": "space-evenly", "margin": "1.5rem" }} className="form-inline">
                     <div>
                         <FormGroup >
                             <Label style={{ "marginRight": "0.5rem" }} for="termFilter">Term</Label>
