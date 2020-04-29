@@ -275,7 +275,7 @@ def check():
     elif request.method == 'DELETE':
 
         #given the id of a program, delete it from database
-        programName= flask.request.values.get('progname')
+        programName= flask.request.values.get('originalName')
        
         #take in the id and use that to delete 
         remove_program(programName)
